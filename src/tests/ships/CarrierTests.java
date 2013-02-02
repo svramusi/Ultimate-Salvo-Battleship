@@ -2,12 +2,16 @@ package tests.ships;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ships.Carrier;
 import ships.Point;
 import ships.Ship;
+import ships.Ship.Direction;
+import ships.Ship.ShipType;
 
 
 public class CarrierTests {
@@ -82,6 +86,52 @@ public class CarrierTests {
 	
 	@Test
 	public void testGetShipName() {
-		assertEquals("Carrier", c.getName());
+		assertEquals("CARRIER", c.getName());
+	}
+	
+	@Test
+	public void testGetShipLocation() {
+		List<Point> shipLocation;
+
+		c.setStartPoint(new Point(4,0), Direction.UP);
+		
+		shipLocation = c.getShipLocation();
+		assertEquals(new Point(4,0), shipLocation.get(0));
+		assertEquals(new Point(3,0), shipLocation.get(1));
+		assertEquals(new Point(2,0), shipLocation.get(2));
+		assertEquals(new Point(1,0), shipLocation.get(3));
+		assertEquals(new Point(0,0), shipLocation.get(4));
+		
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+		
+		shipLocation = c.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(1,0), shipLocation.get(1));
+		assertEquals(new Point(2,0), shipLocation.get(2));
+		assertEquals(new Point(3,0), shipLocation.get(3));
+		assertEquals(new Point(4,0), shipLocation.get(4));
+		
+		c.setStartPoint(new Point(0,4), Direction.LEFT);
+		
+		shipLocation = c.getShipLocation();
+		assertEquals(new Point(0,4), shipLocation.get(0));
+		assertEquals(new Point(0,3), shipLocation.get(1));
+		assertEquals(new Point(0,2), shipLocation.get(2));
+		assertEquals(new Point(0,1), shipLocation.get(3));
+		assertEquals(new Point(0,0), shipLocation.get(4));
+		
+		c.setStartPoint(new Point(0,0), Direction.RIGHT);
+		
+		shipLocation = c.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(0,1), shipLocation.get(1));
+		assertEquals(new Point(0,2), shipLocation.get(2));
+		assertEquals(new Point(0,3), shipLocation.get(3));
+		assertEquals(new Point(0,4), shipLocation.get(4));
+	}
+	
+	@Test
+	public void testShipType() {
+		assertEquals(ShipType.CARRIER, c.getShipType());
 	}
 }

@@ -6,9 +6,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.*;
+
 import ships.Battleship;
 import ships.Point;
 import ships.Ship;
+import ships.Ship.Direction;
+import ships.Ship.ShipType;
 
 
 public class BattleshipTests {
@@ -82,6 +86,48 @@ public class BattleshipTests {
 	
 	@Test
 	public void testGetShipName() {
-		assertEquals("Battleship", b.getName());
+		assertEquals("BATTLESHIP", b.getName());
+	}
+	
+	@Test
+	public void testGetShipLocation() {
+		List<Point> shipLocation;
+
+		b.setStartPoint(new Point(3,0), Direction.UP);
+		
+		shipLocation = b.getShipLocation();
+		assertEquals(new Point(3,0), shipLocation.get(0));
+		assertEquals(new Point(2,0), shipLocation.get(1));
+		assertEquals(new Point(1,0), shipLocation.get(2));
+		assertEquals(new Point(0,0), shipLocation.get(3));
+		
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+		
+		shipLocation = b.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(1,0), shipLocation.get(1));
+		assertEquals(new Point(2,0), shipLocation.get(2));
+		assertEquals(new Point(3,0), shipLocation.get(3));
+		
+		b.setStartPoint(new Point(0,3), Direction.LEFT);
+		
+		shipLocation = b.getShipLocation();
+		assertEquals(new Point(0,3), shipLocation.get(0));
+		assertEquals(new Point(0,2), shipLocation.get(1));
+		assertEquals(new Point(0,1), shipLocation.get(2));
+		assertEquals(new Point(0,0), shipLocation.get(3));
+		
+		b.setStartPoint(new Point(0,0), Direction.RIGHT);
+		
+		shipLocation = b.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(0,1), shipLocation.get(1));
+		assertEquals(new Point(0,2), shipLocation.get(2));
+		assertEquals(new Point(0,3), shipLocation.get(3));
+	}
+	
+	@Test
+	public void testShipType() {
+		assertEquals(ShipType.BATTLESHIP, b.getShipType());
 	}
 }

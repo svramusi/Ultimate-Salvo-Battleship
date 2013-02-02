@@ -3,12 +3,16 @@ package tests.ships;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import ships.PatrolBoat;
 import ships.Point;
 import ships.Ship;
+import ships.Ship.Direction;
+import ships.Ship.ShipType;
 
 
 public class PatrolBoatTests {
@@ -80,6 +84,40 @@ public class PatrolBoatTests {
 	
 	@Test
 	public void testGetShipName() {
-		assertEquals("Patrol Boat", pb.getName());
+		assertEquals("PATROLBOAT", pb.getName());
+	}
+	
+	@Test
+	public void testGetShipLocation() {
+		List<Point> shipLocation;
+
+		pb.setStartPoint(new Point(1,0), Direction.UP);
+		
+		shipLocation = pb.getShipLocation();
+		assertEquals(new Point(1,0), shipLocation.get(0));
+		assertEquals(new Point(0,0), shipLocation.get(1));
+		
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+		
+		shipLocation = pb.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(1,0), shipLocation.get(1));
+		
+		pb.setStartPoint(new Point(0,1), Direction.LEFT);
+		
+		shipLocation = pb.getShipLocation();
+		assertEquals(new Point(0,1), shipLocation.get(0));
+		assertEquals(new Point(0,0), shipLocation.get(1));
+		
+		pb.setStartPoint(new Point(0,0), Direction.RIGHT);
+		
+		shipLocation = pb.getShipLocation();
+		assertEquals(new Point(0,0), shipLocation.get(0));
+		assertEquals(new Point(0,1), shipLocation.get(1));
+	}
+	
+	@Test
+	public void testShipType() {
+		assertEquals(ShipType.PATROLBOAT, pb.getShipType());
 	}
 }
