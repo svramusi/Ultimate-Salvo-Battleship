@@ -58,6 +58,9 @@ public class Board {
 	
 	public boolean shipCollision(Ship ship1, Ship ship2)
 	{
+		if(ship1.isSubmerged() || ship2.isSubmerged())
+			return false;
+		
 		List<Point> ship1Location = ship1.getShipLocation();
 		List<Point> ship2Location = ship2.getShipLocation();
 		

@@ -72,13 +72,9 @@ public class BoardTests {
 		b.setStartPoint(new Point(3,5), Direction.DOWN);
 		assertTrue(board.shipCollision(b,c));
 
-		//NEED TO FIX THIS
-		//A SUB CAN BE ANOTHER ANOTHER SHIP!!
-		/*
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 		s.setStartPoint(new Point(0,0), Direction.DOWN);
 		assertFalse(board.shipCollision(c,s));
-		*/
 	}
 
 	@Test

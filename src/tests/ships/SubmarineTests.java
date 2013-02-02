@@ -123,4 +123,9 @@ public class SubmarineTests {
 	public void testShipType() {
 		assertEquals(ShipType.SUBMARINE, s.getShipType());
 	}
+	
+	@Test
+	public void testIsSubmerged() {
+		assertTrue(s.isSubmerged());
+	}
 }

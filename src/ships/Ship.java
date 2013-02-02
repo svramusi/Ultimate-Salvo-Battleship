@@ -117,4 +117,12 @@ public abstract class Ship {
 	{
 		return this.shipType;
 	}
+	
+	public boolean isSubmerged()
+	{
+		if(this.shipType == ShipType.SUBMARINE)
+			return true;
+		else
+			return false;
+	}
 }

@@ -134,4 +134,9 @@ public class CarrierTests {
 	public void testShipType() {
 		assertEquals(ShipType.CARRIER, c.getShipType());
 	}
+	
+	@Test
+	public void testIsSubmerged() {
+		assertFalse(c.isSubmerged());
+	}
 }
