@@ -1,10 +1,12 @@
 package ships;
 
+import ships.Ship.ShipType;
+
 public class Carrier extends Ship {
 
 	public Carrier()
 	{
-		super("Carrier");
+		super(ShipType.CARRIER);
 	}
 	
 	@Override
