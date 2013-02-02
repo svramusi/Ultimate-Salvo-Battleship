@@ -78,7 +78,7 @@ public class BoardTests {
 	}
 
 	@Test
-	public void testAddShipsToBoardInvalidLocations() {
+	public void testAddShipsToBoardOntopOfEachother() {
 		try {
 			c.setStartPoint(new Point(0,0), Direction.DOWN);
 			board.addShip(c);
@@ -93,6 +93,98 @@ public class BoardTests {
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
 			System.out.println(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testAddShipsToBoardOutOfBounds() {
+
+		try {
+			b.setStartPoint(new Point(-1,0), Direction.DOWN);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(0,-1), Direction.RIGHT);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+		
+		try {
+			b.setStartPoint(new Point(0,0), Direction.UP);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(0,0), Direction.LEFT);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(0,7), Direction.RIGHT);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(0,10), Direction.LEFT);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(7,0), Direction.DOWN);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(10,0), Direction.UP);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(9,9), Direction.RIGHT);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(9,9), Direction.DOWN);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+		}
+
+		try {
+			b.setStartPoint(new Point(9,9), Direction.DOWN);
+			board.addShip(b);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
 		}
 	}
 	

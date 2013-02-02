@@ -38,6 +38,34 @@ public class Board {
 	
 	public void addShip(Ship newShip) throws InvalidShipPositionException
 	{
+		//Does the ship fall inside the bounds of the board
+		if(newShip.getStartPoint().getX() < 0)
+			throw new InvalidShipPositionException(newShip, null);
+		
+		if(newShip.getStartPoint().getY() < 0)
+			throw new InvalidShipPositionException(newShip, null);
+
+		if(newShip.getEndPoint().getX() < 0)
+			throw new InvalidShipPositionException(newShip, null);
+
+		if(newShip.getEndPoint().getY() < 0)
+			throw new InvalidShipPositionException(newShip, null);
+
+
+		if(newShip.getStartPoint().getY() >= getWidth())
+			throw new InvalidShipPositionException(newShip, null);
+		
+		if(newShip.getStartPoint().getX() >= getHeight())
+			throw new InvalidShipPositionException(newShip, null);
+		
+		if(newShip.getEndPoint().getY() >= getWidth())
+			throw new InvalidShipPositionException(newShip, null);
+		
+		if(newShip.getEndPoint().getX() >= getHeight())
+			throw new InvalidShipPositionException(newShip, null);
+		
+		
+		//Does the ship collide with another ship?
 		for(Ship s : ships)
 		{
 			if(shipCollision(newShip, s))

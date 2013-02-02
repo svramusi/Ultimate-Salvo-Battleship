@@ -34,17 +34,22 @@ public class InvalidShipPositionException extends Exception {
 		sb.append(movingShip.getEndPoint().getX());
 		sb.append(",");
 		sb.append(movingShip.getEndPoint().getY());
-		sb.append(")\nThere is already ship: ");
-		sb.append(stationaryShip.getShipType().toString());
-		sb.append(" starting at location: (");
-		sb.append(stationaryShip.getStartPoint().getX());
-		sb.append(",");
-		sb.append(stationaryShip.getStartPoint().getY());
-		sb.append(") to location: (");
-		sb.append(stationaryShip.getEndPoint().getX());
-		sb.append(",");
-		sb.append(stationaryShip.getEndPoint().getY());
 		sb.append(")");
+		
+		if(stationaryShip != null)
+		{
+			sb.append("\nThere is already ship: ");
+			sb.append(stationaryShip.getShipType().toString());
+			sb.append(" starting at location: (");
+			sb.append(stationaryShip.getStartPoint().getX());
+			sb.append(",");
+			sb.append(stationaryShip.getStartPoint().getY());
+			sb.append(") to location: (");
+			sb.append(stationaryShip.getEndPoint().getX());
+			sb.append(",");
+			sb.append(stationaryShip.getEndPoint().getY());
+			sb.append(")");
+		}
 		
 		return sb.toString();
 	}
