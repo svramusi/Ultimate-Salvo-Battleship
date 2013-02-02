@@ -92,6 +92,7 @@ public class BoardTests {
 			fail("InvalidShipPosition not thrown.");
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
+			System.out.println(e.getMessage());
 		}
 	}
 	

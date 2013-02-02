@@ -41,7 +41,7 @@ public class Board {
 		for(Ship s : ships)
 		{
 			if(shipCollision(newShip, s))
-				throw new InvalidShipPositionException("Invalid location for ship: " + newShip.getName() + " starting point: " + newShip.getStartPoint() + " end point: " + newShip.getEndPoint());
+				throw new InvalidShipPositionException(newShip, s);
 		}
 		ships.add(newShip);
 	}
