@@ -1,24 +1,29 @@
 package ships;
 
+import java.util.*;
+
 public abstract class Ship {
+	public enum Direction {UP, DOWN, LEFT, RIGHT};
+	public enum ShipType {CARRIER, BATTLESHIP, DESTROYER, PATROLBOAT, SUBMARINE};
+
+	private Direction direction;
+	private ShipType shipType;
+	
 	protected int damage;
 	protected Point startPoint;
 	protected Point endPoint;
-	
-	protected String shipName;
 	
 	abstract int getMoveDistance();
 	abstract int getShootDistance();
 	abstract int getSize();
 	abstract boolean isSunk();
 	
-	public enum Direction {UP, DOWN, LEFT, RIGHT};
-	
-	public Ship(String shipName)
+	public Ship(ShipType shipType)
 	{
 		damage = 0;
 		setStartPoint(new Point(0,0), Direction.RIGHT);
-		this.shipName = shipName;
+		this.shipType = shipType;
+		this.direction = Direction.RIGHT;
 	}
 	
 	public int damage()
@@ -34,6 +39,8 @@ public abstract class Ship {
 	public void setStartPoint(Point startPoint, Direction direction)
 	{
 		this.startPoint = startPoint;
+		this.direction = direction;
+		
 		if(direction == Direction.UP)
 		{
 			endPoint = new Point(startPoint.getX() - (getSize() - 1), startPoint.getY());
@@ -64,6 +71,50 @@ public abstract class Ship {
 	
 	public String getName()
 	{
-		return shipName;
+		return shipType.toString();
+	}
+	
+	public List<Point> getShipLocation()
+	{
+		List<Point> location = new ArrayList<Point>();
+
+		int startingPointX = getStartPoint().getX();
+		int startingPointY = getStartPoint().getY();
+
+		if(this.direction == Direction.UP)
+		{
+			for(int i=0; i<getSize(); i++)
+			{
+				location.add(new Point(startingPointX - i, startingPointY));
+			}
+		}
+		else if(this.direction == Direction.DOWN)
+		{
+			for(int i=0; i<getSize(); i++)
+			{
+				location.add(new Point(startingPointX + i, startingPointY));
+			}
+		}
+		else if(this.direction == Direction.LEFT)
+		{
+			for(int i=0; i<getSize(); i++)
+			{
+				location.add(new Point(startingPointX, startingPointY - i));
+			}
+		}
+		else if(this.direction == Direction.RIGHT)
+		{
+			for(int i=0; i<getSize(); i++)
+			{
+				location.add(new Point(startingPointX, startingPointY + i));
+			}
+		}
+		
+		return location;
+	}
+	
+	public ShipType getShipType()
+	{
+		return this.shipType;
 	}
 }
