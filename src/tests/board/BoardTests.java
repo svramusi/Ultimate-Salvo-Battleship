@@ -6,6 +6,8 @@ import org.junit.*;
 import board.*;
 import ships.*;
 import ships.Ship.Direction;
+import ships.Ship.ShipType;
+import battleshipExceptions.*;
 
 public class BoardTests {
 
@@ -184,6 +186,59 @@ public class BoardTests {
 			fail("InvalidShipPosition not thrown.");
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testMoveShipToValidLocation() {
+		try {
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(0,1), Direction.DOWN);
+			assertEquals(new Point(0,1), c.getStartPoint());
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidMoveException when I shouldn't have");
+		}
+		
+	}
+
+	@Test
+	public void testMoveShipOutOfBounds() {
+		try {
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(0,1), Direction.UP);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+			assertEquals(new Point(0,0), c.getStartPoint());
+		}
+	}
+
+	@Test
+	public void testMoveShipCollision() {
+		try {
+			board.addShip(c);
+			d.setStartPoint(new Point(5,0), Direction.DOWN);
+			board.addShip(d);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(1,0), Direction.DOWN);
+			fail("InvalidShipPosition not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+			assertEquals(new Point(0,0), c.getStartPoint());
 		}
 	}
 	

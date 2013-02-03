@@ -69,6 +69,11 @@ public abstract class Ship {
 		return endPoint;
 	}
 	
+	public Direction getDirection()
+	{
+		return direction;
+	}
+	
 	public String getName()
 	{
 		return shipType.toString();

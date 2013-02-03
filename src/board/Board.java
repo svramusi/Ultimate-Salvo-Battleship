@@ -1,6 +1,7 @@
 package board;
 
 import ships.*;
+import battleshipExceptions.*;
 
 import java.util.*;
 
@@ -38,16 +39,51 @@ public class Board {
 	
 	public void addShip(Ship newShip) throws InvalidShipPositionException
 	{
-		if(!isInBounds(newShip))
-			throw new InvalidShipPositionException(newShip, null);
+		validateShip(newShip); // throws InvalidShipPositionException
+		ships.add(newShip);
+	}
+	
+	public void moveShip(Ship.ShipType shipType, Point startingPoint, Ship.Direction direction) throws InvalidShipPositionException
+	{
+		Ship movingShip = findShip(shipType);
+		Point origStartingPoint = movingShip.getStartPoint();
+		Ship.Direction origDirection = movingShip.getDirection();
+		
+		movingShip.setStartPoint(startingPoint, direction);
+		
+		try
+		{
+			validateShip(movingShip);
+		}
+		catch(InvalidShipPositionException e)
+		{
+			movingShip.setStartPoint(origStartingPoint, origDirection);
+			throw e;
+		}
+	}
 
-		//Does the ship collide with another ship?
+	private Ship findShip(Ship.ShipType shipType) 
+	{
+		Ship movingShip = null;
+		
 		for(Ship s : ships)
 		{
-			if(shipCollision(newShip, s))
-				throw new InvalidShipPositionException(newShip, s);
+			if(s.getShipType() == shipType)
+			{
+				movingShip = s;
+			}
 		}
-		ships.add(newShip);
+		return movingShip;
+	}
+	
+	private void validateShip(Ship ship) throws InvalidShipPositionException
+	{
+		if(!isInBounds(ship))
+			throw new InvalidShipPositionException(ship, null);
+
+		Ship collidingShip = findCollision(ship);
+		if(collidingShip != null)
+			throw new InvalidShipPositionException(ship, collidingShip);
 	}
 	
 	private boolean isInBounds(Ship s)
@@ -75,6 +111,20 @@ public class Board {
 			return false;
 		else
 			return true;
+	}
+	
+	private Ship findCollision(Ship checkShip)
+	{
+		for(Ship s : ships)
+		{
+			if(s.getShipType() != checkShip.getShipType())
+			{
+				if(shipCollision(checkShip, s))
+					return s;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void clearBoard()
