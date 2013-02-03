@@ -139,4 +139,56 @@ public class CarrierTests {
 	public void testIsSubmerged() {
 		assertFalse(c.isSubmerged());
 	}
+	@Test
+	public void test90DegRotation() {
+		assertTrue(c.is90DegRotation(Direction.UP, Direction.RIGHT));
+		assertTrue(c.is90DegRotation(Direction.UP, Direction.LEFT));
+		assertFalse(c.is90DegRotation(Direction.UP, Direction.DOWN));
+		assertFalse(c.is90DegRotation(Direction.UP, Direction.UP));
+
+		assertTrue(c.is90DegRotation(Direction.DOWN, Direction.RIGHT));
+		assertTrue(c.is90DegRotation(Direction.DOWN, Direction.LEFT));
+		assertFalse(c.is90DegRotation(Direction.DOWN, Direction.UP));
+		assertFalse(c.is90DegRotation(Direction.DOWN, Direction.DOWN));
+
+		assertTrue(c.is90DegRotation(Direction.LEFT, Direction.UP));
+		assertTrue(c.is90DegRotation(Direction.LEFT, Direction.DOWN));
+		assertFalse(c.is90DegRotation(Direction.LEFT, Direction.RIGHT));
+		assertFalse(c.is90DegRotation(Direction.LEFT, Direction.LEFT));
+
+		assertTrue(c.is90DegRotation(Direction.RIGHT, Direction.UP));
+		assertTrue(c.is90DegRotation(Direction.RIGHT, Direction.DOWN));
+		assertFalse(c.is90DegRotation(Direction.RIGHT, Direction.LEFT));
+		assertFalse(c.is90DegRotation(Direction.RIGHT, Direction.RIGHT));
+	}
+
+	@Test
+	public void testRotation() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertFalse(c.isValidRotation(new Point(0,0), Direction.DOWN));
+		assertFalse(c.isValidRotation(new Point(1,0), Direction.DOWN));
+
+		assertTrue(c.isValidRotation(new Point(0,0), Direction.RIGHT)); //Pivot right
+		assertTrue(c.isValidRotation(new Point(0,4), Direction.LEFT)); //Pivot right, swapping start and end
+
+		assertFalse(c.isValidRotation(new Point(4,0), Direction.DOWN)); //180 deg rotation
+		assertFalse(c.isValidRotation(new Point(8,0), Direction.UP)); //180 deg rotation
+	}
+
+	@Test
+	public void testValidMove() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(c.isValidMove(new Point(1,0), Direction.DOWN));
+		assertTrue(c.isValidMove(new Point(0,0), Direction.RIGHT)); //Pivot right
+		assertTrue(c.isValidMove(new Point(0,4), Direction.LEFT)); //Pivot right, swapping start and end
+
+		assertFalse(c.isValidMove(new Point(2,0), Direction.DOWN));
+		assertFalse(c.isValidMove(new Point(8,0), Direction.UP));
+		assertFalse(c.isValidMove(new Point(0,4), Direction.RIGHT));
+
+		c.setStartPoint(new Point(0,4), Direction.DOWN);
+		assertTrue(c.isValidMove(new Point(4,8), Direction.LEFT));
+	}
 }

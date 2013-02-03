@@ -13,10 +13,10 @@ public abstract class Ship {
 	protected Point startPoint;
 	protected Point endPoint;
 	
-	abstract int getMoveDistance();
-	abstract int getShootDistance();
-	abstract int getSize();
-	abstract boolean isSunk();
+	public abstract int getMoveDistance();
+	public abstract int getShootDistance();
+	public abstract int getSize();
+	public abstract boolean isSunk();
 	
 	public Ship(ShipType shipType)
 	{
@@ -40,22 +40,26 @@ public abstract class Ship {
 	{
 		this.startPoint = startPoint;
 		this.direction = direction;
-		
+		this.endPoint = calculateEndPoint(startPoint, direction);
+	}
+	
+	public Point calculateEndPoint(Point startPoint, Direction direction)
+	{
 		if(direction == Direction.UP)
 		{
-			endPoint = new Point(startPoint.getX() - (getSize() - 1), startPoint.getY());
+			return new Point(startPoint.getX() - (getSize() - 1), startPoint.getY());
 		}
 		else if(direction == Direction.DOWN)
 		{
-			endPoint = new Point(startPoint.getX() + (getSize() - 1), startPoint.getY());
+			return new Point(startPoint.getX() + (getSize() - 1), startPoint.getY());
 		}
 		else if(direction == Direction.RIGHT)
 		{
-			endPoint = new Point(startPoint.getX(), startPoint.getY() + (getSize() - 1));
+			return new Point(startPoint.getX(), startPoint.getY() + (getSize() - 1));
 		}
-		else if(direction == Direction.LEFT)
+		else
 		{
-			endPoint = new Point(startPoint.getX(), startPoint.getY() - (getSize() - 1));
+			return new Point(startPoint.getX(), startPoint.getY() - (getSize() - 1));
 		}
 	}
 
@@ -127,6 +131,53 @@ public abstract class Ship {
 	{
 		if(this.shipType == ShipType.SUBMARINE)
 			return true;
+		else
+			return false;
+	}
+	
+	public boolean isValidMove(Point newStartingPoint, Direction direction)
+	{
+		if(isValidRotation(newStartingPoint, direction))
+			return true;
+		
+		if(getStartPoint().getDistanceFrom(newStartingPoint) > getMoveDistance())
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean isValidRotation(Point newStartingPoint, Direction direction)
+	{
+		if(getStartPoint().equals(newStartingPoint) && getDirection() != direction)
+			return true;
+		else if(getStartPoint().equals(calculateEndPoint(newStartingPoint, direction)) && is90DegRotation(getDirection(), direction))
+			return true;
+		else if(getEndPoint().equals(calculateEndPoint(newStartingPoint, direction)) && is90DegRotation(getDirection(), direction))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean is90DegRotation(Direction origDirection, Direction newDirection) 
+	{
+		if(origDirection == Direction.UP || origDirection == Direction.DOWN)
+		{
+			if(newDirection == Direction.RIGHT)
+				return true;
+			else if(newDirection == Direction.LEFT)
+				return true;
+			else
+				return false;
+		}
+		else if(origDirection == Direction.LEFT || origDirection == Direction.RIGHT)
+		{
+			if(newDirection == Direction.UP)
+				return true;
+			else if(newDirection == Direction.DOWN)
+				return true;
+			else
+				return false;
+		}
 		else
 			return false;
 	}

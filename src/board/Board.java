@@ -39,7 +39,7 @@ public class Board {
 	
 	public void addShip(Ship newShip) throws InvalidShipPositionException
 	{
-		validateShip(newShip); // throws InvalidShipPositionException
+		validateShipPositionOnBoard(newShip); // throws InvalidShipPositionException
 		ships.add(newShip);
 	}
 	
@@ -48,12 +48,20 @@ public class Board {
 		Ship movingShip = findShip(shipType);
 		Point origStartingPoint = movingShip.getStartPoint();
 		Ship.Direction origDirection = movingShip.getDirection();
+
+		if(!movingShip.isValidMove(startingPoint, direction))
+		{
+			//Need to set this so the exception is correct
+			Ship tempShip = movingShip;
+			tempShip.setStartPoint(startingPoint, direction);
+			throw new InvalidShipPositionException(tempShip, null);
+		}
 		
 		movingShip.setStartPoint(startingPoint, direction);
 		
 		try
 		{
-			validateShip(movingShip);
+			validateShipPositionOnBoard(movingShip);
 		}
 		catch(InvalidShipPositionException e)
 		{
@@ -76,7 +84,7 @@ public class Board {
 		return movingShip;
 	}
 	
-	private void validateShip(Ship ship) throws InvalidShipPositionException
+	private void validateShipPositionOnBoard(Ship ship) throws InvalidShipPositionException
 	{
 		if(!isInBounds(ship))
 			throw new InvalidShipPositionException(ship, null);
