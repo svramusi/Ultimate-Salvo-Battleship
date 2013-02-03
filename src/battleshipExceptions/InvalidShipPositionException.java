@@ -1,4 +1,4 @@
-package board;
+package battleshipExceptions;
 
 import ships.Ship;
 import java.lang.StringBuilder;
