@@ -21,6 +21,17 @@ public class Point {
 		return y;
 	}
 	
+	public int getDistanceFrom(Point otherPoint)
+	{
+		int otherX = otherPoint.getX();
+		int otherY = otherPoint.getY();
+		
+		int deltaX = Math.abs(this.x - otherX);
+		int deltaY = Math.abs(this.y - otherY);
+
+		return deltaX + deltaY;
+	}
+	
 	@Override
 	public String toString()
 	{

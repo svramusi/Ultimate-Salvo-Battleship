@@ -40,4 +40,17 @@ public class PointTests {
 		
 		assertFalse(p.equals(p1));
 	}
+
+	@Test
+	public void testGetDistanceFrom() {
+		Point p = new Point(0,0);
+		Point p1 = new Point(0,1);
+		assertEquals(1, p.getDistanceFrom(p1));
+
+		p = new Point(0,0);
+		p1 = new Point(1,0);
+		assertEquals(1, p.getDistanceFrom(p1));
+
+		assertEquals(0, p.getDistanceFrom(p));
+	}
 }
