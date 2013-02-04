@@ -52,7 +52,8 @@ public class Board {
 		if(!movingShip.isValidMove(startingPoint, direction))
 		{
 			//Need to set this so the exception is correct
-			Ship tempShip = movingShip;
+			ShipFactory factory = new ShipFactory();
+			Ship tempShip = factory.getShip(movingShip.getShipType());
 			tempShip.setStartPoint(startingPoint, direction);
 			throw new InvalidShipPositionException(tempShip, null);
 		}
