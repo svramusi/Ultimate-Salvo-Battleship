@@ -174,6 +174,9 @@ public class CarrierTests {
 
 		assertFalse(c.isValidRotation(new Point(4,0), Direction.DOWN)); //180 deg rotation
 		assertFalse(c.isValidRotation(new Point(8,0), Direction.UP)); //180 deg rotation
+
+		c.setStartPoint(new Point(4,0), Direction.DOWN);
+		assertFalse(c.isValidRotation(new Point(4,0), Direction.UP));
 	}
 
 	@Test

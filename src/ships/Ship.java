@@ -148,12 +148,17 @@ public abstract class Ship {
 	
 	public boolean isValidRotation(Point newStartingPoint, Direction direction)
 	{
-		if(getStartPoint().equals(newStartingPoint) && getDirection() != direction)
-			return true;
-		else if(getStartPoint().equals(calculateEndPoint(newStartingPoint, direction)) && is90DegRotation(getDirection(), direction))
-			return true;
-		else if(getEndPoint().equals(calculateEndPoint(newStartingPoint, direction)) && is90DegRotation(getDirection(), direction))
-			return true;
+		if(is90DegRotation(getDirection(), direction))
+		{
+			if(getStartPoint().equals(newStartingPoint))
+				return true;
+			else if(getStartPoint().equals(calculateEndPoint(newStartingPoint, direction)))
+				return true;
+			else if(getEndPoint().equals(calculateEndPoint(newStartingPoint, direction)))
+				return true;
+			else
+				return false;
+		}
 		else
 			return false;
 	}
