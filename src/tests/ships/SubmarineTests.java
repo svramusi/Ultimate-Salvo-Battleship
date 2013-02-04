@@ -1,6 +1,7 @@
 package tests.ships;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -127,5 +128,18 @@ public class SubmarineTests {
 	@Test
 	public void testIsSubmerged() {
 		assertTrue(s.isSubmerged());
+	}
+	
+	@Test
+	public void testValidShot() {
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(s.isValidShot(new Point(0,1)));
+		assertTrue(s.isValidShot(new Point(3,0)));
+		assertTrue(s.isValidShot(new Point(3,1)));
+		assertTrue(s.isValidShot(new Point(2,1)));
+
+		assertFalse(s.isValidShot(new Point(4,0)));
+		assertFalse(s.isValidShot(new Point(3,2)));
 	}
 }

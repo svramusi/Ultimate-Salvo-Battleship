@@ -129,4 +129,17 @@ public class DestroyerTests {
 	public void testIsSubmerged() {
 		assertFalse(d.isSubmerged());
 	}
+	
+	@Test
+	public void testValidShot() {
+		d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(d.isValidShot(new Point(0,1)));
+		assertTrue(d.isValidShot(new Point(5,0)));
+		assertTrue(d.isValidShot(new Point(1,3)));
+		assertTrue(d.isValidShot(new Point(5,3)));
+
+		assertFalse(d.isValidShot(new Point(6,0)));
+		assertFalse(d.isValidShot(new Point(5,5)));
+	}
 }

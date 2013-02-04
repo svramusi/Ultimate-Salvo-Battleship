@@ -134,4 +134,15 @@ public class BattleshipTests {
 	public void testIsSubmerged() {
 		assertFalse(b.isSubmerged());
 	}
+	
+	@Test
+	public void testValidShot() {
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(b.isValidShot(new Point(1,0)));
+		assertTrue(b.isValidShot(new Point(4,0)));
+		assertTrue(b.isValidShot(new Point(4,4)));
+
+		assertFalse(b.isValidShot(new Point(0,5)));
+	}
 }

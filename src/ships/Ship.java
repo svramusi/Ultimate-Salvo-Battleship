@@ -186,4 +186,14 @@ public abstract class Ship {
 		else
 			return false;
 	}
+
+	public boolean isValidShot(Point shot) {
+		if(getStartPoint().getDistanceFrom(shot) <= getShootDistance())
+			return true;
+
+		if(getEndPoint().getDistanceFrom(shot) <= getShootDistance())
+			return true;
+
+		return false;
+	}
 }

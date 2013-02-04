@@ -124,4 +124,17 @@ public class PatrolBoatTests {
 	public void testIsSubmerged() {
 		assertFalse(pb.isSubmerged());
 	}
+	
+	@Test
+	public void testValidShot() {
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(pb.isValidShot(new Point(0,1)));
+		assertTrue(pb.isValidShot(new Point(3,0)));
+		assertTrue(pb.isValidShot(new Point(1,2)));
+		assertTrue(pb.isValidShot(new Point(3,2)));
+
+		assertFalse(pb.isValidShot(new Point(4,0)));
+		assertFalse(pb.isValidShot(new Point(3,3)));
+	}
 }

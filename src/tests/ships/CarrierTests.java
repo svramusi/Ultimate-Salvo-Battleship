@@ -194,4 +194,16 @@ public class CarrierTests {
 		c.setStartPoint(new Point(0,4), Direction.DOWN);
 		assertTrue(c.isValidMove(new Point(4,8), Direction.LEFT));
 	}
+	
+	@Test
+	public void testValidShot() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(c.isValidShot(new Point(0,1)));
+		assertTrue(c.isValidShot(new Point(9,0)));
+		assertTrue(c.isValidShot(new Point(1,6)));
+		assertTrue(c.isValidShot(new Point(9,6)));
+
+		assertFalse(c.isValidShot(new Point(9,7)));
+	}
 }
