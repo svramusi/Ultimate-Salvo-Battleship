@@ -29,7 +29,10 @@ public class Point {
 		int deltaX = Math.abs(this.x - otherX);
 		int deltaY = Math.abs(this.y - otherY);
 
-		return deltaX + deltaY;
+		if(deltaX > deltaY)
+			return deltaX;
+		else
+			return deltaY;
 	}
 	
 	@Override

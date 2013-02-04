@@ -52,5 +52,8 @@ public class PointTests {
 		assertEquals(1, p.getDistanceFrom(p1));
 
 		assertEquals(0, p.getDistanceFrom(p));
+
+		p1 = new Point(4,2);
+		assertEquals(4, p.getDistanceFrom(p1));
 	}
 }
