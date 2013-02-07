@@ -1,19 +1,18 @@
 package tests.display;
 
+import static org.junit.Assert.fail;
 
-import static org.junit.Assert.*;
-
-import org.junit.*;
+import org.junit.Test;
 
 import ships.*;
 import display.*;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
 
-public class ConsoleTests {
+public class FileTests {
 
 	@Test
-	public void testConsole() {
+	public void testFile() {
 		Board board = new Board();
 		board.clearBoard();
 		
@@ -42,7 +41,7 @@ public class ConsoleTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		Display display = new ConsoleDisplay(board);
+		Display display = new FileDisplay(board,"output-file.txt");
 		display.printBoard();
 	}
 }
