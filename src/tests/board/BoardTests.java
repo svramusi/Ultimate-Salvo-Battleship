@@ -8,6 +8,7 @@ import ships.*;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
 import battleshipExceptions.*;
+import java.util.*;
 
 public class BoardTests {
 
@@ -20,7 +21,7 @@ public class BoardTests {
 	
 	@Before
 	public void setUp() throws Exception {
-		board = Board.getBoard();
+		board = new Board();
 		board.clearBoard();
 		
 		c = new Carrier();
@@ -295,5 +296,27 @@ public class BoardTests {
 			System.out.println(e.getMessage());
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
+	}
+
+	@Test
+	public void testGetAllShips() {
+		try {
+			board.addShip(c);
+			board.addShip(b);
+			board.addShip(d);
+			board.addShip(pb);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		List<Ship> actualShips = board.getShips();
+		assertEquals(5, actualShips.size());
+
+		assertTrue(actualShips.contains(c));
+		assertTrue(actualShips.contains(b));
+		assertTrue(actualShips.contains(d));
+		assertTrue(actualShips.contains(pb));
+		assertTrue(actualShips.contains(s));
 	}
 }

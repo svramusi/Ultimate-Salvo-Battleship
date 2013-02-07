@@ -7,24 +7,15 @@ import java.util.*;
 
 public class Board {
 
-	private static Board theBoard = null;
 	private int width;
 	private int height;
 	private List<Ship> ships;
 	
-	private Board()
+	public Board()
 	{
 		width = 10;
 		height = 10;
 		ships = new ArrayList<Ship>();
-	}
-	
-	public static Board getBoard()
-	{
-		if(theBoard == null)
-			theBoard = new Board();
-		
-		return theBoard;
 	}
 	
 	public int getWidth()
@@ -164,5 +155,9 @@ public class Board {
 		}
 		
 		return false;
+	}
+
+	public List<Ship> getShips() {
+		return ships;
 	}
 }
