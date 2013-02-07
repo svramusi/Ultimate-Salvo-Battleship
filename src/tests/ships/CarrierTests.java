@@ -201,8 +201,8 @@ public class CarrierTests {
 
 		assertTrue(c.isValidShot(new Point(0,1)));
 		assertTrue(c.isValidShot(new Point(9,0)));
-		assertTrue(c.isValidShot(new Point(1,6)));
-		assertTrue(c.isValidShot(new Point(9,6)));
+		assertTrue(c.isValidShot(new Point(1,5)));
+		assertTrue(c.isValidShot(new Point(9,5)));
 
 		assertFalse(c.isValidShot(new Point(9,7)));
 	}
