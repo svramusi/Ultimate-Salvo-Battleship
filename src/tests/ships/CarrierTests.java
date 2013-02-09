@@ -63,25 +63,49 @@ public class CarrierTests {
 	}
 	
 	@Test
-	public void testInitialDamage() {
-		assertEquals(0, c.damage());
+	public void testConvertToDamageIndex() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertEquals(0, c.convertToDamageIndex(new Point(0,0)));
+		assertEquals(1, c.convertToDamageIndex(new Point(1,0)));
+		assertEquals(2, c.convertToDamageIndex(new Point(2,0)));
+		assertEquals(3, c.convertToDamageIndex(new Point(3,0)));
+		assertEquals(4, c.convertToDamageIndex(new Point(4,0)));
+
+		assertEquals(-1, c.convertToDamageIndex(new Point(9,9)));
 	}
-	
+
 	@Test
 	public void testTakesDamage() {
-		assertEquals(0, c.damage());
-		c.takeDamage();
-		assertEquals(1, c.damage());
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(c.takesDamage(new Point(0,0)));
+		assertTrue(c.takesDamage(new Point(1,0)));
+		assertFalse(c.takesDamage(new Point(9,9)));
 	}
 	
 	@Test
 	public void testSunk() {
-		c.takeDamage();
-		c.takeDamage();
-		c.takeDamage();
-		c.takeDamage();
-		c.takeDamage();
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(c.takesDamage(new Point(0,0)));
+		assertTrue(c.takesDamage(new Point(1,0)));
+		assertTrue(c.takesDamage(new Point(2,0)));
+		assertTrue(c.takesDamage(new Point(3,0)));
+		assertTrue(c.takesDamage(new Point(4,0)));
+		
 		assertTrue(c.isSunk());
+	}
+	
+	@Test
+	public void testIsDamaged() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(c.takesDamage(new Point(0,0)));
+
+		assertTrue(c.isDamaged(new Point(0,0)));
+		assertFalse(c.isDamaged(new Point(1,0)));
+		assertFalse(c.isDamaged(new Point(9,9)));
 	}
 	
 	@Test

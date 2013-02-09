@@ -61,26 +61,49 @@ public class BattleshipTests {
 		assertEquals(new Point(0,3), b.getStartPoint());
 		assertEquals(new Point(0,0), b.getEndPoint());
 	}
-	
+
 	@Test
-	public void testInitialDamage() {
-		assertEquals(0, b.damage());
+	public void testConvertToDamageIndex() {
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertEquals(0, b.convertToDamageIndex(new Point(0,0)));
+		assertEquals(1, b.convertToDamageIndex(new Point(1,0)));
+		assertEquals(2, b.convertToDamageIndex(new Point(2,0)));
+		assertEquals(3, b.convertToDamageIndex(new Point(3,0)));
+
+		assertEquals(-1, b.convertToDamageIndex(new Point(9,9)));
 	}
-	
+
 	@Test
 	public void testTakesDamage() {
-		assertEquals(0, b.damage());
-		b.takeDamage();
-		assertEquals(1, b.damage());
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(b.takesDamage(new Point(0,0)));
+		assertTrue(b.takesDamage(new Point(1,0)));
+		assertFalse(b.takesDamage(new Point(9,9)));
 	}
 	
 	@Test
 	public void testSunk() {
-		b.takeDamage();
-		b.takeDamage();
-		b.takeDamage();
-		b.takeDamage();
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(b.takesDamage(new Point(0,0)));
+		assertTrue(b.takesDamage(new Point(1,0)));
+		assertTrue(b.takesDamage(new Point(2,0)));
+		assertTrue(b.takesDamage(new Point(3,0)));
+		
 		assertTrue(b.isSunk());
+	}
+	
+	@Test
+	public void testIsDamaged() {
+		b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(b.takesDamage(new Point(0,0)));
+
+		assertTrue(b.isDamaged(new Point(0,0)));
+		assertFalse(b.isDamaged(new Point(1,0)));
+		assertFalse(b.isDamaged(new Point(9,9)));
 	}
 	
 	@Test

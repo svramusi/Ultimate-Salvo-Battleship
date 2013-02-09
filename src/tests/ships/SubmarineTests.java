@@ -63,24 +63,49 @@ public class SubmarineTests {
 		assertEquals(new Point(0,2), s.getStartPoint());
 		assertEquals(new Point(0,0), s.getEndPoint());
 	}
-	
+
 	@Test
-	public void testInitialDamage() {
-		assertEquals(0, s.damage());
+	public void testConvertToDamageIndex() {
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertEquals(0, s.convertToDamageIndex(new Point(0,0)));
+		assertEquals(1, s.convertToDamageIndex(new Point(1,0)));
+		assertEquals(2, s.convertToDamageIndex(new Point(2,0)));
+
+		assertEquals(-1, s.convertToDamageIndex(new Point(9,9)));
 	}
-	
+
 	@Test
 	public void testTakesDamage() {
-		assertEquals(0, s.damage());
-		s.takeDamage();
-		assertEquals(1, s.damage());
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(s.takesDamage(new Point(0,0)));
+		assertTrue(s.takesDamage(new Point(1,0)));
+		assertFalse(s.takesDamage(new Point(9,9)));
 	}
 	
 	@Test
 	public void testSunk() {
-		s.takeDamage();
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(s.takesDamage(new Point(0,0)));
+		assertTrue(s.takesDamage(new Point(1,0)));
+		assertTrue(s.takesDamage(new Point(2,0)));
+		
 		assertTrue(s.isSunk());
 	}
+	
+	@Test
+	public void testIsDamaged() {
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(s.takesDamage(new Point(0,0)));
+
+		assertTrue(s.isDamaged(new Point(0,0)));
+		assertFalse(s.isDamaged(new Point(1,0)));
+		assertFalse(s.isDamaged(new Point(9,9)));
+	}
+	
 	
 	@Test
 	public void testGetShipName() {

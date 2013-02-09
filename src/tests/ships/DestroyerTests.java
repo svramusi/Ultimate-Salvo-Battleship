@@ -61,25 +61,47 @@ public class DestroyerTests {
 		assertEquals(new Point(0,2), d.getStartPoint());
 		assertEquals(new Point(0,0), d.getEndPoint());
 	}
-	
+
 	@Test
-	public void testInitialDamage() {
-		assertEquals(0, d.damage());
+	public void testConvertToDamageIndex() {
+		d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertEquals(0, d.convertToDamageIndex(new Point(0,0)));
+		assertEquals(1, d.convertToDamageIndex(new Point(1,0)));
+		assertEquals(2, d.convertToDamageIndex(new Point(2,0)));
+
+		assertEquals(-1, d.convertToDamageIndex(new Point(9,9)));
 	}
-	
+
 	@Test
 	public void testTakesDamage() {
-		assertEquals(0, d.damage());
-		d.takeDamage();
-		assertEquals(1, d.damage());
+		d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(d.takesDamage(new Point(0,0)));
+		assertTrue(d.takesDamage(new Point(1,0)));
+		assertFalse(d.takesDamage(new Point(9,9)));
 	}
 	
 	@Test
 	public void testSunk() {
-		d.takeDamage();
-		d.takeDamage();
-		d.takeDamage();
+		d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(d.takesDamage(new Point(0,0)));
+		assertTrue(d.takesDamage(new Point(1,0)));
+		assertTrue(d.takesDamage(new Point(2,0)));
+		
 		assertTrue(d.isSunk());
+	}
+	
+	@Test
+	public void testIsDamaged() {
+		d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(d.takesDamage(new Point(0,0)));
+
+		assertTrue(d.isDamaged(new Point(0,0)));
+		assertFalse(d.isDamaged(new Point(1,0)));
+		assertFalse(d.isDamaged(new Point(9,9)));
 	}
 	
 	@Test

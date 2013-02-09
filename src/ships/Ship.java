@@ -8,32 +8,74 @@ public abstract class Ship {
 
 	private Direction direction;
 	private ShipType shipType;
-	
-	protected int damage;
+
+	protected boolean[] damage;
+
 	protected Point startPoint;
 	protected Point endPoint;
-	
+
 	public abstract int getMoveDistance();
 	public abstract int getShootDistance();
 	public abstract int getSize();
-	public abstract boolean isSunk();
-	
+
 	public Ship(ShipType shipType)
 	{
-		damage = 0;
 		setStartPoint(new Point(0,0), Direction.RIGHT);
+		damage = new boolean[getSize()];
+		for(int i=0; i<getSize(); i++)
+			damage[i] = false;
+
 		this.shipType = shipType;
 		this.direction = Direction.RIGHT;
 	}
-	
-	public int damage()
+
+	public int convertToDamageIndex(Point p)
 	{
-		return damage;
+		int index = 0;
+
+		for(Point location : getShipLocation())
+		{
+			if(location.equals(p))
+				return index;
+
+			index++;
+		}
+
+		return -1;
 	}
-	
-	public void takeDamage()
+
+	public boolean takesDamage(Point p)
 	{
-		damage++;
+		int damageIndex = convertToDamageIndex(p);
+
+		if(damageIndex != -1)
+		{
+			damage[damageIndex] = true;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public boolean isSunk() {
+		for(int i=0; i<getSize(); i++)
+		{
+			if(!damage[i])
+				return false;
+		}
+
+		return true;
+	}
+
+	public boolean isDamaged(Point point) {
+		int index = convertToDamageIndex(point);
+
+		if(index != -1)
+			return damage[index];
+		else
+			return false;
 	}
 	
 	public void setStartPoint(Point startPoint, Direction direction)

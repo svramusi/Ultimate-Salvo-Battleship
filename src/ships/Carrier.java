@@ -1,7 +1,5 @@
 package ships;
 
-import ships.Ship.ShipType;
-
 public class Carrier extends Ship {
 
 	public Carrier()
@@ -22,13 +20,5 @@ public class Carrier extends Ship {
 	@Override
 	public int getSize() {
 		return 5;
-	}
-	
-	@Override
-	public boolean isSunk() {
-		if(damage < 5)
-			return false;
-		else
-			return true;
 	}
 }

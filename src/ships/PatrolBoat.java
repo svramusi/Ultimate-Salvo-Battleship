@@ -1,7 +1,5 @@
 package ships;
 
-import ships.Ship.ShipType;
-
 public class PatrolBoat extends Ship {
 
 	public PatrolBoat()
@@ -22,13 +20,5 @@ public class PatrolBoat extends Ship {
 	@Override
 	public int getSize() {
 		return 2;
-	}
-	
-	@Override
-	public boolean isSunk() {
-		if(damage < 2)
-			return false;
-		else
-			return true;
 	}
 }

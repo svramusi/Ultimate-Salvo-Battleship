@@ -61,24 +61,46 @@ public class PatrolBoatTests {
 		assertEquals(new Point(0,1), pb.getStartPoint());
 		assertEquals(new Point(0,0), pb.getEndPoint());
 	}
-	
+
+
 	@Test
-	public void testInitialDamage() {
-		assertEquals(0, pb.damage());
+	public void testConvertToDamageIndex() {
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertEquals(0, pb.convertToDamageIndex(new Point(0,0)));
+		assertEquals(1, pb.convertToDamageIndex(new Point(1,0)));
+
+		assertEquals(-1, pb.convertToDamageIndex(new Point(9,9)));
 	}
-	
+
 	@Test
 	public void testTakesDamage() {
-		assertEquals(0, pb.damage());
-		pb.takeDamage();
-		assertEquals(1, pb.damage());
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(pb.takesDamage(new Point(0,0)));
+		assertTrue(pb.takesDamage(new Point(1,0)));
+		assertFalse(pb.takesDamage(new Point(9,9)));
 	}
 	
 	@Test
 	public void testSunk() {
-		pb.takeDamage();
-		pb.takeDamage();
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(pb.takesDamage(new Point(0,0)));
+		assertTrue(pb.takesDamage(new Point(1,0)));
+		
 		assertTrue(pb.isSunk());
+	}
+	
+	@Test
+	public void testIsDamaged() {
+		pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		assertTrue(pb.takesDamage(new Point(0,0)));
+
+		assertTrue(pb.isDamaged(new Point(0,0)));
+		assertFalse(pb.isDamaged(new Point(1,0)));
+		assertFalse(pb.isDamaged(new Point(9,9)));
 	}
 	
 	@Test

@@ -21,12 +21,4 @@ public class Battleship extends Ship {
 	public int getSize() {
 		return 4;
 	}
-	
-	@Override
-	public boolean isSunk() {
-		if(damage < 4)
-			return false;
-		else
-			return true;
-	}
 }
