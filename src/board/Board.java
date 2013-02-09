@@ -157,7 +157,20 @@ public class Board {
 		return false;
 	}
 
-	public List<Ship> getShips() {
+	public List<Ship> getShips()
+	{
 		return ships;
+	}
+
+	public boolean isHit(Point shot)
+	{
+		boolean isAHit = false;
+		for(Ship s : ships)
+		{
+			if(s.takesDamage(shot))
+				isAHit = true;
+		}
+
+		return isAHit;
 	}
 }

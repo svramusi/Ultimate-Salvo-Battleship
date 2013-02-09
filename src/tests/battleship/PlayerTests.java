@@ -12,11 +12,11 @@ import board.Board;
 import display.Display;
 import display.FileDisplay;
 import battleship.Player;
+import battleship.HumanPlayer;
 
 public class PlayerTests {
 
 	private Board board;
-	private Display display;
 	private Player player;
 
 	@Before
@@ -49,13 +49,24 @@ public class PlayerTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		display = new FileDisplay(board, "computer player", "output-file.txt");
-		
-		player = new Player("human player");
+		player = new HumanPlayer(board, "human player");
 	}
 
 	@Test
 	public void testPlayerName() {
 		assertEquals("human player", player.getName());
+	}
+
+	@Test
+	public void testIsHit() {
+		assertTrue(player.isHit(new Point(0,0)));
+		assertFalse(player.isHit(new Point(8,8)));
+	}
+
+	@Test
+	public void testIsDefeated() {
+		assertFalse(player.isDefeated());
+		board.clearBoard();
+		assertTrue(player.isDefeated());
 	}
 }

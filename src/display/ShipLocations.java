@@ -43,13 +43,13 @@ public class ShipLocations {
 		}
 	}
 	
-	public Ship.ShipType getShip(int row, int col)
+	public Info getShip(int row, int col)
 	{
 		List<Info> cols = shipLocations.get(row);
 		for(Info i : cols)
 		{
 			if(i.getCol() == col)
-				return i.getShipType();
+				return i;
 		}
 		
 		return null;
@@ -57,7 +57,7 @@ public class ShipLocations {
 	
 	private Info convertToInfo(Point p, Ship s)
 	{
-		return new Info(s.getShipType(), p.getY());
+		return new Info(s.getShipType(), p.getY(), s.isDamaged(p));
 	}
 }
 
@@ -65,11 +65,13 @@ class Info
 {
 	private Ship.ShipType shipType;
 	private int col;
+	private boolean isDamaged;
 	
-	public Info(Ship.ShipType shipType, int col)
+	public Info(Ship.ShipType shipType, int col, boolean isDamaged)
 	{
 		this.shipType = shipType;
 		this.col = col;
+		this.isDamaged = isDamaged;
 	}
 	
 	public int getCol()
@@ -80,5 +82,10 @@ class Info
 	public Ship.ShipType getShipType()
 	{
 		return shipType;
+	}
+
+	public boolean isDamaged()
+	{
+		return isDamaged;
 	}
 }

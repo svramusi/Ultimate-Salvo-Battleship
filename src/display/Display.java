@@ -4,8 +4,6 @@ import board.Board;
 import ships.*;
 import ships.Ship.ShipType;
 
-import java.util.*;
-
 public abstract class Display {
 	
 	protected Board board;
@@ -31,21 +29,23 @@ public abstract class Display {
 			sb.append("|");
 			for(int col=0; col<board.getWidth(); col++)
 			{
-				Ship.ShipType shipToDisplay = shipLocations.getShip(row, col);
+				Info shipToDisplay = shipLocations.getShip(row, col);
 				
 				if(shipToDisplay == null)
 					sb.append(".");
 				else
 				{
-					if(shipToDisplay == ShipType.CARRIER)
+					if(shipToDisplay.isDamaged())
+						sb.append("X");
+					else if(shipToDisplay.getShipType() == ShipType.CARRIER)
 						sb.append("C");
-					else if(shipToDisplay == ShipType.BATTLESHIP)
+					else if(shipToDisplay.getShipType() == ShipType.BATTLESHIP)
 						sb.append("B");
-					else if(shipToDisplay == ShipType.DESTROYER)
+					else if(shipToDisplay.getShipType() == ShipType.DESTROYER)
 						sb.append("D");
-					else if(shipToDisplay == ShipType.PATROLBOAT)
+					else if(shipToDisplay.getShipType() == ShipType.PATROLBOAT)
 						sb.append("P");
-					else if(shipToDisplay == ShipType.SUBMARINE)
+					else if(shipToDisplay.getShipType() == ShipType.SUBMARINE)
 						sb.append("S");
 				}
 			}

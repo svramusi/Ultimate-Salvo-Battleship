@@ -319,4 +319,20 @@ public class BoardTests {
 		assertTrue(actualShips.contains(pb));
 		assertTrue(actualShips.contains(s));
 	}
+
+	@Test
+	public void testIsAShipHit() {
+		try {
+			board.addShip(c);
+			board.addShip(b);
+			board.addShip(d);
+			board.addShip(pb);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		assertTrue(board.isHit(new Point(0,0)));
+		assertFalse(board.isHit(new Point(8,8)));
+	}
 }
