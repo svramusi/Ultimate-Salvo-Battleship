@@ -4,9 +4,9 @@ import board.Board;
 
 public class ConsoleDisplay extends Display {
 	
-	public ConsoleDisplay(Board board)
+	public ConsoleDisplay(Board board, String playerName)
 	{
-		super(board);
+		super(board, playerName);
 	}
 	
 	public void writeLine(String line)

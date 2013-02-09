@@ -42,7 +42,7 @@ public class ConsoleTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		Display display = new ConsoleDisplay(board);
+		Display display = new ConsoleDisplay(board,"human player");
 		display.printBoard();
 	}
 }

@@ -41,7 +41,7 @@ public class FileTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		Display display = new FileDisplay(board,"output-file.txt");
+		Display display = new FileDisplay(board,"computer player", "output-file.txt");
 		display.printBoard();
 	}
 }

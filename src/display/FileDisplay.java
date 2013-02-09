@@ -7,9 +7,9 @@ public class FileDisplay extends Display {
 	
 	private String fileName;
 
-	public FileDisplay(Board board, String fileName)
+	public FileDisplay(Board board, String playerName, String fileName)
 	{
-		super(board);
+		super(board, playerName);
 		this.fileName = fileName;
 		
 		writeLine("--------------------------------------------");
