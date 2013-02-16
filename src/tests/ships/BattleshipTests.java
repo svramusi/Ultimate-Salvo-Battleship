@@ -78,19 +78,19 @@ public class BattleshipTests {
 	public void testTakesDamage() {
 		b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(b.takesDamage(new Point(0,0)));
-		assertTrue(b.takesDamage(new Point(1,0)));
-		assertFalse(b.takesDamage(new Point(9,9)));
+		assertTrue(b.isAHit(new Point(0,0), true));
+		assertTrue(b.isAHit(new Point(1,0), true));
+		assertFalse(b.isAHit(new Point(9,9), true));
 	}
 	
 	@Test
 	public void testSunk() {
 		b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(b.takesDamage(new Point(0,0)));
-		assertTrue(b.takesDamage(new Point(1,0)));
-		assertTrue(b.takesDamage(new Point(2,0)));
-		assertTrue(b.takesDamage(new Point(3,0)));
+		assertTrue(b.isAHit(new Point(0,0), true));
+		assertTrue(b.isAHit(new Point(1,0), true));
+		assertTrue(b.isAHit(new Point(2,0), true));
+		assertTrue(b.isAHit(new Point(3,0), true));
 		
 		assertTrue(b.isSunk());
 	}
@@ -99,7 +99,7 @@ public class BattleshipTests {
 	public void testIsDamaged() {
 		b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(b.takesDamage(new Point(0,0)));
+		assertTrue(b.isAHit(new Point(0,0), true));
 
 		assertTrue(b.isDamaged(new Point(0,0)));
 		assertFalse(b.isDamaged(new Point(1,0)));

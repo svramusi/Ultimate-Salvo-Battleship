@@ -10,6 +10,7 @@ import org.junit.Test;
 import ships.*;
 import ships.Ship.Direction;
 
+import battleshipExceptions.InvalidShipPositionException;
 import board.*;
 
 public class ScanTests {
@@ -47,7 +48,7 @@ public class ScanTests {
 	public void testConvertEndPointsRow() {
 		List<Point> placesToScan;
 		
-		scan = new Scan(new Point(0,0), new Point(0,5));
+		scan = new Scan(new Point(0,0), new Point(0,5), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -59,7 +60,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 		
 
-		scan = new Scan(new Point(1,1), new Point(1,6));
+		scan = new Scan(new Point(1,1), new Point(1,6), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(1,1)));
@@ -71,7 +72,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 
 		
-		scan = new Scan(new Point(1,7), new Point(1,9));
+		scan = new Scan(new Point(1,7), new Point(1,9), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(1,7)));
@@ -80,7 +81,7 @@ public class ScanTests {
 		assertEquals(3, placesToScan.size());
 
 
-		scan = new Scan(new Point(1,9), new Point(1,7));
+		scan = new Scan(new Point(1,9), new Point(1,7), board);
 		placesToScan = scan.getPointsToScan();
 		
 		assertTrue(placesToScan.contains(new Point(1,9)));
@@ -93,7 +94,7 @@ public class ScanTests {
 	public void testConvertEndPointsCol() {
 		List<Point> placesToScan;
 		
-		scan = new Scan(new Point(0,0), new Point(5,0));
+		scan = new Scan(new Point(0,0), new Point(5,0), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -105,7 +106,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 		
 
-		scan = new Scan(new Point(1,1), new Point(6,1));
+		scan = new Scan(new Point(1,1), new Point(6,1), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(1,1)));
@@ -117,7 +118,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 
 
-		scan = new Scan(new Point(7,1), new Point(9,1));
+		scan = new Scan(new Point(7,1), new Point(9,1), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(7,1)));
@@ -126,7 +127,7 @@ public class ScanTests {
 		assertEquals(3, placesToScan.size());
 
 		
-		scan = new Scan(new Point(9,1), new Point(7,1));
+		scan = new Scan(new Point(9,1), new Point(7,1), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(7,1)));
@@ -139,7 +140,7 @@ public class ScanTests {
 	public void testConvertEndPointsBox() {
 		List<Point> placesToScan;
 
-		scan = new Scan(new Point(0,0), new Point(1,2));
+		scan = new Scan(new Point(0,0), new Point(1,2), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -151,7 +152,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 		
 
-		scan = new Scan(new Point(8,7), new Point(9,9));
+		scan = new Scan(new Point(8,7), new Point(9,9), board);
 		placesToScan = scan.getPointsToScan();
 		
 		assertTrue(placesToScan.contains(new Point(8,7)));
@@ -167,7 +168,7 @@ public class ScanTests {
 		
 
 
-		scan = new Scan(new Point(0,0), new Point(2,1));
+		scan = new Scan(new Point(0,0), new Point(2,1), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -179,7 +180,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 		
 
-		scan = new Scan(new Point(7,8), new Point(9,9));
+		scan = new Scan(new Point(7,8), new Point(9,9), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(7,8)));
@@ -190,12 +191,12 @@ public class ScanTests {
 		assertTrue(placesToScan.contains(new Point(9,9)));
 		assertEquals(6, placesToScan.size());
 	}
-	
+
 	@Test
 	public void testConvertEndPointsDiagonal() {
 		List<Point> placesToScan;
 
-		scan = new Scan(new Point(0,0), new Point(5,5));
+		scan = new Scan(new Point(0,0), new Point(5,5), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -207,7 +208,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 
 
-		scan = new Scan(new Point(5,5), new Point(0,0));
+		scan = new Scan(new Point(5,5), new Point(0,0), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(0,0)));
@@ -219,7 +220,7 @@ public class ScanTests {
 		assertEquals(6, placesToScan.size());
 
 
-		scan = new Scan(new Point(5,5), new Point(9,1));
+		scan = new Scan(new Point(5,5), new Point(9,1), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(5,5)));
@@ -230,7 +231,7 @@ public class ScanTests {
 		assertEquals(5, placesToScan.size());
 		
 
-		scan = new Scan(new Point(9,1), new Point(5,5));
+		scan = new Scan(new Point(9,1), new Point(5,5), board);
 		placesToScan = scan.getPointsToScan();
 
 		assertTrue(placesToScan.contains(new Point(5,5)));
@@ -239,5 +240,86 @@ public class ScanTests {
 		assertTrue(placesToScan.contains(new Point(8,2)));
 		assertTrue(placesToScan.contains(new Point(9,1)));
 		assertEquals(5, placesToScan.size());
+	}
+
+	@Test
+	public void testScanColFindsCarrier() {
+		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipFound;
+		scan = new Scan(new Point(0,0), new Point(5,0), board);
+		
+		shipFound = scan.findShips();
+		assertTrue(shipFound.contains(new Point(0,0)));
+		assertTrue(shipFound.contains(new Point(1,0)));
+		assertTrue(shipFound.contains(new Point(2,0)));
+		assertTrue(shipFound.contains(new Point(3,0)));
+		assertTrue(shipFound.contains(new Point(4,0)));
+		assertEquals(5, shipFound.size());
+		
+		assertFalse(c.isSunk());
+	}
+
+	@Test
+	public void testScanRowFindsCarrier() {
+		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipFound;
+		scan = new Scan(new Point(0,0), new Point(0,5), board);
+		
+		shipFound = scan.findShips();
+		assertTrue(shipFound.contains(new Point(0,0)));
+		assertEquals(1, shipFound.size());
+		
+		assertFalse(c.isSunk());
+	}
+
+	@Test
+	public void testScanBoxFindsCarrier() {
+		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipFound;
+		scan = new Scan(new Point(0,0), new Point(1,2), board);
+		
+		shipFound = scan.findShips();
+		assertTrue(shipFound.contains(new Point(0,0)));
+		assertTrue(shipFound.contains(new Point(1,0)));
+		assertEquals(2, shipFound.size());
+		
+		assertFalse(c.isSunk());
+	}
+
+	@Test
+	public void testScanDiagonalFindsCarrier() {
+		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipFound;
+		scan = new Scan(new Point(0,0), new Point(5,5), board);
+		
+		shipFound = scan.findShips();
+		assertTrue(shipFound.contains(new Point(0,0)));
+		assertEquals(1, shipFound.size());
+		
+		assertFalse(c.isSunk());
 	}
 }

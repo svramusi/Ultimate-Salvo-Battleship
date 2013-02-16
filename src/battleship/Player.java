@@ -56,7 +56,7 @@ public abstract class Player {
 
 	public boolean isHit(Point shot)
 	{
-		return board.isHit(shot);
+		return board.isHit(shot, true);
 	}
 
 	public boolean isDefeated()

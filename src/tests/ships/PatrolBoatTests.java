@@ -77,17 +77,17 @@ public class PatrolBoatTests {
 	public void testTakesDamage() {
 		pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(pb.takesDamage(new Point(0,0)));
-		assertTrue(pb.takesDamage(new Point(1,0)));
-		assertFalse(pb.takesDamage(new Point(9,9)));
+		assertTrue(pb.isAHit(new Point(0,0), true));
+		assertTrue(pb.isAHit(new Point(1,0), true));
+		assertFalse(pb.isAHit(new Point(9,9), true));
 	}
 	
 	@Test
 	public void testSunk() {
 		pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(pb.takesDamage(new Point(0,0)));
-		assertTrue(pb.takesDamage(new Point(1,0)));
+		assertTrue(pb.isAHit(new Point(0,0), true));
+		assertTrue(pb.isAHit(new Point(1,0), true));
 		
 		assertTrue(pb.isSunk());
 	}
@@ -96,7 +96,7 @@ public class PatrolBoatTests {
 	public void testIsDamaged() {
 		pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(pb.takesDamage(new Point(0,0)));
+		assertTrue(pb.isAHit(new Point(0,0), true));
 
 		assertTrue(pb.isDamaged(new Point(0,0)));
 		assertFalse(pb.isDamaged(new Point(1,0)));

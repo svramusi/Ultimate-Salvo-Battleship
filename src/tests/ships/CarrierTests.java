@@ -79,20 +79,20 @@ public class CarrierTests {
 	public void testTakesDamage() {
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(c.takesDamage(new Point(0,0)));
-		assertTrue(c.takesDamage(new Point(1,0)));
-		assertFalse(c.takesDamage(new Point(9,9)));
+		assertTrue(c.isAHit(new Point(0,0), true));
+		assertTrue(c.isAHit(new Point(1,0), true));
+		assertFalse(c.isAHit(new Point(9,9), true));
 	}
 	
 	@Test
 	public void testSunk() {
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(c.takesDamage(new Point(0,0)));
-		assertTrue(c.takesDamage(new Point(1,0)));
-		assertTrue(c.takesDamage(new Point(2,0)));
-		assertTrue(c.takesDamage(new Point(3,0)));
-		assertTrue(c.takesDamage(new Point(4,0)));
+		assertTrue(c.isAHit(new Point(0,0), true));
+		assertTrue(c.isAHit(new Point(1,0), true));
+		assertTrue(c.isAHit(new Point(2,0), true));
+		assertTrue(c.isAHit(new Point(3,0), true));
+		assertTrue(c.isAHit(new Point(4,0), true));
 		
 		assertTrue(c.isSunk());
 	}
@@ -101,7 +101,7 @@ public class CarrierTests {
 	public void testIsDamaged() {
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(c.takesDamage(new Point(0,0)));
+		assertTrue(c.isAHit(new Point(0,0), true));
 
 		assertTrue(c.isDamaged(new Point(0,0)));
 		assertFalse(c.isDamaged(new Point(1,0)));

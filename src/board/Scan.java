@@ -7,11 +7,13 @@ import ships.*;
 public class Scan {
 	private Point startPoint;
 	private Point endPoint;
+	private Board board;
 	
-	public Scan(Point startPoint, Point endPoint)
+	public Scan(Point startPoint, Point endPoint, Board board)
 	{
 		this.startPoint = startPoint;
 		this.endPoint = endPoint;
+		this.board = board;
 	}
 
 	public List<Point> getPointsToScan() {
@@ -48,6 +50,20 @@ public class Scan {
 		}
 		
 		return pointsToScan;
+	}
+
+
+	public List<Point> findShips() {
+		List<Point> foundShips = new ArrayList<Point>();
+		List<Point> pointsToScan = getPointsToScan();
+
+		for(Point scanPoint : pointsToScan)
+		{
+			if(board.isHit(scanPoint, false))
+				foundShips.add(scanPoint);
+		}
+
+		return foundShips;
 	}
 
 	private Point calculateClosestPoint(Point currentPoint, Point end)

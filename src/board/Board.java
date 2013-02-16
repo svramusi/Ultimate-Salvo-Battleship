@@ -162,12 +162,12 @@ public class Board {
 		return ships;
 	}
 
-	public boolean isHit(Point shot)
+	public boolean isHit(Point shot, boolean takesDamage)
 	{
 		boolean isAHit = false;
 		for(Ship s : ships)
 		{
-			if(s.takesDamage(shot))
+			if(s.isAHit(shot, takesDamage))
 				isAHit = true;
 		}
 

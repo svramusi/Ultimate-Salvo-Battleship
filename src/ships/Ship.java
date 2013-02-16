@@ -44,13 +44,15 @@ public abstract class Ship {
 		return -1;
 	}
 
-	public boolean takesDamage(Point p)
+	public boolean isAHit(Point p, boolean takesDamage)
 	{
-		int damageIndex = convertToDamageIndex(p);
+		int hitIndex = convertToDamageIndex(p);
 
-		if(damageIndex != -1)
+		if(hitIndex != -1)
 		{
-			damage[damageIndex] = true;
+			if(takesDamage)
+				damage[hitIndex] = true;
+			
 			return true;
 		}
 		else

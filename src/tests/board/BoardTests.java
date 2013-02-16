@@ -332,7 +332,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
-		assertTrue(board.isHit(new Point(0,0)));
-		assertFalse(board.isHit(new Point(8,8)));
+		assertTrue(board.isHit(new Point(0,0), true));
+		assertFalse(board.isHit(new Point(8,8), true));
 	}
 }
