@@ -51,8 +51,8 @@ public class ShipLocationsTests {
 		
 		ShipLocations locations = new ShipLocations(board);
 
-		assertEquals(Ship.ShipType.CARRIER, locations.getShip(0,0));
-		assertEquals(Ship.ShipType.SUBMARINE, locations.getShip(9,9));
+		assertEquals(Ship.ShipType.CARRIER, locations.getShip(0,0).getShipType());
+		assertEquals(Ship.ShipType.SUBMARINE, locations.getShip(9,9).getShipType());
 		assertNull(locations.getShip(2,2));
 	}
 }
