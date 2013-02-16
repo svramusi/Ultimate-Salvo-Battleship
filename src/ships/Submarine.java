@@ -21,4 +21,15 @@ public class Submarine extends Ship {
 	public int getSize() {
 		return 3;
 	}
+
+	@Override
+	public boolean isSunk() {
+		for(int i=0; i<getSize(); i++)
+		{
+			if(damage[i])
+				return true;
+		}
+
+		return false;
+	}
 }

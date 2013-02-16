@@ -89,9 +89,6 @@ public class SubmarineTests {
 		s.setStartPoint(new Point(0,0), Direction.DOWN);
 
 		assertTrue(s.takesDamage(new Point(0,0)));
-		assertTrue(s.takesDamage(new Point(1,0)));
-		assertTrue(s.takesDamage(new Point(2,0)));
-		
 		assertTrue(s.isSunk());
 	}
 	
