@@ -11,6 +11,8 @@ public abstract class Player {
 	private String playerName;
 	protected Board board;
 
+	protected boolean doneWithTurn;
+
 	public abstract void moveShips();
 	public abstract Shot takeAShot();
 	public abstract boolean isHit(Shot shot);
@@ -65,5 +67,10 @@ public abstract class Player {
 			return false;
 		else
 			return true;
+	}
+
+	public boolean isTurnOver()
+	{
+		return doneWithTurn;
 	}
 }

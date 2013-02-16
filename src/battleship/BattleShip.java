@@ -10,8 +10,8 @@ public class BattleShip {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Player player1 = new HumanPlayer(new Board(), "human player");
-		Player player2 = new DumbComputerPlayer(new Board(), "computer player");
+		Player player1 = new DumbComputerPlayer(new Board(), "computer_player1");
+		Player player2 = new RandomComputerPlayer(new Board(), "computer_player2");
 		
 		Player activePlayer = player1;
 		Player nonactivePlayer = player2;
@@ -22,9 +22,11 @@ public class BattleShip {
 		while(!player1.isDefeated() && !player2.isDefeated())
 		{
 			activePlayer.moveShips();
-			Shot shot = activePlayer.takeAShot();
-			hitResult = nonactivePlayer.isHit(shot);
-			activePlayer.getResponse(hitResult);
+			while(!activePlayer.isTurnOver())
+			{
+				hitResult = nonactivePlayer.isHit(activePlayer.takeAShot());
+				activePlayer.getResponse(hitResult);
+			}
 			
 			tempPlayer = activePlayer;
 			activePlayer = nonactivePlayer;

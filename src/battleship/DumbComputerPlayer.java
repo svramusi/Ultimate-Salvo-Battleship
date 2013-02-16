@@ -19,6 +19,7 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	public void moveShips() 
 	{
 		//Don't move ships
+		doneWithTurn = false;
 	}
 	
 	@Override
@@ -32,6 +33,7 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	public void getResponse(boolean shotResult)
 	{
 		//Ignore response, it isn't going to affect anything
+		doneWithTurn = true;
 	}
 
 	@Override
