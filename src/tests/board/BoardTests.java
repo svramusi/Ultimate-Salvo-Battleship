@@ -59,7 +59,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		assertEquals(5, board.getShipCount());
+		assertEquals(5, board.getActiveShips());
 	}
 
 	@Test

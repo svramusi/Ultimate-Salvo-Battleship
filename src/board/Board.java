@@ -130,7 +130,7 @@ public class Board {
 	
 	private Ship findCollision(Ship checkShip, boolean ignoreSubmerged)
 	{
-		for(Ship s : getAllShips())
+		for(Ship s : getActiveShips())
 		{
 			if(s.getShipType() != checkShip.getShipType())
 			{
@@ -145,11 +145,6 @@ public class Board {
 	public void clearBoard()
 	{
 		ships.clear();
-	}
-	
-	public int getShipCount()
-	{
-		return ships.size();
 	}
 	
 	public boolean shipCollision(Ship ship1, Ship ship2, boolean ignoreSubmerged)

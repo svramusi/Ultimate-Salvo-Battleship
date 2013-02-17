@@ -63,7 +63,7 @@ public abstract class Player {
 
 	public boolean isDefeated()
 	{
-		if(board.getShipCount() > 0)
+		if(board.getActiveShips().size() > 0)
 			return false;
 		else
 			return true;

@@ -117,7 +117,7 @@ public class RandomComputerPlayer extends Player {
 	@Override
 	public void moveShips() 
 	{
-		List<Ship> ships = board.getShips();
+		List<Ship> ships = board.getActiveShips();
 		Random random = new Random();
 		int randomNumber;
 		
