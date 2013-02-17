@@ -347,7 +347,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
-		List<Ship> actualShips = board.getShips();
+		List<Ship> actualShips = board.getAllShips();
 		assertEquals(5, actualShips.size());
 
 		assertTrue(actualShips.contains(c));
@@ -355,6 +355,51 @@ public class BoardTests {
 		assertTrue(actualShips.contains(d));
 		assertTrue(actualShips.contains(pb));
 		assertTrue(actualShips.contains(s));
+	}
+
+	@Test
+	public void testGetNonSunkShips() {
+		try {
+			board.addShip(c);
+			board.addShip(b);
+			board.addShip(d);
+			board.addShip(pb);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		List<Ship> active;
+
+		active = board.getActiveShips();
+		assertEquals(5, active.size());
+
+		assertTrue(active.contains(c));
+		assertTrue(active.contains(b));
+		assertTrue(active.contains(d));
+		assertTrue(active.contains(pb));
+		assertTrue(active.contains(s));
+
+		board.isHit(new Point(9,9), true);
+
+		active = board.getActiveShips();
+		assertEquals(4, active.size());
+
+		assertTrue(active.contains(c));
+		assertTrue(active.contains(b));
+		assertTrue(active.contains(d));
+		assertTrue(active.contains(pb));
+
+
+		board.isHit(new Point(5,5), true);
+		board.isHit(new Point(5,4), true);
+
+		active = board.getActiveShips();
+		assertEquals(3, active.size());
+
+		assertTrue(active.contains(c));
+		assertTrue(active.contains(b));
+		assertTrue(active.contains(d));
 	}
 
 	@Test

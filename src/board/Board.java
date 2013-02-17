@@ -130,7 +130,7 @@ public class Board {
 	
 	private Ship findCollision(Ship checkShip, boolean ignoreSubmerged)
 	{
-		for(Ship s : getShips())
+		for(Ship s : getAllShips())
 		{
 			if(s.getShipType() != checkShip.getShipType())
 			{
@@ -175,9 +175,20 @@ public class Board {
 		return false;
 	}
 
-	public List<Ship> getShips()
+	public List<Ship> getAllShips()
 	{
 		return ships;
+	}
+
+	public List<Ship> getActiveShips()
+	{
+		List<Ship> activeShips = new ArrayList<Ship>();
+		for(Ship s : getAllShips())
+		{
+			if(!s.isSunk())
+				activeShips.add(s);
+		}
+		return activeShips;
 	}
 
 	public boolean isUnderAnotherShip(Ship s) {

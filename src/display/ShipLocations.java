@@ -33,7 +33,7 @@ public class ShipLocations {
 		for(int i=0;i<board.getHeight();i++)
 			shipLocations.add(new ArrayList<Info>());
 
-		List<Ship> ships = board.getShips();
+		List<Ship> ships = board.getActiveShips();
 		for(Ship s : ships)
 		{
 			for(Point p : s.getShipLocation())
