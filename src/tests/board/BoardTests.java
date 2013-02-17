@@ -3,6 +3,7 @@ package tests.board;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+
 import board.*;
 import ships.*;
 import ships.Ship.Direction;
@@ -65,19 +66,19 @@ public class BoardTests {
 	public void testShipCollision() {
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 		b.setStartPoint(new Point(0,0), Direction.DOWN);
-		assertTrue(board.shipCollision(b,c));
+		assertTrue(board.shipCollision(b,c, false));
 
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 		b.setStartPoint(new Point(5,0), Direction.DOWN);
-		assertFalse(board.shipCollision(b,c));
+		assertFalse(board.shipCollision(b,c, false));
 
 		c.setStartPoint(new Point(5,3), Direction.RIGHT);
 		b.setStartPoint(new Point(3,5), Direction.DOWN);
-		assertTrue(board.shipCollision(b,c));
+		assertTrue(board.shipCollision(b,c, false));
 
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 		s.setStartPoint(new Point(0,0), Direction.DOWN);
-		assertFalse(board.shipCollision(c,s));
+		assertFalse(board.shipCollision(c,s, false));
 	}
 
 	@Test
@@ -334,5 +335,42 @@ public class BoardTests {
 
 		assertTrue(board.isHit(new Point(0,0), true));
 		assertFalse(board.isHit(new Point(8,8), true));
+	}
+
+
+	@Test
+	public void testIsUnderAnotherShip() {
+		Point zeroPoint = new Point(0,0);
+		s.setStartPoint(zeroPoint, Direction.DOWN);
+		c.setStartPoint(zeroPoint, Direction.DOWN);
+
+		try {
+			board.addShip(c);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		assertTrue(board.isUnderAnotherShip(s));
+		assertFalse(board.isUnderAnotherShip(c));
+	}
+
+	@Test
+	public void testSubDesntTakeDamageUnderAnotherShip() {
+		Point zeroPoint = new Point(0,0);
+		s.setStartPoint(zeroPoint, Direction.DOWN);
+		c.setStartPoint(zeroPoint, Direction.DOWN);
+
+		try {
+			board.addShip(c);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		assertTrue(board.isHit(zeroPoint, true));
+
+		assertTrue(c.isDamaged(zeroPoint));
+		assertFalse(s.isDamaged(zeroPoint));
 	}
 }

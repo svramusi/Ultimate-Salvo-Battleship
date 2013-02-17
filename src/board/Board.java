@@ -81,7 +81,7 @@ public class Board {
 		if(!isInBounds(ship))
 			throw new InvalidShipPositionException(ship, null);
 
-		Ship collidingShip = findCollision(ship);
+		Ship collidingShip = findCollision(ship, false);
 		if(collidingShip != null)
 			throw new InvalidShipPositionException(ship, collidingShip);
 	}
@@ -113,13 +113,13 @@ public class Board {
 			return true;
 	}
 	
-	private Ship findCollision(Ship checkShip)
+	private Ship findCollision(Ship checkShip, boolean ignoreSubmerged)
 	{
-		for(Ship s : ships)
+		for(Ship s : getShips())
 		{
 			if(s.getShipType() != checkShip.getShipType())
 			{
-				if(shipCollision(checkShip, s))
+				if(shipCollision(checkShip, s, ignoreSubmerged))
 					return s;
 			}
 		}
@@ -137,10 +137,13 @@ public class Board {
 		return ships.size();
 	}
 	
-	public boolean shipCollision(Ship ship1, Ship ship2)
+	public boolean shipCollision(Ship ship1, Ship ship2, boolean ignoreSubmerged)
 	{
-		if(ship1.isSubmerged() || ship2.isSubmerged())
-			return false;
+		if(!ignoreSubmerged)
+		{
+			if(ship1.isSubmerged() || ship2.isSubmerged())
+				return false;
+		}
 		
 		List<Point> ship1Location = ship1.getShipLocation();
 		List<Point> ship2Location = ship2.getShipLocation();
@@ -162,13 +165,26 @@ public class Board {
 		return ships;
 	}
 
+	public boolean isUnderAnotherShip(Ship s) {
+		if(s.getShipType() != Ship.ShipType.SUBMARINE)
+			return false;
+
+		if(findCollision(s, true) != null)
+			return true;
+		else
+			return false;
+	}
+
 	public boolean isHit(Point shot, boolean takesDamage)
 	{
 		boolean isAHit = false;
 		for(Ship s : ships)
 		{
-			if(s.isAHit(shot, takesDamage))
-				isAHit = true;
+			if(!isUnderAnotherShip(s))
+			{
+				if(s.isAHit(shot, takesDamage))
+					isAHit = true;
+			}
 		}
 
 		return isAHit;
