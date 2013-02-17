@@ -194,18 +194,20 @@ public class BoardTests {
 	@Test
 	public void testMoveShipToValidLocation() {
 		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
 			board.addShip(c);
 		} catch (InvalidShipPositionException e) {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
 		try {
-			board.moveShip(ShipType.CARRIER, new Point(0,1), Direction.DOWN);
-			assertEquals(new Point(0,1), c.getStartPoint());
+			board.moveShip(ShipType.CARRIER, new Point(1,0), Direction.DOWN);
+			assertEquals(new Point(1,0), c.getStartPoint());
 		} catch (InvalidShipPositionException e) {
 			fail("caught InvalidMoveException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
-		
 	}
 
 	@Test
@@ -222,6 +224,8 @@ public class BoardTests {
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
 			assertEquals(new Point(0,0), c.getStartPoint());
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 	}
 
@@ -241,6 +245,8 @@ public class BoardTests {
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
 			assertEquals(new Point(0,0), c.getStartPoint());
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 	}
 
@@ -258,6 +264,8 @@ public class BoardTests {
 		} catch (InvalidShipPositionException e) {
 			assertNotNull(e.getMessage());
 			assertEquals(new Point(0,0), c.getStartPoint());
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 
 		try {
@@ -265,6 +273,8 @@ public class BoardTests {
 			assertEquals(new Point(1,0), c.getStartPoint());
 		} catch (InvalidShipPositionException e) {
 			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 	}
 
@@ -281,6 +291,8 @@ public class BoardTests {
 			assertEquals(new Point(0,4), c.getStartPoint());
 		} catch (InvalidShipPositionException e) {
 			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 
 		try {
@@ -288,6 +300,8 @@ public class BoardTests {
 			assertEquals(new Point(0,4), c.getStartPoint());
 		} catch (InvalidShipPositionException e) {
 			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 
 		try {
@@ -296,6 +310,8 @@ public class BoardTests {
 		} catch (InvalidShipPositionException e) {
 			System.out.println(e.getMessage());
 			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
 		}
 	}
 
@@ -372,5 +388,54 @@ public class BoardTests {
 
 		assertTrue(c.isDamaged(zeroPoint));
 		assertFalse(s.isDamaged(zeroPoint));
+	}
+
+	@Test
+	public void testShipThatsBeenDamageCantMove() {
+		Point zeroPoint = new Point(0,0);
+		c.setStartPoint(zeroPoint, Direction.DOWN);
+
+		try {
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		assertTrue(board.isHit(zeroPoint, true));
+
+		assertTrue(c.isDamaged(zeroPoint));
+
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(1,0), Direction.DOWN);
+			fail("ShipDamagedException not thrown.");
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			assertNotNull(e.getMessage());
+			assertEquals(new Point(0,0), c.getStartPoint());
+		}
+
+		board.nextTurn();
+
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(1,0), Direction.DOWN);
+			fail("ShipDamagedException not thrown.");
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			assertNotNull(e.getMessage());
+			assertEquals(new Point(0,0), c.getStartPoint());
+		}
+
+		board.nextTurn();
+
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(1,0), Direction.DOWN);
+			assertEquals(new Point(1,0), c.getStartPoint());
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
+		}
 	}
 }

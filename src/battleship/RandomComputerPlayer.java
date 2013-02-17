@@ -1,5 +1,6 @@
 package battleship;
 
+import static org.junit.Assert.fail;
 import ships.*;
 import ships.Ship.ShipType;
 import ships.Ship.Direction;
@@ -50,6 +51,8 @@ public class RandomComputerPlayer extends Player {
 			board.moveShip(s.getShipType(), newStartingPoint, direction);
 		} catch (InvalidShipPositionException e) { 
 			//Throw away, just don't move the ship
+		} catch (ShipDamagedException e) {
+			//Throw away, just don't move the ship
 		}
 	}
 	
@@ -69,6 +72,8 @@ public class RandomComputerPlayer extends Player {
 					board.moveShip(s.getShipType(), startingPoint, Direction.LEFT);
 				} catch (InvalidShipPositionException e) { 
 					//Throw away, just don't move the ship
+				} catch (ShipDamagedException e) {
+					//Throw away, just don't move the ship
 				}
 			}
 			else
@@ -76,6 +81,8 @@ public class RandomComputerPlayer extends Player {
 				try {
 					board.moveShip(s.getShipType(), startingPoint, Direction.RIGHT);
 				} catch (InvalidShipPositionException e) { 
+					//Throw away, just don't move the ship
+				} catch (ShipDamagedException e) {
 					//Throw away, just don't move the ship
 				}
 			}
@@ -88,6 +95,8 @@ public class RandomComputerPlayer extends Player {
 					board.moveShip(s.getShipType(), startingPoint, Direction.UP);
 				} catch (InvalidShipPositionException e) { 
 					//Throw away, just don't move the ship
+				} catch (ShipDamagedException e) {
+					//Throw away, just don't move the ship
 				}
 			}
 			else
@@ -95,6 +104,8 @@ public class RandomComputerPlayer extends Player {
 				try {
 					board.moveShip(s.getShipType(), startingPoint, Direction.DOWN);
 				} catch (InvalidShipPositionException e) { 
+					//Throw away, just don't move the ship
+				} catch (ShipDamagedException e) {
 					//Throw away, just don't move the ship
 				}
 			}

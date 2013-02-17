@@ -10,12 +10,17 @@ public class Board {
 	private int width;
 	private int height;
 	private List<Ship> ships;
+
+	private List<Ship> recentlyDamagedShips;
+	private List<Ship> shipsDamagedLastTurn;
 	
 	public Board()
 	{
 		width = 10;
 		height = 10;
 		ships = new ArrayList<Ship>();
+		recentlyDamagedShips = new ArrayList<Ship>();
+		shipsDamagedLastTurn = new ArrayList<Ship>();
 	}
 	
 	public int getWidth()
@@ -33,12 +38,22 @@ public class Board {
 		validateShipPositionOnBoard(newShip); // throws InvalidShipPositionException
 		ships.add(newShip);
 	}
+
+	private boolean hasBeenDamaged(Ship ship) {
+		if(recentlyDamagedShips.contains(ship) || shipsDamagedLastTurn.contains(ship))
+			return true;
+		else
+			return false;
+	}
 	
-	public void moveShip(Ship.ShipType shipType, Point startingPoint, Ship.Direction direction) throws InvalidShipPositionException
+	public void moveShip(Ship.ShipType shipType, Point startingPoint, Ship.Direction direction) throws InvalidShipPositionException, ShipDamagedException
 	{
 		Ship movingShip = findShip(shipType);
 		Point origStartingPoint = movingShip.getStartPoint();
 		Ship.Direction origDirection = movingShip.getDirection();
+
+		if(hasBeenDamaged(movingShip))
+			throw new ShipDamagedException(movingShip);
 
 		if(!movingShip.isValidMove(startingPoint, direction))
 		{
@@ -183,10 +198,21 @@ public class Board {
 			if(!isUnderAnotherShip(s))
 			{
 				if(s.isAHit(shot, takesDamage))
+				{
 					isAHit = true;
+
+					if(takesDamage)
+						recentlyDamagedShips.add(s);
+				}
 			}
 		}
 
 		return isAHit;
+	}
+
+	public void nextTurn() {
+		shipsDamagedLastTurn.clear();
+		shipsDamagedLastTurn.addAll(recentlyDamagedShips);
+		recentlyDamagedShips.clear();
 	}
 }
