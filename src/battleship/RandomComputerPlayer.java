@@ -1,6 +1,5 @@
 package battleship;
 
-import static org.junit.Assert.fail;
 import ships.*;
 import ships.Ship.ShipType;
 import ships.Ship.Direction;
@@ -13,13 +12,17 @@ import java.util.*;
 
 public class RandomComputerPlayer extends Player {
 	private Display display;
-	
+
+	private int salvoCount;
+	private int shipToFireThisTurn;
+	private int shipsFiredThisTurn;
+
 	public RandomComputerPlayer(Board board, String playerName)
 	{
 		super(board, playerName);
 		display = new FileDisplay(board, playerName, "player-log-" + playerName + ".txt");
 	}
-	
+
 	private void moveShipNoRotate(Ship s)
 	{
 		Ship.Direction direction = s.getDirection();
@@ -55,7 +58,7 @@ public class RandomComputerPlayer extends Player {
 			//Throw away, just don't move the ship
 		}
 	}
-	
+
 	private void rotateShip(Ship s)
 	{
 		Ship.Direction direction = s.getDirection();
@@ -110,17 +113,17 @@ public class RandomComputerPlayer extends Player {
 				}
 			}
 		}
-		
-		
 	}
-	
+
 	@Override
 	public void moveShips() 
 	{
+		display.writeLine("************************* START TURN *************************");
+
 		List<Ship> ships = board.getActiveShips();
 		Random random = new Random();
 		int randomNumber;
-		
+
 		for (Ship s : ships)
 		{
 			randomNumber = random.nextInt();
@@ -129,22 +132,61 @@ public class RandomComputerPlayer extends Player {
 			else
 				rotateShip(s);
 		}
-		
+
+		salvoCount = ships.size();
+		shipsFiredThisTurn = 0;
+		shipToFireThisTurn = 0;
+
 		doneWithTurn = false;
 	}
-	
+
+	private Shot getShotFromShip(Ship ship)
+	{
+		Random random = new Random();
+		int randomFrontBack = random.nextInt();
+		int randomPlusMinus = random.nextInt();
+		int randomShootDistanceX = random.nextInt(ship.getShootDistance());
+		int randomShootDistanceY = random.nextInt(ship.getShootDistance());
+
+		Point pointToShootFrom;
+		if(randomFrontBack % 2 == 0)
+			pointToShootFrom = ship.getStartPoint();
+		else
+			pointToShootFrom = ship.getEndPoint();
+
+		Point shotPoint;
+		if(randomPlusMinus % 2 == 0)
+			shotPoint = new Point(pointToShootFrom.getX() + randomShootDistanceX, pointToShootFrom.getY() + randomShootDistanceY);
+		else
+			shotPoint = new Point(pointToShootFrom.getX() - randomShootDistanceX, pointToShootFrom.getY() - randomShootDistanceY);
+
+		display.writeLine("Shooting at: " + shotPoint.toString() + " from: " + ship.getShipType().toString());
+
+		return new Shot(shotPoint, ship.getShipType());
+	}
+
 	@Override
 	public Shot takeAShot()
 	{
-		//Always shoot at the same spot
-		return new Shot(new Point(0,0), ShipType.CARRIER);
+		List<Ship> ships = board.getActiveShips();
+
+		Shot shot = getShotFromShip(ships.get(shipToFireThisTurn));
+
+		shipToFireThisTurn++;
+		shipsFiredThisTurn++;
+
+		return shot;
 	}
-	
+
 	@Override
 	public void getResponse(boolean shotResult)
 	{
 		//Ignore response, it isn't going to affect anything
-		doneWithTurn = true;
+		if(shipsFiredThisTurn >= salvoCount)
+		{
+			display.writeLine("************************* TURN OVER *************************");
+			doneWithTurn = true;
+		}
 	}
 
 	@Override
@@ -162,5 +204,4 @@ public class RandomComputerPlayer extends Player {
 		
 		return isAHit;
 	}
-
 }
