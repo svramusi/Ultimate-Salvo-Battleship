@@ -204,6 +204,21 @@ public class CarrierTests {
 	}
 
 	@Test
+	public void testIsMoveWithinRowOrCol() {
+		c.setStartPoint(new Point(0,0), Direction.DOWN);
+		assertTrue(c.isMoveWithinRowOrCol(new Point(1,0), Direction.DOWN));
+
+		c.setStartPoint(new Point(9,0), Direction.UP);
+		assertTrue(c.isMoveWithinRowOrCol(new Point(8,0), Direction.UP));
+
+		c.setStartPoint(new Point(0,0), Direction.RIGHT);
+		assertTrue(c.isMoveWithinRowOrCol(new Point(0,1), Direction.RIGHT));
+
+		c.setStartPoint(new Point(0,9), Direction.LEFT);
+		assertTrue(c.isMoveWithinRowOrCol(new Point(0,8), Direction.LEFT));
+	}
+
+	@Test
 	public void testValidMove() {
 		c.setStartPoint(new Point(0,0), Direction.DOWN);
 
@@ -214,6 +229,10 @@ public class CarrierTests {
 		assertFalse(c.isValidMove(new Point(2,0), Direction.DOWN));
 		assertFalse(c.isValidMove(new Point(8,0), Direction.UP));
 		assertFalse(c.isValidMove(new Point(0,4), Direction.RIGHT));
+
+
+		assertFalse(c.isValidMove(new Point(1,1), Direction.DOWN)); //Move parallel and down
+		assertFalse(c.isValidMove(new Point(0,1), Direction.DOWN)); //Move parallel
 
 		c.setStartPoint(new Point(0,4), Direction.DOWN);
 		assertTrue(c.isValidMove(new Point(4,8), Direction.LEFT));

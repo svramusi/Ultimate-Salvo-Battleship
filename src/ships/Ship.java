@@ -178,18 +178,37 @@ public abstract class Ship {
 		else
 			return false;
 	}
-	
-	public boolean isValidMove(Point newStartingPoint, Direction direction)
+
+	public boolean isMoveWithinRowOrCol(Point newStartingPoint, Direction newDirection)
 	{
-		if(isValidRotation(newStartingPoint, direction))
+		Direction orig_direction = getDirection();
+		if(orig_direction != newDirection)
+			return false;
+
+		if(orig_direction == Direction.UP || orig_direction == Direction.DOWN)
+		{
+			return getStartPoint().getY() == newStartingPoint.getY();
+		}
+		else
+		{
+			return getStartPoint().getX() == newStartingPoint.getX();
+		}
+	}
+	
+	public boolean isValidMove(Point newStartingPoint, Direction newDirection)
+	{
+		if(isValidRotation(newStartingPoint, newDirection))
 			return true;
 		
+		if(!isMoveWithinRowOrCol(newStartingPoint, newDirection))
+			return false;
+
 		if(getStartPoint().getDistanceFrom(newStartingPoint) > getMoveDistance())
 			return false;
 		else
 			return true;
 	}
-	
+
 	public boolean isValidRotation(Point newStartingPoint, Direction direction)
 	{
 		if(is90DegRotation(getDirection(), direction))

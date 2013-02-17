@@ -211,6 +211,26 @@ public class BoardTests {
 	}
 
 	@Test
+	public void testMoveShipToInvalidLocation() {
+		try {
+			c.setStartPoint(new Point(0,0), Direction.DOWN);
+			board.addShip(c);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+
+		try {
+			board.moveShip(ShipType.CARRIER, new Point(0,1), Direction.DOWN);
+			fail("InvalidShipPositionException not thrown.");
+		} catch (InvalidShipPositionException e) {
+			assertNotNull(e.getMessage());
+			assertEquals(new Point(0,0), c.getStartPoint());
+		} catch (ShipDamagedException e) {
+			fail("caught ShipDamagedException when I shouldn't have");
+		}
+	}
+
+	@Test
 	public void testMoveShipOutOfBounds() {
 		try {
 			board.addShip(c);
