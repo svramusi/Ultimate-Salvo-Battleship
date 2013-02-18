@@ -119,6 +119,7 @@ public class RandomComputerPlayer extends Player {
 	public void moveShips() 
 	{
 		display.writeLine("************************* START TURN *************************");
+		board.nextTurn();
 
 		List<Ship> ships = board.getActiveShips();
 		Random random = new Random();
