@@ -202,7 +202,7 @@ public class Board {
 		boolean isAHit = false;
 		ShipType sunkShip = null;
 		
-		for(Ship ship : ships)
+		for(Ship ship : getActiveShips())
 		{
 			if(!isUnderAnotherShip(ship))
 			{

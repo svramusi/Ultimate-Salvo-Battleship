@@ -3,10 +3,7 @@ package battleship;
 import java.util.*;
 
 import ships.*;
-import ships.Ship.Direction;
 import ships.Ship.ShipType;
-import battleshipExceptions.InvalidShipPositionException;
-import battleshipExceptions.ShipDamagedException;
 import board.Board;
 import board.HitResponse;
 import display.Display;
@@ -25,6 +22,7 @@ public class ExpertComputerPlayer extends Player  {
 	private List<Point> actualShipLocation;
 	
 	private EnemyShips enemyShips;
+	private ShipDestroyer shipDestroyer;
 
 	public ExpertComputerPlayer(Board board, String playerName)
 	{
@@ -33,6 +31,7 @@ public class ExpertComputerPlayer extends Player  {
 		
 		predictor = new ShipPredictor(board);
 		enemyShips = new EnemyShips();
+		shipDestroyer = new ShipDestroyer(board);
 	}
 
 	@Override
@@ -50,64 +49,42 @@ public class ExpertComputerPlayer extends Player  {
 
 		doneWithTurn = false;
 	}
-
-	/*
-	//THIS NEEDS TO CHANGE!!!!!!!!!!
-	private Shot getShotFromShip(Ship ship)
-	{
-		Random random = new Random();
-		int randomFrontBack = random.nextInt();
-		int randomPlusMinus = random.nextInt();
-		int randomShootDistanceX = random.nextInt(ship.getShootDistance());
-		int randomShootDistanceY = random.nextInt(ship.getShootDistance());
-
-		Point pointToShootFrom;
-		if(randomFrontBack % 2 == 0)
-			pointToShootFrom = ship.getStartPoint();
-		else
-			pointToShootFrom = ship.getEndPoint();
-
-		Point shotPoint;
-		if(randomPlusMinus % 2 == 0)
-			shotPoint = new Point(pointToShootFrom.getX() + randomShootDistanceX, pointToShootFrom.getY() + randomShootDistanceY);
-		else
-			shotPoint = new Point(pointToShootFrom.getX() - randomShootDistanceX, pointToShootFrom.getY() - randomShootDistanceY);
-
-		display.writeLine("Shooting at: " + shotPoint.toString() + " from: " + ship.getShipType().toString());
-
-		return new Shot(shotPoint, ship.getShipType());
-	}
-	*/
 	
 	private Point getOptimalShot()
 	{
+		Point optimalShot;
+
 		display.writeLine("finding optimal shot");
 		
-		Point optimalShot;
-		if(enemyShips.isShipStillFloating(ShipType.SUBMARINE))
+		if(shipDestroyer.hotOnTrail())
+			optimalShot = shipDestroyer.getNextShot();
+		else
 		{
-			optimalShot = predictor.getPrediction(ShipType.SUBMARINE);
-			targetedShip = ShipType.SUBMARINE;
-		}
-		else if(enemyShips.isShipStillFloating(ShipType.PATROLBOAT))
-		{
-			optimalShot = predictor.getPrediction(ShipType.PATROLBOAT);
-			targetedShip = ShipType.PATROLBOAT;
-		}
-		else if(enemyShips.isShipStillFloating(ShipType.DESTROYER))
-		{
-			optimalShot = predictor.getPrediction(ShipType.DESTROYER);
-			targetedShip = ShipType.DESTROYER;
-		}
-		else if(enemyShips.isShipStillFloating(ShipType.CARRIER))
-		{
-			optimalShot = predictor.getPrediction(ShipType.CARRIER);
-			targetedShip = ShipType.CARRIER;
-		}
-		else //if(enemyShips.isShipStillFloating(ShipType.BATTLESHIP))
-		{
-			optimalShot = predictor.getPrediction(ShipType.BATTLESHIP);
-			targetedShip = ShipType.BATTLESHIP;
+			if(enemyShips.isShipStillFloating(ShipType.SUBMARINE))
+			{
+				optimalShot = predictor.getPrediction(ShipType.SUBMARINE);
+				targetedShip = ShipType.SUBMARINE;
+			}
+			else if(enemyShips.isShipStillFloating(ShipType.PATROLBOAT))
+			{
+				optimalShot = predictor.getPrediction(ShipType.PATROLBOAT);
+				targetedShip = ShipType.PATROLBOAT;
+			}
+			else if(enemyShips.isShipStillFloating(ShipType.DESTROYER))
+			{
+				optimalShot = predictor.getPrediction(ShipType.DESTROYER);
+				targetedShip = ShipType.DESTROYER;
+			}
+			else if(enemyShips.isShipStillFloating(ShipType.CARRIER))
+			{
+				optimalShot = predictor.getPrediction(ShipType.CARRIER);
+				targetedShip = ShipType.CARRIER;
+			}
+			else //if(enemyShips.isShipStillFloating(ShipType.BATTLESHIP))
+			{
+				optimalShot = predictor.getPrediction(ShipType.BATTLESHIP);
+				targetedShip = ShipType.BATTLESHIP;
+			}
 		}
 		
 		return optimalShot;
@@ -145,15 +122,23 @@ public class ExpertComputerPlayer extends Player  {
 		{
 			display.writeLine("I shot at: " + lastShot.getPoint().toString() + " trying to hit: " + targetedShip + " and I hit something!");
 			enemyShips.registerHit(targetedShip);
+			shipDestroyer.hit(lastShot.getPoint());
 		}
 		else
+		{
 			display.writeLine("I shot at: " + lastShot.getPoint().toString() + " trying to hit: " + targetedShip + " and I missed!");
+
+			//It doesn't need to know about every miss...
+			if(shipDestroyer.hotOnTrail())
+				shipDestroyer.miss(lastShot.getPoint());
+		}
 		
 		if(hitResponse.getSunkShip() != null)
 		{
 			ShipType sunkShip = hitResponse.getSunkShip();
 			enemyShips.sunkShip(sunkShip);
 			display.writeLine("You sunk their " + sunkShip + "!");
+			shipDestroyer.reset();
 		}
 		
 
@@ -170,7 +155,6 @@ public class ExpertComputerPlayer extends Player  {
 		}
 		
 		
-		//Ignore response, it isn't going to affect anything
 		if(shipsFiredThisTurn >= salvoCount)
 		{
 			display.writeLine("************************* TURN OVER *************************");
@@ -191,23 +175,6 @@ public class ExpertComputerPlayer extends Player  {
 		display.printBoard();
 		
 		predictor.addInfo(shot);
-		
-		/*
-		Point suspectedLocation = predictor.getPrediction(shot.getShipType());
-		
-		display.writeLine("There was a shot to point: " + shot.getPoint().toString() + " from ship: "  + shot.getShipType().toString() + " and my prediction is: " + suspectedLocation.toString());
-		display.writeLine("the ship's actual location was: ");
-		for(Point p : actualShipLocation)
-		{
-			display.writeLine(p.toString());
-		}
-		
-		display.writeLine("history of predictions from that ship: ");
-		for(Point p : predictor.getHistoryOfGuesses(shot.getShipType()))
-		{
-			display.writeLine(p.toString());
-		}
-		*/
 		
 		return hitResponse;
 	}
