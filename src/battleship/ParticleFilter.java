@@ -159,21 +159,58 @@ public class ParticleFilter {
     	
     	return newParticles;
     }
+    
+    private Double calculateZScore(double value, double mean, double stdDev)
+    {
+    	return Math.abs((value - mean)/stdDev);
+    }
 
     public Point getMostLikelyLocation()
     {
     	double xSum = 0;
+    	double x2Sum = 0;
     	double ySum = 0;
+    	double y2Sum = 0;
 
     	for(int i=0; i<particleCount; i++)
     	{
-    		xSum += particles[i].getX();
-    		ySum += particles[i].getY();
+    		double x = particles[i].getX();
+    		double y = particles[i].getY();
+    		
+    		xSum += x; 
+    		ySum += y;
+
+    		x2Sum += x * x;
+    		y2Sum += y * y;
     	}
 
-    	Double xMean = xSum/particleCount;
-    	Double yMean = ySum/particleCount;
+    	double xMean = xSum/particleCount;
+    	double yMean = ySum/particleCount;
 
-    	return new Point(xMean.intValue(), yMean.intValue());
+    	double xStdDev = Math.sqrt((x2Sum - xSum*xMean)/(particleCount - 1));
+    	double yStdDev = Math.sqrt((y2Sum - ySum*yMean)/(particleCount - 1));
+
+    	Double lowestXzscore = Double.POSITIVE_INFINITY;
+    	Double lowestYzscore = Double.POSITIVE_INFINITY;
+    	Double lowestzscore = Double.POSITIVE_INFINITY;
+
+    	for(int i=0; i<particleCount; i++)
+    	{
+    		double x = particles[i].getX();
+    		double y = particles[i].getY();
+    		
+    		Double xzscore = calculateZScore(x, xMean, xStdDev);
+    		Double yzscore = calculateZScore(y, yMean, yStdDev);
+    		
+    		Double zscore = xzscore + yzscore;
+    		
+    		if(zscore < lowestzscore)
+    		{
+    			lowestXzscore = x;
+    			lowestYzscore = y;
+    		}
+    	}
+
+    	return new Point(lowestXzscore.intValue(), lowestYzscore.intValue());
     }
 }
