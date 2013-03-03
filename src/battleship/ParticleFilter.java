@@ -4,6 +4,7 @@ import java.util.*;
 
 import ships.*;
 import ships.Ship.Direction;
+import ships.Ship.ShipType;
 import board.Board;
 
 public class ParticleFilter {
@@ -39,19 +40,9 @@ public class ParticleFilter {
     	particles = resample(0.1);
     }
     
-    //THIS NEEDS TO BE REVISITED!!!!
-    private int numberOfPossibilities(int shootDistance)
+    private int numberOfPossibilities(Point point, ShipType shipType)
     {
-    	if(shootDistance == 1)
-    		return 9;
-    	else if(shootDistance == 2)
-    		return 25;
-    	else if(shootDistance == 3)
-    		return 49;
-    	else if(shootDistance == 4)
-    		return 81;
-    	else //if(shootDistance == 5)
-    		return 121;
+    	return board.getBoundingBoxSize(point, shipType);
     }
     
     private double getProbability(Shot shot, Particle particle)
@@ -66,7 +57,7 @@ public class ParticleFilter {
     	{
     		//Everything is equal probability
     		//Should probably changes this in the future to take into account previous shots
-    		return 1.0/numberOfPossibilities(shipShotFrom.getShootDistance());
+    		return 1.0/numberOfPossibilities(new Point(particle.getX().intValue(), particle.getY().intValue()), shot.getShipType());
     	}
     }
     

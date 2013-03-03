@@ -260,4 +260,21 @@ public class Board {
 		//Shouldn't get here!
 		return false;
 	}
+
+	public int getBoundingBoxSize(Point point, ShipType shipType) {
+		int shootDistance = (new ShipFactory()).getShip(shipType).getShootDistance();
+
+		int boundingBoxSize = 0;
+
+		for(int row=point.getX()-shootDistance; row<=point.getX()+shootDistance; row++)
+		{
+			for(int col=point.getY()-shootDistance; col<=point.getY()+shootDistance; col++)
+			{
+				if(isValidShot(new Point(row,col)))
+					boundingBoxSize++;
+			}
+		}
+
+		return boundingBoxSize;
+	}
 }

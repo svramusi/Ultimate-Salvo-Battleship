@@ -517,4 +517,22 @@ public class BoardTests {
 		assertFalse(board.isValidShot(new Point (0,10)));
 		assertFalse(board.isValidShot(new Point (10,10)));
 	}
+
+	@Test
+	public void testGetBoundingBox() {
+		assertEquals(4, board.getBoundingBoxSize(new Point(0,0), ShipType.SUBMARINE));
+		assertEquals(9, board.getBoundingBoxSize(new Point(5,5), ShipType.SUBMARINE));
+
+		assertEquals(9, board.getBoundingBoxSize(new Point(0,0), ShipType.PATROLBOAT));
+		assertEquals(25, board.getBoundingBoxSize(new Point(5,5), ShipType.PATROLBOAT));
+
+		assertEquals(16, board.getBoundingBoxSize(new Point(0,0), ShipType.DESTROYER));
+		assertEquals(49, board.getBoundingBoxSize(new Point(5,5), ShipType.DESTROYER));
+
+		assertEquals(25, board.getBoundingBoxSize(new Point(0,0), ShipType.BATTLESHIP));
+		assertEquals(81, board.getBoundingBoxSize(new Point(5,5), ShipType.BATTLESHIP));
+
+		assertEquals(36, board.getBoundingBoxSize(new Point(0,0), ShipType.CARRIER));
+		assertEquals(100, board.getBoundingBoxSize(new Point(5,5), ShipType.CARRIER));
+	}
 }
