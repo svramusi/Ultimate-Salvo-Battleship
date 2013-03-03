@@ -3,6 +3,7 @@ package battleship;
 import java.util.List;
 
 import board.Board;
+import board.HitResponse;
 import display.Display;
 import display.ConsoleDisplay;
 import ships.Point;
@@ -14,6 +15,7 @@ import battleshipExceptions.InvalidShipPositionException;
 public class HumanPlayer extends Player {
 
 	private Display display;
+	private Shot lastShot;
 	
 	public HumanPlayer(Board board, String playerName)
 	{
@@ -31,26 +33,39 @@ public class HumanPlayer extends Player {
 	@Override
 	public Shot takeAShot()
 	{
-		return new Shot(new Point(0,0), ShipType.CARRIER);
+		lastShot = new Shot(new Point(0,0), ShipType.CARRIER);
+		return lastShot;
 	}
 
 	@Override
-	public void getResponse(boolean shotResult)
+	public ShipType getTargedShipType()
 	{
-		if(shotResult)
+		return lastShot.getShipType();
+	}
+	
+	@Override
+	public void informActualLocation(List<Point> actualShipLocation)
+	{
+		//I'M NOT A CHEATER!
+	}
+
+	@Override
+	public void getResponse(HitResponse hitResponse)
+	{
+		if(hitResponse.isAHit())
 			display.writeLine("Your shot was a hit!");
 		else
 			display.writeLine("Your shot was a mist.");
 	}
 
 	@Override
-	public boolean isHit(Shot shot, List<Point> actualShipLocation)
+	public HitResponse isHit(Shot shot)
 	{
 		display.writeLine("shot from: " + shot.getShipType() + " at: " + shot.getPoint());
 
-		boolean isAHit = isHit(shot.getPoint());
+		HitResponse hitResponse = isHit(shot.getPoint());
 
-		if(isAHit)
+		if(hitResponse.isAHit())
 		{
 			display.writeLine("and it was a hit!");
 			display.writeLine("board after:");
@@ -59,6 +74,6 @@ public class HumanPlayer extends Player {
 		else
 			display.writeLine("and it mist!");
 
-		return isAHit;
+		return hitResponse;
 	}
 }

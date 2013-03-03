@@ -1,7 +1,9 @@
 package battleship;
 
 import board.Board;
+import board.HitResponse;
 import ships.Point;
+import ships.Ship.ShipType;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class BattleShip {
 		Player nonactivePlayer = player2;
 		Player tempPlayer = null;
 
-		boolean hitResult = false;
+		HitResponse hitResult;
 		List<Point> actualShipLocation;
 
 		int turnCount = 0;
@@ -26,9 +28,13 @@ public class BattleShip {
 			while(!activePlayer.isTurnOver())
 			{
 				Shot shot = activePlayer.takeAShot();
-				actualShipLocation = activePlayer.getShipLocation(shot.getShipType());
-
-				hitResult = nonactivePlayer.isHit(shot, actualShipLocation);
+				
+				ShipType shipTargeted = activePlayer.getTargedShipType();
+				actualShipLocation = nonactivePlayer.getShipLocation(shipTargeted);
+				
+				hitResult = nonactivePlayer.isHit(shot);
+				
+				activePlayer.informActualLocation(actualShipLocation);
 				activePlayer.getResponse(hitResult);
 			}
 

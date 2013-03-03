@@ -6,6 +6,7 @@ import java.util.List;
 import display.Display;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
+import board.HitResponse;
 import ships.*;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
@@ -18,8 +19,11 @@ public abstract class Player {
 
 	public abstract void moveShips();
 	public abstract Shot takeAShot();
-	public abstract boolean isHit(Shot shot, List<Point> actualShipLocation);
-	public abstract void getResponse(boolean shotResult);
+	public abstract HitResponse isHit(Shot shot);
+	public abstract void getResponse(HitResponse hitResponse);
+	
+	public abstract ShipType getTargedShipType();
+	public abstract void informActualLocation(List<Point> actualShipLocation);
 	
 	public Player(Board board, String playerName)
 	{
@@ -59,11 +63,11 @@ public abstract class Player {
 		return playerName;
 	}
 
-	public boolean isHit(Point shot)
+	public HitResponse isHit(Point shot)
 	{
 		return board.isHit(shot, true);
 	}
-
+	
 	public List<Point> getShipLocation(ShipType shipType)
 	{
 		return board.getShipLocation(shipType);

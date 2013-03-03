@@ -71,6 +71,11 @@ public abstract class Ship {
 		return true;
 	}
 
+	public int getMaxDamage()
+	{
+		return getSize();
+	}
+
 	public boolean isDamaged(Point point) {
 		int index = convertToDamageIndex(point);
 

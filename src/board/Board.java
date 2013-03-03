@@ -1,6 +1,7 @@
 package board;
 
 import ships.*;
+import ships.Ship.ShipType;
 import battleshipExceptions.*;
 
 import java.util.*;
@@ -196,24 +197,28 @@ public class Board {
 			return false;
 	}
 
-	public boolean isHit(Point shot, boolean takesDamage)
+	public HitResponse isHit(Point shot, boolean takesDamage)
 	{
 		boolean isAHit = false;
-		for(Ship s : ships)
+		ShipType sunkShip = null;
+		
+		for(Ship ship : ships)
 		{
-			if(!isUnderAnotherShip(s))
+			if(!isUnderAnotherShip(ship))
 			{
-				if(s.isAHit(shot, takesDamage))
+				if(ship.isAHit(shot, takesDamage))
 				{
 					isAHit = true;
+					if(ship.isSunk())
+						sunkShip = ship.getShipType();
 
 					if(takesDamage)
-						recentlyDamagedShips.add(s);
+						recentlyDamagedShips.add(ship);
 				}
 			}
 		}
 
-		return isAHit;
+		return new HitResponse(isAHit, sunkShip);
 	}
 
 	public void nextTurn() {
@@ -242,5 +247,17 @@ public class Board {
 
 		//Shouldn't get here...
 		return new ArrayList<Point>();
+	}
+	
+	public boolean isShipSunk(ShipType shipType)
+	{
+		for(Ship s : getAllShips())
+		{
+			if(s.getShipType().equals(shipType))
+				return s.isSunk();
+		}
+		
+		//Shouldn't get here!
+		return false;
 	}
 }

@@ -3,6 +3,7 @@ package battleship;
 import ships.*;
 import ships.Ship.ShipType;
 import ships.Ship.Direction;
+import board.HitResponse;
 import board.Board;
 import display.Display;
 import display.FileDisplay;
@@ -16,6 +17,8 @@ public class RandomComputerPlayer extends Player {
 	private int salvoCount;
 	private int shipToFireThisTurn;
 	private int shipsFiredThisTurn;
+	
+	private Shot lastShot;
 
 	public RandomComputerPlayer(Board board, String playerName)
 	{
@@ -183,16 +186,28 @@ public class RandomComputerPlayer extends Player {
 	{
 		List<Ship> ships = board.getActiveShips();
 
-		Shot shot = getShotFromShip(ships.get(shipToFireThisTurn));
+		lastShot = getShotFromShip(ships.get(shipToFireThisTurn));
 
 		shipToFireThisTurn++;
 		shipsFiredThisTurn++;
 
-		return shot;
+		return lastShot;
 	}
 
 	@Override
-	public void getResponse(boolean shotResult)
+	public ShipType getTargedShipType()
+	{
+		return lastShot.getShipType();
+	}
+	
+	@Override
+	public void informActualLocation(List<Point> actualShipLocation)
+	{
+		//I'M NOT A CHEATER!
+	}
+	
+	@Override
+	public void getResponse(HitResponse hitResponse)
 	{
 		//Ignore response, it isn't going to affect anything
 		if(shipsFiredThisTurn >= salvoCount)
@@ -203,18 +218,18 @@ public class RandomComputerPlayer extends Player {
 	}
 
 	@Override
-	public boolean isHit(Shot shot, List<Point> actualShipLocation)
+	public HitResponse isHit(Shot shot)
 	{
-		boolean isAHit;
+		HitResponse hitResponse;
 		//Must respond with result, but ignore where the shot came from
 		display.writeLine("board before:");
 		display.printBoard();
 		
-		isAHit = isHit(shot.getPoint());
+		hitResponse = isHit(shot.getPoint());
 
 		display.writeLine("board after:");
 		display.printBoard();
 		
-		return isAHit;
+		return hitResponse;
 	}
 }

@@ -414,8 +414,8 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
-		assertTrue(board.isHit(new Point(0,0), true));
-		assertFalse(board.isHit(new Point(8,8), true));
+		assertTrue(board.isHit(new Point(0,0), true).isAHit());
+		assertFalse(board.isHit(new Point(8,8), true).isAHit());
 	}
 
 
@@ -449,7 +449,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
-		assertTrue(board.isHit(zeroPoint, true));
+		assertTrue(board.isHit(zeroPoint, true).isAHit());
 
 		assertTrue(c.isDamaged(zeroPoint));
 		assertFalse(s.isDamaged(zeroPoint));
@@ -466,7 +466,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 
-		assertTrue(board.isHit(zeroPoint, true));
+		assertTrue(board.isHit(zeroPoint, true).isAHit());
 
 		assertTrue(c.isDamaged(zeroPoint));
 

@@ -59,8 +59,8 @@ public class PlayerTests {
 
 	@Test
 	public void testIsHit() {
-		assertTrue(player.isHit(new Point(0,0)));
-		assertFalse(player.isHit(new Point(8,8)));
+		assertTrue(player.isHit(new Point(0,0)).isAHit());
+		assertFalse(player.isHit(new Point(8,8)).isAHit());
 	}
 
 	@Test

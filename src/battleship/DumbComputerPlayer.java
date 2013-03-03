@@ -5,11 +5,14 @@ import java.util.List;
 import ships.Point;
 import ships.Ship.ShipType;
 import board.Board;
+import board.HitResponse;
 import display.Display;
 import display.FileDisplay;
 
 public class DumbComputerPlayer extends ComputerPlayer {
 	private Display display;
+	
+	private Shot lastShot;
 	
 	public DumbComputerPlayer(Board board, String playerName)
 	{
@@ -28,29 +31,43 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	public Shot takeAShot()
 	{
 		//Always shoot at the same spot
-		return new Shot(new Point(0,0), ShipType.CARRIER);
+		lastShot = new Shot(new Point(0,0), ShipType.CARRIER);
+		
+		return lastShot;
+	}
+
+	@Override
+	public ShipType getTargedShipType()
+	{
+		return lastShot.getShipType();
 	}
 	
 	@Override
-	public void getResponse(boolean shotResult)
+	public void informActualLocation(List<Point> actualShipLocation)
+	{
+		//I'M NOT A CHEATER!
+	}
+	
+	@Override
+	public void getResponse(HitResponse hitResponse)
 	{
 		//Ignore response, it isn't going to affect anything
 		doneWithTurn = true;
 	}
 
 	@Override
-	public boolean isHit(Shot shot, List<Point> actualShipLocation)
+	public HitResponse isHit(Shot shot)
 	{
-		boolean isAHit;
+		HitResponse hitResponse;
 		//Must respond with result, but ignore where the shot came from
 		display.writeLine("board before:");
 		display.printBoard();
 		
-		isAHit = isHit(shot.getPoint());
+		hitResponse = isHit(shot.getPoint());
 
 		display.writeLine("board after:");
 		display.printBoard();
 		
-		return isAHit;
+		return hitResponse;
 	}
 }

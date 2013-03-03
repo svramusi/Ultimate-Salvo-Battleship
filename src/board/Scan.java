@@ -59,7 +59,7 @@ public class Scan {
 
 		for(Point scanPoint : pointsToScan)
 		{
-			if(board.isHit(scanPoint, false))
+			if(board.isHit(scanPoint, false).isAHit())
 				foundShips.add(scanPoint);
 		}
 
