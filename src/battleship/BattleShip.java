@@ -1,23 +1,22 @@
 package battleship;
 
 import board.Board;
-import display.*;
 import ships.Point;
+
+import java.util.List;
 
 public class BattleShip {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		Player player1 = new RandomComputerPlayer(new Board(), "computer_player1");
-		Player player2 = new RandomComputerPlayer(new Board(), "computer_player2");
+		Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
 
 		Player activePlayer = player1;
 		Player nonactivePlayer = player2;
 		Player tempPlayer = null;
 
 		boolean hitResult = false;
+		List<Point> actualShipLocation;
 
 		int turnCount = 0;
 
@@ -26,7 +25,10 @@ public class BattleShip {
 			activePlayer.moveShips();
 			while(!activePlayer.isTurnOver())
 			{
-				hitResult = nonactivePlayer.isHit(activePlayer.takeAShot());
+				Shot shot = activePlayer.takeAShot();
+				actualShipLocation = activePlayer.getShipLocation(shot.getShipType());
+
+				hitResult = nonactivePlayer.isHit(shot, actualShipLocation);
 				activePlayer.getResponse(hitResult);
 			}
 

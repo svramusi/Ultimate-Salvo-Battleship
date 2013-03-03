@@ -144,22 +144,34 @@ public class RandomComputerPlayer extends Player {
 	private Shot getShotFromShip(Ship ship)
 	{
 		Random random = new Random();
-		int randomFrontBack = random.nextInt();
-		int randomPlusMinus = random.nextInt();
-		int randomShootDistanceX = random.nextInt(ship.getShootDistance());
-		int randomShootDistanceY = random.nextInt(ship.getShootDistance());
-
-		Point pointToShootFrom;
-		if(randomFrontBack % 2 == 0)
-			pointToShootFrom = ship.getStartPoint();
-		else
-			pointToShootFrom = ship.getEndPoint();
-
-		Point shotPoint;
-		if(randomPlusMinus % 2 == 0)
-			shotPoint = new Point(pointToShootFrom.getX() + randomShootDistanceX, pointToShootFrom.getY() + randomShootDistanceY);
-		else
-			shotPoint = new Point(pointToShootFrom.getX() - randomShootDistanceX, pointToShootFrom.getY() - randomShootDistanceY);
+		
+		boolean isValidShot = false;
+		Point shotPoint = new Point(0,0);
+		
+		while(!isValidShot)
+		{
+			int randomFrontBack = random.nextInt();
+			int randomPlusMinus = random.nextInt();
+			int randomShootDistanceX = random.nextInt(ship.getShootDistance());
+			int randomShootDistanceY = random.nextInt(ship.getShootDistance());
+			Point pointToShootFrom;
+			
+			if(randomFrontBack % 2 == 0)
+				pointToShootFrom = ship.getStartPoint();
+			else
+				pointToShootFrom = ship.getEndPoint();
+	
+			if(randomPlusMinus % 2 == 0)
+				shotPoint = new Point(pointToShootFrom.getX() + randomShootDistanceX, pointToShootFrom.getY() + randomShootDistanceY);
+			else
+				shotPoint = new Point(pointToShootFrom.getX() - randomShootDistanceX, pointToShootFrom.getY() - randomShootDistanceY);
+			
+			
+			if(shotPoint.getX() < 0 || shotPoint.getY() < 0 || shotPoint.getX() > 9 || shotPoint.getY() > 9)
+				isValidShot = false;
+			else
+				isValidShot = true;
+		}
 
 		display.writeLine("Shooting at: " + shotPoint.toString() + " from: " + ship.getShipType().toString());
 
@@ -191,7 +203,7 @@ public class RandomComputerPlayer extends Player {
 	}
 
 	@Override
-	public boolean isHit(Shot shot)
+	public boolean isHit(Shot shot, List<Point> actualShipLocation)
 	{
 		boolean isAHit;
 		//Must respond with result, but ignore where the shot came from

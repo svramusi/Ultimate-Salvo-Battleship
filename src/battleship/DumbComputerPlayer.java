@@ -1,5 +1,7 @@
 package battleship;
 
+import java.util.List;
+
 import ships.Point;
 import ships.Ship.ShipType;
 import board.Board;
@@ -37,7 +39,7 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	}
 
 	@Override
-	public boolean isHit(Shot shot)
+	public boolean isHit(Shot shot, List<Point> actualShipLocation)
 	{
 		boolean isAHit;
 		//Must respond with result, but ignore where the shot came from

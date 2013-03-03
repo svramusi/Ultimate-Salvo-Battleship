@@ -1,5 +1,7 @@
 package battleship;
 
+import java.util.List;
+
 import board.Board;
 import display.Display;
 import display.ConsoleDisplay;
@@ -18,20 +20,20 @@ public class HumanPlayer extends Player {
 		super(board, playerName);
 		display = new ConsoleDisplay(board, playerName);
 	}
-	
+
 	@Override
 	public void moveShips() 
 	{
 		display.writeLine("It's time to move your ships.\nHere's your board:\n");
 		display.printBoard();
 	}
-	
+
 	@Override
 	public Shot takeAShot()
 	{
 		return new Shot(new Point(0,0), ShipType.CARRIER);
 	}
-	
+
 	@Override
 	public void getResponse(boolean shotResult)
 	{
@@ -42,7 +44,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public boolean isHit(Shot shot)
+	public boolean isHit(Shot shot, List<Point> actualShipLocation)
 	{
 		display.writeLine("shot from: " + shot.getShipType() + " at: " + shot.getPoint());
 
@@ -57,8 +59,6 @@ public class HumanPlayer extends Player {
 		else
 			display.writeLine("and it mist!");
 
-		
 		return isAHit;
 	}
-
 }

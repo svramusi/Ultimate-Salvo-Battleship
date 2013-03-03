@@ -59,7 +59,7 @@ public class BoardTests {
 			fail("caught InvalidShipPositionException when I shouldn't have");
 		}
 		
-		assertEquals(5, board.getActiveShips());
+		assertEquals(5, board.getActiveShips().size());
 	}
 
 	@Test
@@ -502,5 +502,19 @@ public class BoardTests {
 		} catch (ShipDamagedException e) {
 			fail("caught ShipDamagedException when I shouldn't have");
 		}
+	}
+
+	@Test
+	public void testIsValidShot() {
+		assertTrue(board.isValidShot(new Point (0,0)));
+		assertTrue(board.isValidShot(new Point (0,9)));
+		assertTrue(board.isValidShot(new Point (9,0)));
+		assertTrue(board.isValidShot(new Point (9,9)));
+
+		assertFalse(board.isValidShot(new Point (-1,0)));
+		assertFalse(board.isValidShot(new Point (0,-1)));
+		assertFalse(board.isValidShot(new Point (10,0)));
+		assertFalse(board.isValidShot(new Point (0,10)));
+		assertFalse(board.isValidShot(new Point (10,10)));
 	}
 }

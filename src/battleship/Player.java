@@ -1,11 +1,14 @@
 package battleship;
 
 import static org.junit.Assert.fail;
+import java.util.List;
+
 import display.Display;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
 import ships.*;
 import ships.Ship.Direction;
+import ships.Ship.ShipType;
 
 public abstract class Player {
 	private String playerName;
@@ -15,7 +18,7 @@ public abstract class Player {
 
 	public abstract void moveShips();
 	public abstract Shot takeAShot();
-	public abstract boolean isHit(Shot shot);
+	public abstract boolean isHit(Shot shot, List<Point> actualShipLocation);
 	public abstract void getResponse(boolean shotResult);
 	
 	public Player(Board board, String playerName)
@@ -59,6 +62,11 @@ public abstract class Player {
 	public boolean isHit(Point shot)
 	{
 		return board.isHit(shot, true);
+	}
+
+	public List<Point> getShipLocation(ShipType shipType)
+	{
+		return board.getShipLocation(shipType);
 	}
 
 	public boolean isDefeated()

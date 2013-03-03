@@ -221,4 +221,26 @@ public class Board {
 		shipsDamagedLastTurn.addAll(recentlyDamagedShips);
 		recentlyDamagedShips.clear();
 	}
+
+	public boolean isValidShot(Point point) {
+		int x = point.getX();
+		int y = point.getY();
+
+		if(x < 0 || y < 0 || x > 9 || y > 9)
+			return false;
+		else
+			return true;
+	}
+
+	public List<Point> getShipLocation(Ship.ShipType shipType)
+	{
+		for(Ship s : getActiveShips())
+		{
+			if(s.getShipType().equals(shipType))
+				return s.getShipLocation();
+		}
+
+		//Shouldn't get here...
+		return new ArrayList<Point>();
+	}
 }
