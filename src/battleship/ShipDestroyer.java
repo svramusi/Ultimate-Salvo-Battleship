@@ -16,6 +16,8 @@ public class ShipDestroyer {
 	
 	private Board board;
 	
+	//Need to handle tracking 2 different ships
+	
 	public ShipDestroyer(Board board)
 	{
 		this.board = board;

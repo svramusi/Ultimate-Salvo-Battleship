@@ -18,12 +18,12 @@ public abstract class Player {
 	protected boolean doneWithTurn;
 
 	public abstract void moveShips();
-	public abstract Shot takeAShot();
-	public abstract HitResponse isHit(Shot shot);
-	public abstract void getResponse(HitResponse hitResponse);
+	public abstract List<Shot> takeAShot();
+	public abstract List<HitResponse> isHit(List<Shot> shots);
+	public abstract void getResponse(List<HitResponse> hitResponses);
 	
-	public abstract ShipType getTargedShipType();
-	public abstract void informActualLocation(List<Point> actualShipLocation);
+	//public abstract ShipType getTargedShipType();
+	//public abstract void informActualLocation(List<Point> actualShipLocation);
 	
 	public Player(Board board, String playerName)
 	{
@@ -63,9 +63,9 @@ public abstract class Player {
 		return playerName;
 	}
 
-	public HitResponse isHit(Point shot)
+	public HitResponse isHit(Point shot, boolean dealDamage)
 	{
-		return board.isHit(shot, true);
+		return board.isHit(shot, dealDamage);
 	}
 	
 	public List<Point> getShipLocation(ShipType shipType)

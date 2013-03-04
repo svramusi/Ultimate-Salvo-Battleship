@@ -17,7 +17,7 @@ public class BattleShip {
 		Player nonactivePlayer = player2;
 		Player tempPlayer = null;
 
-		HitResponse hitResult;
+		List<HitResponse> hitResults;
 		List<Point> actualShipLocation;
 
 		int turnCount = 0;
@@ -27,15 +27,15 @@ public class BattleShip {
 			activePlayer.moveShips();
 			while(!activePlayer.isTurnOver())
 			{
-				Shot shot = activePlayer.takeAShot();
+				List<Shot> shots = activePlayer.takeAShot();
 				
-				ShipType shipTargeted = activePlayer.getTargedShipType();
-				actualShipLocation = nonactivePlayer.getShipLocation(shipTargeted);
+				//ShipType shipTargeted = activePlayer.getTargedShipType();
+				//actualShipLocation = nonactivePlayer.getShipLocation(shipTargeted);
 				
-				hitResult = nonactivePlayer.isHit(shot);
+				hitResults = nonactivePlayer.isHit(shots);
 				
-				activePlayer.informActualLocation(actualShipLocation);
-				activePlayer.getResponse(hitResult);
+				//activePlayer.informActualLocation(actualShipLocation);
+				activePlayer.getResponse(hitResults);
 			}
 
 			tempPlayer = activePlayer;

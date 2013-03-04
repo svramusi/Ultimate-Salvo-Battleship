@@ -218,7 +218,7 @@ public class Board {
 			}
 		}
 
-		return new HitResponse(isAHit, sunkShip);
+		return new HitResponse(shot, isAHit, sunkShip);
 	}
 
 	public void nextTurn() {

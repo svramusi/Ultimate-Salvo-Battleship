@@ -1,6 +1,6 @@
 package battleship;
 
-import java.util.List;
+import java.util.*;
 
 import board.Board;
 import board.HitResponse;
@@ -31,12 +31,14 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public Shot takeAShot()
+	public List<Shot> takeAShot()
 	{
-		lastShot = new Shot(new Point(0,0), ShipType.CARRIER);
-		return lastShot;
+		List<Shot> shots = new ArrayList<Shot>();
+		shots.add(new Shot(new Point(0,0), ShipType.CARRIER));
+		return shots;
 	}
-
+	
+	/*
 	@Override
 	public ShipType getTargedShipType()
 	{
@@ -48,32 +50,47 @@ public class HumanPlayer extends Player {
 	{
 		//I'M NOT A CHEATER!
 	}
-
+	*/
+	
 	@Override
-	public void getResponse(HitResponse hitResponse)
+	public void getResponse(List<HitResponse> hitResponses)
 	{
-		if(hitResponse.isAHit())
-			display.writeLine("Your shot was a hit!");
-		else
-			display.writeLine("Your shot was a mist.");
+		for(HitResponse response : hitResponses)
+		{
+			if(response.isAHit())
+				display.writeLine("Your shot was a hit!");
+			else
+				display.writeLine("Your shot was a mist.");
+		}
 	}
 
 	@Override
-	public HitResponse isHit(Shot shot)
+	public List<HitResponse> isHit(List<Shot> shots)
 	{
-		display.writeLine("shot from: " + shot.getShipType() + " at: " + shot.getPoint());
-
-		HitResponse hitResponse = isHit(shot.getPoint());
-
-		if(hitResponse.isAHit())
+		List<HitResponse> hitResponses = new ArrayList<HitResponse>();
+		
+		for(Shot shot : shots)
 		{
-			display.writeLine("and it was a hit!");
-			display.writeLine("board after:");
-			display.printBoard();
-		}
-		else
-			display.writeLine("and it mist!");
+			display.writeLine("shot from: " + shot.getShipType() + " at: " + shot.getPoint());
 
-		return hitResponse;
+			boolean dealDamage = true;
+			if(shots.size() > 1)
+				dealDamage = false; //ITS A SCAN!
+			
+			HitResponse hitResponse = isHit(shot.getPoint(), dealDamage);
+	
+			if(hitResponse.isAHit())
+			{
+				display.writeLine("and it was a hit!");
+				display.writeLine("board after:");
+				display.printBoard();
+			}
+			else
+				display.writeLine("and it mist!");
+			
+			hitResponses.add(hitResponse);
+		}
+
+		return hitResponses;
 	}
 }

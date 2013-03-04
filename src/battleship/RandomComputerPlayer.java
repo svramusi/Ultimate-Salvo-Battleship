@@ -17,8 +17,6 @@ public class RandomComputerPlayer extends Player {
 	private int salvoCount;
 	private int shipToFireThisTurn;
 	private int shipsFiredThisTurn;
-	
-	private Shot lastShot;
 
 	public RandomComputerPlayer(Board board, String playerName)
 	{
@@ -182,18 +180,21 @@ public class RandomComputerPlayer extends Player {
 	}
 
 	@Override
-	public Shot takeAShot()
+	public List<Shot> takeAShot()
 	{
 		List<Ship> ships = board.getActiveShips();
+		
+		List<Shot> shots = new ArrayList<Shot>();
 
-		lastShot = getShotFromShip(ships.get(shipToFireThisTurn));
+		shots.add(getShotFromShip(ships.get(shipToFireThisTurn)));
 
 		shipToFireThisTurn++;
 		shipsFiredThisTurn++;
 
-		return lastShot;
+		return shots;
 	}
 
+	/*
 	@Override
 	public ShipType getTargedShipType()
 	{
@@ -205,9 +206,10 @@ public class RandomComputerPlayer extends Player {
 	{
 		//I'M NOT A CHEATER!
 	}
+	*/
 	
 	@Override
-	public void getResponse(HitResponse hitResponse)
+	public void getResponse(List<HitResponse> hitResponse)
 	{
 		//Ignore response, it isn't going to affect anything
 		if(shipsFiredThisTurn >= salvoCount)
@@ -218,18 +220,25 @@ public class RandomComputerPlayer extends Player {
 	}
 
 	@Override
-	public HitResponse isHit(Shot shot)
+	public List<HitResponse> isHit(List<Shot> shots)
 	{
-		HitResponse hitResponse;
+		List<HitResponse> hitResponses = new ArrayList<HitResponse>();
 		//Must respond with result, but ignore where the shot came from
 		display.writeLine("board before:");
 		display.printBoard();
+
+		boolean dealDamage = true;
+		if(shots.size() > 1)
+			dealDamage = false; //ITS A SCAN!
 		
-		hitResponse = isHit(shot.getPoint());
+		for(Shot shot : shots)
+		{
+			hitResponses.add(isHit(shot.getPoint(), dealDamage));
+		}
 
 		display.writeLine("board after:");
 		display.printBoard();
 		
-		return hitResponse;
+		return hitResponses;
 	}
 }

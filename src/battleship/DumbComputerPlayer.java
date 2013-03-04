@@ -1,6 +1,6 @@
 package battleship;
 
-import java.util.List;
+import java.util.*;
 
 import ships.Point;
 import ships.Ship.ShipType;
@@ -28,14 +28,17 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	}
 	
 	@Override
-	public Shot takeAShot()
+	public List<Shot> takeAShot()
 	{
 		//Always shoot at the same spot
-		lastShot = new Shot(new Point(0,0), ShipType.CARRIER);
+		List<Shot> shots = new ArrayList<Shot>();
 		
-		return lastShot;
+		shots.add(new Shot(new Point(0,0), ShipType.CARRIER));
+		
+		return shots;
 	}
 
+	/*
 	@Override
 	public ShipType getTargedShipType()
 	{
@@ -47,27 +50,36 @@ public class DumbComputerPlayer extends ComputerPlayer {
 	{
 		//I'M NOT A CHEATER!
 	}
+	*/
 	
 	@Override
-	public void getResponse(HitResponse hitResponse)
+	public void getResponse(List<HitResponse> hitResponse)
 	{
 		//Ignore response, it isn't going to affect anything
 		doneWithTurn = true;
 	}
 
 	@Override
-	public HitResponse isHit(Shot shot)
+	public List<HitResponse> isHit(List<Shot> shots)
 	{
-		HitResponse hitResponse;
+		List<HitResponse> hitResponses = new ArrayList<HitResponse>();
+		
 		//Must respond with result, but ignore where the shot came from
 		display.writeLine("board before:");
 		display.printBoard();
+
+		boolean dealDamage = true;
+		if(shots.size() > 1)
+			dealDamage = false; //ITS A SCAN!
 		
-		hitResponse = isHit(shot.getPoint());
+		for(Shot shot : shots)
+		{
+			hitResponses.add(isHit(shot.getPoint(), dealDamage));
+		}
 
 		display.writeLine("board after:");
 		display.printBoard();
 		
-		return hitResponse;
+		return hitResponses;
 	}
 }

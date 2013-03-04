@@ -16,15 +16,15 @@ public class ExpertComputerPlayer extends Player  {
 	private int shipToFireThisTurn;
 	private int shipsFiredThisTurn;
 	
-	private Shot lastShot;
-	private ShipType targetedShip;
-	private List<Point> actualShipLocation;
+	//private Shot lastShot;
+	//private ShipType targetedShip;
+	//private List<Point> actualShipLocation;
 	
 	private EnemyShips enemyShips;
 	private ShipDestroyer shipDestroyer;
 	
-	private boolean didAScan;
 	private List<Point> scanResults;
+	private boolean didAScan;
 
 	public ExpertComputerPlayer(Board board, String playerName)
 	{
@@ -36,6 +36,7 @@ public class ExpertComputerPlayer extends Player  {
 		shipDestroyer = new ShipDestroyer(board);
 		
 		didAScan = false;
+		scanResults = new ArrayList<Point>();
 	}
 
 	@Override
@@ -62,50 +63,52 @@ public class ExpertComputerPlayer extends Player  {
 		if(enemyShips.isShipStillFloating(ShipType.SUBMARINE))
 		{
 			optimalShot = predictor.getPrediction(ShipType.SUBMARINE);
-			targetedShip = ShipType.SUBMARINE;
+			//targetedShip = ShipType.SUBMARINE;
 		}
 		else if(enemyShips.isShipStillFloating(ShipType.PATROLBOAT))
 		{
 			optimalShot = predictor.getPrediction(ShipType.PATROLBOAT);
-			targetedShip = ShipType.PATROLBOAT;
+			//targetedShip = ShipType.PATROLBOAT;
 		}
 		else if(enemyShips.isShipStillFloating(ShipType.DESTROYER))
 		{
 			optimalShot = predictor.getPrediction(ShipType.DESTROYER);
-			targetedShip = ShipType.DESTROYER;
+			//targetedShip = ShipType.DESTROYER;
 		}
 		else if(enemyShips.isShipStillFloating(ShipType.CARRIER))
 		{
 			optimalShot = predictor.getPrediction(ShipType.CARRIER);
-			targetedShip = ShipType.CARRIER;
+			//targetedShip = ShipType.CARRIER;
 		}
 		else //if(enemyShips.isShipStillFloating(ShipType.BATTLESHIP))
 		{
 			optimalShot = predictor.getPrediction(ShipType.BATTLESHIP);
-			targetedShip = ShipType.BATTLESHIP;
+			//targetedShip = ShipType.BATTLESHIP;
 		}
 		
 		return optimalShot;
 	}
 	
-	private void performCarrierScan()
+	private List<Point> performCarrierScan()
 	{
 		didAScan = true;
 		
 		Point pointToScan = getOptimalShot();
+		boolean needToSearchNextLine = false;
 		
 		Point startPoint = null;
 		startPoint = new Point(pointToScan.getX()-1, pointToScan.getY()-1);
 		
-		if(board.isValidShot(startPoint))
+		if(!board.isValidShot(startPoint))
 		{
-			startPoint = new Point(pointToScan.getX(), pointToScan.getY()-1);
+			startPoint = new Point(pointToScan.getX()-1, pointToScan.getY());
 			
-			if(board.isValidShot(startPoint))
+			if(!board.isValidShot(startPoint))
 			{
-				startPoint = new Point(pointToScan.getX()-1, pointToScan.getY());
+				needToSearchNextLine = true;
+				startPoint = new Point(pointToScan.getX(), pointToScan.getY()-1);
 				
-				if(board.isValidShot(startPoint))
+				if(!board.isValidShot(startPoint))
 				{
 					startPoint = new Point(pointToScan.getX(), pointToScan.getY());
 				}
@@ -113,71 +116,85 @@ public class ExpertComputerPlayer extends Player  {
 		}
 		
 		Point endPoint = null;
-		endPoint = new Point(pointToScan.getX()+1, pointToScan.getY()+1);
+		int row;
+		if(needToSearchNextLine)
+			row = pointToScan.getX()+1;
+		else
+			row = pointToScan.getX();
+
+		endPoint = new Point(row, pointToScan.getY()+1);
 		
-		if(board.isValidShot(endPoint))
+		if(!board.isValidShot(endPoint))
 		{
-			endPoint = new Point(pointToScan.getX(), pointToScan.getY()+1);
-			
-			if(board.isValidShot(endPoint))
-			{
-				endPoint = new Point(pointToScan.getX()+1, pointToScan.getY());
-				
-				if(board.isValidShot(endPoint))
-				{
-					endPoint = new Point(pointToScan.getX(), pointToScan.getY());
-				}
-			}
+			endPoint = new Point(row, pointToScan.getY());
 		}
+
+		display.writeLine("start point: " + startPoint);
+		display.writeLine("end point: " + endPoint);
 		
 		Scan scan = new Scan(startPoint, endPoint, board);
+		return scan.getPointsToScan();
+		
+		/*
 		scanResults = scan.findShips();
 		
-		display.writeLine("I did a scan of " + startPoint + " " + endPoint + " and I found:");
+		display.writeLine("Point to scan: " + pointToScan.toString() + " I did a scan of " + startPoint + " " + endPoint + " and I found:");
 		for(Point result : scanResults)
 		{
 			display.writeLine(result.toString());
 		}
+		*/
 	}
 
 	@Override
-	public Shot takeAShot()
+	public List<Shot> takeAShot()
 	{
+		List<Shot> shots = new ArrayList<Shot>();
+		List<Point> pointsToAttack = new ArrayList<Point>();
 		List<Ship> ships = board.getActiveShips();
-		Point shotToTake;
-		
-		if(shipDestroyer.hotOnTrail())
-			shotToTake = shipDestroyer.getNextShot();
+
+		if(scanResults.size() > 0)
+		{
+			pointsToAttack.add(scanResults.get(0));
+			scanResults.remove(0);
+		}
 		else
 		{
-			performCarrierScan();
-			
-			if(scanResults.size() > 0)
-			{
-				shotToTake = scanResults.get(0);
-				scanResults.remove(0);
-			}
+			if(shipDestroyer.hotOnTrail())
+				pointsToAttack.add(shipDestroyer.getNextShot());
 			else
 			{
-				shotToTake = getOptimalShot();
+				if(!didAScan)
+				{
+					pointsToAttack = performCarrierScan();
+				}
+				else
+				{
+					pointsToAttack.add(getOptimalShot());
+				}
 			}
 		}
 		
-		ShipType shipType = ships.get(shipToFireThisTurn).getShipType();
 		/*
 		if(!shipType.equals(ShipType.CARRIER)) //carrier always scans for now
 		{
 		}
 		*/
-		
-		lastShot = new Shot(shotToTake, shipType);
+
+		ShipType shipType = ships.get(shipToFireThisTurn).getShipType();
+		for(Point pointToAttack : pointsToAttack)
+		{
+			display.writeLine("attacking/scanning: " + pointToAttack);
+			shots.add(new Shot(pointToAttack, shipType));
+		}
 		
 		shipToFireThisTurn++;
 		shipsFiredThisTurn++;
 
-		return lastShot;
+		return shots;
 	}
 	
+	/*
 	@Override
 	public ShipType getTargedShipType()
 	{
@@ -189,34 +206,53 @@ public class ExpertComputerPlayer extends Player  {
 	{
 		this.actualShipLocation = actualShipLocation;
 	}
-
+	*/
+	
 	@Override
-	public void getResponse(HitResponse hitResponse)
+	public void getResponse(List<HitResponse> hitResponses)
 	{
-		if(hitResponse.isAHit())
+		if(hitResponses.size() == 1)
 		{
-			display.writeLine("I shot at: " + lastShot.getPoint().toString() + " trying to hit: " + targetedShip + " and I hit something!");
-			enemyShips.registerHit(targetedShip);
-			shipDestroyer.hit(lastShot.getPoint());
+			HitResponse response = hitResponses.get(0);
+			
+			if(response.isAHit())
+			{
+				display.writeLine("I shot at: " + response.getLocation().toString() + " and I hit something!");
+				//enemyShips.registerHit(targetedShip);
+				shipDestroyer.hit(response.getLocation());
+			}
+			else
+			{
+				display.writeLine("I shot at: " + response.getLocation().toString() + " and I missed!");
+	
+				//It doesn't need to know about every miss...
+				if(shipDestroyer.hotOnTrail())
+					shipDestroyer.miss(response.getLocation());
+			}
+			
+			if(response.getSunkShip() != null)
+			{
+				ShipType sunkShip = response.getSunkShip();
+				enemyShips.sunkShip(sunkShip);
+				display.writeLine("You sunk their " + sunkShip + "!");
+				shipDestroyer.reset();
+			}
 		}
-		else
+		else //IT WAS A SCAN!
 		{
-			display.writeLine("I shot at: " + lastShot.getPoint().toString() + " trying to hit: " + targetedShip + " and I missed!");
-
-			//It doesn't need to know about every miss...
-			if(shipDestroyer.hotOnTrail())
-				shipDestroyer.miss(lastShot.getPoint());
+			for(HitResponse response : hitResponses)
+			{
+				if(response.isAHit())
+					scanResults.add(response.getLocation());
+			}
+			display.writeLine("The scan found the following: ");
+			for(Point foundLocation : scanResults)
+			{
+				display.writeLine(foundLocation.toString());
+			}
 		}
 		
-		if(hitResponse.getSunkShip() != null)
-		{
-			ShipType sunkShip = hitResponse.getSunkShip();
-			enemyShips.sunkShip(sunkShip);
-			display.writeLine("You sunk their " + sunkShip + "!");
-			shipDestroyer.reset();
-		}
-		
-
+		/*
 		display.writeLine("the ship's actual location was: ");
 		for(Point p : actualShipLocation)
 		{
@@ -228,7 +264,7 @@ public class ExpertComputerPlayer extends Player  {
 		{
 			display.writeLine(p.toString());
 		}
-		
+		*/
 		
 		if(shipsFiredThisTurn >= salvoCount)
 		{
@@ -240,19 +276,26 @@ public class ExpertComputerPlayer extends Player  {
 	}
 
 	@Override
-	public HitResponse isHit(Shot shot)
+	public List<HitResponse> isHit(List<Shot> shots)
 	{
-		HitResponse hitResponse;
+		List<HitResponse> hitResponses = new ArrayList<HitResponse>();
+		
 		display.writeLine("board before:");
 		display.printBoard();
 		
-		hitResponse = isHit(shot.getPoint());
+		boolean dealDamage = true;
+		if(shots.size() > 1)
+			dealDamage = false; //ITS A SCAN!
+		
+		for(Shot shot : shots)
+		{
+			hitResponses.add(isHit(shot.getPoint(), dealDamage));
+			predictor.addInfo(shot);
+		}
 
 		display.writeLine("board after:");
 		display.printBoard();
 		
-		predictor.addInfo(shot);
-		
-		return hitResponse;
+		return hitResponses;
 	}
 }
