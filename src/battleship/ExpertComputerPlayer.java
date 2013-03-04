@@ -4,8 +4,7 @@ import java.util.*;
 
 import ships.*;
 import ships.Ship.ShipType;
-import board.Board;
-import board.HitResponse;
+import board.*;
 import display.Display;
 import display.FileDisplay;
 
@@ -23,6 +22,9 @@ public class ExpertComputerPlayer extends Player  {
 	
 	private EnemyShips enemyShips;
 	private ShipDestroyer shipDestroyer;
+	
+	private boolean didAScan;
+	private List<Point> scanResults;
 
 	public ExpertComputerPlayer(Board board, String playerName)
 	{
@@ -32,6 +34,8 @@ public class ExpertComputerPlayer extends Player  {
 		predictor = new ShipPredictor(board);
 		enemyShips = new EnemyShips();
 		shipDestroyer = new ShipDestroyer(board);
+		
+		didAScan = false;
 	}
 
 	@Override
@@ -53,50 +57,121 @@ public class ExpertComputerPlayer extends Player  {
 	private Point getOptimalShot()
 	{
 		Point optimalShot;
-
 		display.writeLine("finding optimal shot");
 		
-		if(shipDestroyer.hotOnTrail())
-			optimalShot = shipDestroyer.getNextShot();
-		else
+		if(enemyShips.isShipStillFloating(ShipType.SUBMARINE))
 		{
-			if(enemyShips.isShipStillFloating(ShipType.SUBMARINE))
-			{
-				optimalShot = predictor.getPrediction(ShipType.SUBMARINE);
-				targetedShip = ShipType.SUBMARINE;
-			}
-			else if(enemyShips.isShipStillFloating(ShipType.PATROLBOAT))
-			{
-				optimalShot = predictor.getPrediction(ShipType.PATROLBOAT);
-				targetedShip = ShipType.PATROLBOAT;
-			}
-			else if(enemyShips.isShipStillFloating(ShipType.DESTROYER))
-			{
-				optimalShot = predictor.getPrediction(ShipType.DESTROYER);
-				targetedShip = ShipType.DESTROYER;
-			}
-			else if(enemyShips.isShipStillFloating(ShipType.CARRIER))
-			{
-				optimalShot = predictor.getPrediction(ShipType.CARRIER);
-				targetedShip = ShipType.CARRIER;
-			}
-			else //if(enemyShips.isShipStillFloating(ShipType.BATTLESHIP))
-			{
-				optimalShot = predictor.getPrediction(ShipType.BATTLESHIP);
-				targetedShip = ShipType.BATTLESHIP;
-			}
+			optimalShot = predictor.getPrediction(ShipType.SUBMARINE);
+			targetedShip = ShipType.SUBMARINE;
+		}
+		else if(enemyShips.isShipStillFloating(ShipType.PATROLBOAT))
+		{
+			optimalShot = predictor.getPrediction(ShipType.PATROLBOAT);
+			targetedShip = ShipType.PATROLBOAT;
+		}
+		else if(enemyShips.isShipStillFloating(ShipType.DESTROYER))
+		{
+			optimalShot = predictor.getPrediction(ShipType.DESTROYER);
+			targetedShip = ShipType.DESTROYER;
+		}
+		else if(enemyShips.isShipStillFloating(ShipType.CARRIER))
+		{
+			optimalShot = predictor.getPrediction(ShipType.CARRIER);
+			targetedShip = ShipType.CARRIER;
+		}
+		else //if(enemyShips.isShipStillFloating(ShipType.BATTLESHIP))
+		{
+			optimalShot = predictor.getPrediction(ShipType.BATTLESHIP);
+			targetedShip = ShipType.BATTLESHIP;
 		}
 		
 		return optimalShot;
+	}
+	
+	private void performCarrierScan()
+	{
+		didAScan = true;
+		
+		Point pointToScan = getOptimalShot();
+		
+		Point startPoint = null;
+		startPoint = new Point(pointToScan.getX()-1, pointToScan.getY()-1);
+		
+		if(board.isValidShot(startPoint))
+		{
+			startPoint = new Point(pointToScan.getX(), pointToScan.getY()-1);
+			
+			if(board.isValidShot(startPoint))
+			{
+				startPoint = new Point(pointToScan.getX()-1, pointToScan.getY());
+				
+				if(board.isValidShot(startPoint))
+				{
+					startPoint = new Point(pointToScan.getX(), pointToScan.getY());
+				}
+			}
+		}
+		
+		Point endPoint = null;
+		endPoint = new Point(pointToScan.getX()+1, pointToScan.getY()+1);
+		
+		if(board.isValidShot(endPoint))
+		{
+			endPoint = new Point(pointToScan.getX(), pointToScan.getY()+1);
+			
+			if(board.isValidShot(endPoint))
+			{
+				endPoint = new Point(pointToScan.getX()+1, pointToScan.getY());
+				
+				if(board.isValidShot(endPoint))
+				{
+					endPoint = new Point(pointToScan.getX(), pointToScan.getY());
+				}
+			}
+		}
+		
+		Scan scan = new Scan(startPoint, endPoint, board);
+		scanResults = scan.findShips();
+		
+		display.writeLine("I did a scan of " + startPoint + " " + endPoint + " and I found:");
+		for(Point result : scanResults)
+		{
+			display.writeLine(result.toString());
+		}
 	}
 
 	@Override
 	public Shot takeAShot()
 	{
 		List<Ship> ships = board.getActiveShips();
+		Point shotToTake;
 		
-		lastShot = new Shot(getOptimalShot(), ships.get(shipToFireThisTurn).getShipType());
-
+		if(shipDestroyer.hotOnTrail())
+			shotToTake = shipDestroyer.getNextShot();
+		else
+		{
+			performCarrierScan();
+			
+			if(scanResults.size() > 0)
+			{
+				shotToTake = scanResults.get(0);
+				scanResults.remove(0);
+			}
+			else
+			{
+				shotToTake = getOptimalShot();
+			}
+		}
+		
+		ShipType shipType = ships.get(shipToFireThisTurn).getShipType();
+		/*
+		if(!shipType.equals(ShipType.CARRIER)) //carrier always scans for now
+		{
+		}
+		*/
+		
+		lastShot = new Shot(shotToTake, shipType);
+		
 		shipToFireThisTurn++;
 		shipsFiredThisTurn++;
 
@@ -158,7 +233,9 @@ public class ExpertComputerPlayer extends Player  {
 		if(shipsFiredThisTurn >= salvoCount)
 		{
 			display.writeLine("************************* TURN OVER *************************");
+			didAScan = false;
 			doneWithTurn = true;
+			scanResults.clear();
 		}
 	}
 
