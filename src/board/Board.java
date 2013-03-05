@@ -277,4 +277,15 @@ public class Board {
 
 		return boundingBoxSize;
 	}
+
+	public Ship getShip(ShipType shipType) {
+
+		for(Ship ship : getAllShips())
+		{
+			if(ship.getShipType().equals(shipType))
+				return ship;
+		}
+
+		return null;
+	}
 }

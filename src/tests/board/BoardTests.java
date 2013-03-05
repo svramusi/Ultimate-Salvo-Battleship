@@ -535,4 +535,23 @@ public class BoardTests {
 		assertEquals(36, board.getBoundingBoxSize(new Point(0,0), ShipType.CARRIER));
 		assertEquals(100, board.getBoundingBoxSize(new Point(5,5), ShipType.CARRIER));
 	}
+
+	@Test
+	public void testGetShip() {
+		try {
+			board.addShip(c);
+			board.addShip(b);
+			board.addShip(d);
+			board.addShip(pb);
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		assertEquals(c, board.getShip(ShipType.CARRIER));
+		assertEquals(b, board.getShip(ShipType.BATTLESHIP));
+		assertEquals(d, board.getShip(ShipType.DESTROYER));
+		assertEquals(pb, board.getShip(ShipType.PATROLBOAT));
+		assertEquals(s, board.getShip(ShipType.SUBMARINE));
+	}
 }

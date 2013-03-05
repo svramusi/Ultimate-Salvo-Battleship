@@ -3,6 +3,7 @@ package board;
 import java.util.*;
 
 import ships.*;
+import battleship.BattleshipUtils;
 
 public class Scan {
 	private Point startPoint;
@@ -21,8 +22,8 @@ public class Scan {
 		
 		int x = getSmallestX();
 		int y = getSmallestY();
-		int xDistance = getXDistance(startPoint, endPoint);
-		int yDistance = getYDistance(startPoint, endPoint);
+		int xDistance = BattleshipUtils.getXDistance(startPoint, endPoint);
+		int yDistance = BattleshipUtils.getYDistance(startPoint, endPoint);
 
 		if(xDistance > 2 &&
 				yDistance > 2 &&
@@ -73,10 +74,10 @@ public class Scan {
 		Point bottomRight = new Point(currentPoint.getX()+1, currentPoint.getY()-1);
 		Point bottomLeft = new Point(currentPoint.getX()+1, currentPoint.getY()+1);
 
-		int topLeftDistance = getXDistance(topLeft, end) + getYDistance(topLeft, end);
-		int topRightDistance = getXDistance(topRight, end) + getYDistance(topRight, end);
-		int bottomRightDistance = getXDistance(bottomRight, end) + getYDistance(bottomRight, end);
-		int bottomLeftDistance = getXDistance(bottomLeft, end) + getYDistance(bottomLeft, end);
+		int topLeftDistance = BattleshipUtils.getXDistance(topLeft, end) + BattleshipUtils.getYDistance(topLeft, end);
+		int topRightDistance = BattleshipUtils.getXDistance(topRight, end) + BattleshipUtils.getYDistance(topRight, end);
+		int bottomRightDistance = BattleshipUtils.getXDistance(bottomRight, end) + BattleshipUtils.getYDistance(bottomRight, end);
+		int bottomLeftDistance = BattleshipUtils.getXDistance(bottomLeft, end) + BattleshipUtils.getYDistance(bottomLeft, end);
 
 		if(topLeftDistance <= topRightDistance &&
 				topLeftDistance <= bottomRightDistance &&
@@ -96,14 +97,6 @@ public class Scan {
 			return bottomLeft;
 		else
 			return null;
-	}
-
-	private int getXDistance(Point start, Point end) {
-		return Math.abs(start.getX() - end.getX());
-	}
-
-	private int getYDistance(Point start, Point end) {
-		return Math.abs(start.getY() - end.getY());
 	}
 
 	private int getSmallestX() 
