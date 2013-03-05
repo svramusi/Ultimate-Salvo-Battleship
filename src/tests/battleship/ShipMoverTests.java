@@ -53,7 +53,7 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(0,0)));
 
 		
-		shipMover = new ShipMover(ShipType.CARRIER, new Point(5,9), board);
+		shipMover = new ShipMover(ShipType.CARRIER, new Point(9,5), board);
 		shipMover.moveShip();
 
 		shipLocation = board.getShipLocation(ShipType.CARRIER);
@@ -236,4 +236,172 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(0,8)));
 	}
 
+	@Test
+	public void testRotateDownMove() {
+		Submarine s = new Submarine();
+		s.setStartPoint(new Point(0,0), Direction.RIGHT);
+
+		try {
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipLocation;
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		assertTrue(shipLocation.contains(new Point(0,2)));
+		
+		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(3,1), board);
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+
+		assertFalse(shipLocation.contains(new Point(0,2)));
+
+		assertTrue(shipLocation.contains(new Point(0,0)));
+		assertTrue(shipLocation.contains(new Point(1,0)));
+		assertTrue(shipLocation.contains(new Point(2,0)));
+	}
+
+	@Test
+	public void testRotateUpMove() {
+		Submarine s = new Submarine();
+		s.setStartPoint(new Point(5,5), Direction.RIGHT);
+
+		try {
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipLocation;
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		assertTrue(shipLocation.contains(new Point(5,7)));
+		
+		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(3,4), board);
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+
+		assertFalse(shipLocation.contains(new Point(5,7)));
+
+		assertTrue(shipLocation.contains(new Point(5,5)));
+		assertTrue(shipLocation.contains(new Point(4,5)));
+		assertTrue(shipLocation.contains(new Point(3,5)));
+	}
+
+	@Test
+	public void testRotateLeftMove() {
+		Submarine s = new Submarine();
+		s.setStartPoint(new Point(5,5), Direction.UP);
+
+		try {
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipLocation;
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		assertTrue(shipLocation.contains(new Point(3,5)));
+		
+		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(6,3), board);
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+
+		assertFalse(shipLocation.contains(new Point(3,5)));
+
+		assertTrue(shipLocation.contains(new Point(5,3)));
+		assertTrue(shipLocation.contains(new Point(5,4)));
+		assertTrue(shipLocation.contains(new Point(5,5)));
+	}
+
+	@Test
+	public void testRotateRightMove() {
+		Submarine s = new Submarine();
+		s.setStartPoint(new Point(5,5), Direction.UP);
+
+		try {
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipLocation;
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		assertTrue(shipLocation.contains(new Point(3,5)));
+		
+		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(6,7), board);
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+
+		assertFalse(shipLocation.contains(new Point(3,5)));
+
+		assertTrue(shipLocation.contains(new Point(5,5)));
+		assertTrue(shipLocation.contains(new Point(5,6)));
+		assertTrue(shipLocation.contains(new Point(5,7)));
+	}
+
+	@Test
+	public void testComplexMove() {
+		Submarine s = new Submarine();
+		s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+		try {
+			board.addShip(s);
+		} catch (InvalidShipPositionException e) {
+			fail("caught InvalidShipPositionException when I shouldn't have");
+		}
+		
+		List<Point> shipLocation;
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		assertTrue(shipLocation.contains(new Point(0,0)));
+		
+		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(5,5), board);
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		
+		for(Point p : shipLocation)
+			System.out.println(p);
+
+		assertFalse(shipLocation.contains(new Point(0,0)));
+
+		assertTrue(shipLocation.contains(new Point(5,0)));
+		assertTrue(shipLocation.contains(new Point(4,0)));
+		assertTrue(shipLocation.contains(new Point(3,0)));
+		
+
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		
+		for(Point p : shipLocation)
+			System.out.println(p);
+
+		assertFalse(shipLocation.contains(new Point(0,0)));
+		assertFalse(shipLocation.contains(new Point(3,0)));
+
+		assertTrue(shipLocation.contains(new Point(5,0)));
+		assertTrue(shipLocation.contains(new Point(5,1)));
+		assertTrue(shipLocation.contains(new Point(5,2)));
+		
+
+		shipMover.moveShip();
+
+		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
+		
+		for(Point p : shipLocation)
+			System.out.println(p);
+
+		assertFalse(shipLocation.contains(new Point(0,0)));
+		assertFalse(shipLocation.contains(new Point(3,0)));
+		assertFalse(shipLocation.contains(new Point(5,0)));
+
+		assertTrue(shipLocation.contains(new Point(5,4)));
+		assertTrue(shipLocation.contains(new Point(5,3)));
+		assertTrue(shipLocation.contains(new Point(5,2)));
+	}
 }

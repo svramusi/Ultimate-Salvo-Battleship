@@ -30,6 +30,9 @@ public class ShipMover {
 			return distanceNeeded;
 	}
 	
+	//NEED TO MAKE THIS A UTILITY FUNCION
+	//NEED TO EVALUATE ALL OPTIONS AND GO FROM THERE
+	
 	public void moveShip()
 	{
 		Ship ship = board.getShip(shipType);
@@ -42,8 +45,10 @@ public class ShipMover {
 			Point closestXPoint = BattleshipUtils.getClosestXPoint(ship.getShipLocation(), target);
 			Point closestYPoint = BattleshipUtils.getClosestYPoint(ship.getShipLocation(), target);
 			
-			int xDistance = BattleshipUtils.getXDistance(closestXPoint, target);
-			int yDistance = BattleshipUtils.getYDistance(closestYPoint, target);
+			Point closestPoint = new Point(closestXPoint.getX(), closestYPoint.getY());
+			
+			int xDistance = BattleshipUtils.getXDistance(closestPoint, target);
+			int yDistance = BattleshipUtils.getYDistance(closestPoint, target);
 			
 			Direction direction = ship.getDirection();
 
@@ -66,6 +71,16 @@ public class ShipMover {
 				else
 					newStartingPoint = new Point(origStartingPoint.getX(), origStartingPoint.getY() - distanceToMove);
 			}
+			else
+			{
+				if(xDistance > ship.getShootDistance() || yDistance > ship.getShootDistance())
+				{
+					if(direction == Direction.UP || direction == Direction.DOWN)
+						direction = getNewDirection(ship, newStartingPoint, direction, Direction.RIGHT, Direction.LEFT);
+					else //(direction == Direction.RIGHT || direction == Direction.LEFT)
+						direction = getNewDirection(ship, newStartingPoint, direction, Direction.UP, Direction.DOWN);
+				}
+			}
 			
 			try
 			{
@@ -82,5 +97,48 @@ public class ShipMover {
 				System.out.println("ShipDamagedException!!! ");
 			}
 		}
+	}
+
+	private Direction getNewDirection(Ship ship, Point newStartingPoint, 
+			Direction origDirection, Direction option1, Direction option2) 
+	{
+		int option1Dist = tryDifferentDirection(ship, newStartingPoint, option1, origDirection);
+		int option2Dist = tryDifferentDirection(ship, newStartingPoint, option2, origDirection);
+		
+		System.out.println("option1Dist : " + option1Dist + " option2Dist : " + option2Dist);
+		
+		if(option1Dist < option2Dist)
+			return option1;
+		else
+			return option2;
+	}
+
+	private int tryDifferentDirection(Ship ship, Point origStartingPoint, Direction directoinToTry, Direction origDirection)
+	{
+		int distance = Integer.MAX_VALUE;
+		
+		try
+		{
+			board.moveShip(ship.getShipType(), origStartingPoint, directoinToTry);
+
+			int xDist = BattleshipUtils.getXDistance(ship.getEndPoint(), target);
+			int yDist = BattleshipUtils.getYDistance(ship.getEndPoint(), target);
+			
+			distance = xDist + yDist;
+		}
+		catch(Exception e)
+		{ /*ignore it, try the other way */ }
+		finally
+		{
+			//go back to the way it was...
+			try
+			{
+				board.moveShip(ship.getShipType(), origStartingPoint, origDirection);
+			}
+			catch(Exception e)
+			{ }
+		}
+		
+		return distance;
 	}
 }
