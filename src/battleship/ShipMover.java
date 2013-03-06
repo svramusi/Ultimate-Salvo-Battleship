@@ -133,6 +133,10 @@ public class ShipMover
 	}
 	private static void utility(Board board, Ship ship, Point target)
 	{
+		//Don't move unless you have to...
+		if(ship.isValidShot(target))
+			return;
+
 		Point origStartingPoint = ship.getStartPoint();
 		Point origEndingPoint = ship.getEndPoint();
 		Direction origDirection = ship.getDirection();

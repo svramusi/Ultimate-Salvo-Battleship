@@ -225,8 +225,8 @@ public class ShipMoverTests {
 
 		assertFalse(shipLocation.contains(new Point(0,4)));
 		
-		assertTrue(shipLocation.contains(new Point(0,9)));
-		assertTrue(shipLocation.contains(new Point(0,8)));
+		assertTrue(shipLocation.contains(new Point(0,7)));
+		assertTrue(shipLocation.contains(new Point(0,6)));
 	}
 
 	@Test
