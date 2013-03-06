@@ -204,7 +204,7 @@ public abstract class Ship {
 	{
 		if(isValidRotation(newStartingPoint, newDirection))
 			return true;
-		
+
 		if(!isMoveWithinRowOrCol(newStartingPoint, newDirection))
 			return false;
 
@@ -221,6 +221,8 @@ public abstract class Ship {
 			if(getStartPoint().equals(newStartingPoint))
 				return true;
 			else if(getStartPoint().equals(calculateEndPoint(newStartingPoint, direction)))
+				return true;
+			else if(getEndPoint().equals(newStartingPoint))
 				return true;
 			else if(getEndPoint().equals(calculateEndPoint(newStartingPoint, direction)))
 				return true;

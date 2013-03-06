@@ -46,15 +46,14 @@ public class ShipMoverTests {
 		shipLocation = board.getShipLocation(ShipType.CARRIER);
 		assertTrue(shipLocation.contains(new Point(0,0)));
 		
-		ShipMover shipMover = new ShipMover(ShipType.CARRIER, new Point(1,1), board);
-		shipMover.moveShip();
+		
+		ShipMover.moveShip(ShipType.CARRIER, new Point(1,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.CARRIER);
 		assertTrue(shipLocation.contains(new Point(0,0)));
 
-		
-		shipMover = new ShipMover(ShipType.CARRIER, new Point(9,5), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.CARRIER, new Point(9,5), board);
 
 		shipLocation = board.getShipLocation(ShipType.CARRIER);
 		assertTrue(shipLocation.contains(new Point(0,0)));
@@ -72,9 +71,8 @@ public class ShipMoverTests {
 		
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(0,0)));
-		
-		shipMover = new ShipMover(ShipType.SUBMARINE, new Point(3,1), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(3,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -97,9 +95,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(0,0)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(4,1), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(4,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -124,9 +121,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(3,0)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(0,1), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(0,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -151,9 +147,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 		assertTrue(shipLocation.contains(new Point(8,0)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.PATROLBOAT, new Point(0,1), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.PATROLBOAT, new Point(0,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 
@@ -163,7 +158,7 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(5,0)));
 		
 
-		shipMover.moveShip();
+		ShipMover.moveShip(ShipType.PATROLBOAT, new Point(0,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 
@@ -187,9 +182,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(0,2)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(1,4), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(1,4), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -214,9 +208,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 		assertTrue(shipLocation.contains(new Point(0,1)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.PATROLBOAT, new Point(0,9), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.PATROLBOAT, new Point(0,9), board);
 
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 
@@ -226,7 +219,7 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(0,4)));
 		
 
-		shipMover.moveShip();
+		ShipMover.moveShip(ShipType.PATROLBOAT, new Point(0,9), board);
 
 		shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
 
@@ -250,9 +243,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(0,2)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(3,1), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(3,1), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -277,9 +269,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(5,7)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(3,4), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(3,4), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -304,9 +295,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(3,5)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(6,3), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(6,3), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -331,9 +321,8 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(3,5)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(6,7), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(6,7), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 
@@ -358,14 +347,10 @@ public class ShipMoverTests {
 		List<Point> shipLocation;
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
 		assertTrue(shipLocation.contains(new Point(0,0)));
-		
-		ShipMover shipMover = new ShipMover(ShipType.SUBMARINE, new Point(5,5), board);
-		shipMover.moveShip();
+
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(5,5), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
-		
-		for(Point p : shipLocation)
-			System.out.println(p);
 
 		assertFalse(shipLocation.contains(new Point(0,0)));
 
@@ -374,12 +359,9 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(3,0)));
 		
 
-		shipMover.moveShip();
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(5,5), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
-		
-		for(Point p : shipLocation)
-			System.out.println(p);
 
 		assertFalse(shipLocation.contains(new Point(0,0)));
 		assertFalse(shipLocation.contains(new Point(3,0)));
@@ -389,12 +371,9 @@ public class ShipMoverTests {
 		assertTrue(shipLocation.contains(new Point(5,2)));
 		
 
-		shipMover.moveShip();
+		ShipMover.moveShip(ShipType.SUBMARINE, new Point(5,5), board);
 
 		shipLocation = board.getShipLocation(ShipType.SUBMARINE);
-		
-		for(Point p : shipLocation)
-			System.out.println(p);
 
 		assertFalse(shipLocation.contains(new Point(0,0)));
 		assertFalse(shipLocation.contains(new Point(3,0)));
