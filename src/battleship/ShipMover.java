@@ -25,7 +25,7 @@ public class ShipMover
 		Direction direction = ship.getDirection();
 		if(direction == Direction.LEFT || direction == Direction.RIGHT)
 		{
-			Point closestPoint = getClosestPoint(target, ship.getShipLocation());
+			Point closestPoint = BattleshipUtils.getClosestPoint(target, ship.getShipLocation());
 			int yDistance = BattleshipUtils.getYDistance(closestPoint, target);
 
 			//If you're closing in on the target, take into account your shooting distance
@@ -48,7 +48,7 @@ public class ShipMover
 		Direction direction = ship.getDirection();
 		if(direction == Direction.UP || direction == Direction.DOWN)
 		{
-			Point closestPoint = getClosestPoint(target, ship.getShipLocation());
+			Point closestPoint = BattleshipUtils.getClosestPoint(target, ship.getShipLocation());
 			int xDistance = BattleshipUtils.getXDistance(closestPoint, target);
 
 			//If you're closing in on the target, take into account your shooting distance
@@ -286,25 +286,16 @@ public class ShipMover
 		if(tempLocation.size() == 0)
 			return Integer.MAX_VALUE;
 		
-		Point closestPoint = getClosestPoint(target, tempLocation);
+		Point closestPoint = BattleshipUtils.getClosestPoint(target, tempLocation);
 
 		int xDistance = BattleshipUtils.getXDistance(closestPoint, target);
 		int yDistance = BattleshipUtils.getYDistance(closestPoint, target);
 		
 		return xDistance + yDistance;
 	}
-
-	private static Point getClosestPoint(Point target, List<Point> shipLocation)
-	{
-		Point closestXPoint = BattleshipUtils.getClosestXPoint(shipLocation, target);
-		Point closestYPoint = BattleshipUtils.getClosestYPoint(shipLocation, target);
-		
-		return new Point(closestXPoint.getX(), closestYPoint.getY());
-	}
 	
-	public static void moveShip(ShipType shipType, Point target, Board board)
+	public static void moveShip(Ship ship, Point target, Board board)
 	{
-		Ship ship = board.getShip(shipType);
 		utility(board, ship, target);
 	}
 }

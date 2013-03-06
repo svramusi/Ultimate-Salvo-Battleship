@@ -22,7 +22,8 @@ public class ExpertComputerPlayer extends Player  {
 	
 	private EnemyShips enemyShips;
 	private ShipDestroyer shipDestroyer;
-	
+
+	private List<Point> pointsToAttack;
 	private List<Point> scanResults;
 	private boolean didAScan;
 
@@ -37,6 +38,7 @@ public class ExpertComputerPlayer extends Player  {
 		
 		didAScan = false;
 		scanResults = new ArrayList<Point>();
+		pointsToAttack = new ArrayList<Point>();
 	}
 
 	@Override
@@ -44,11 +46,21 @@ public class ExpertComputerPlayer extends Player  {
 	{
 		display.writeLine("************************* START TURN *************************");
 		board.nextTurn();
+		
+		pointsToAttack.clear();
 
-		List<Ship> ships = board.getActiveShips();
+		List<Ship> activeShips = board.getActiveShips();
 
+		Point target = findNextTarget();
+		
+		display.writeLine("Next target is: " + target);
 
-		salvoCount = ships.size();
+		for(Ship ship : activeShips)
+		{
+			ShipMover.moveShip(ship, target, board);
+		}
+
+		salvoCount = activeShips.size();
 		shipsFiredThisTurn = 0;
 		shipToFireThisTurn = 0;
 
@@ -96,8 +108,7 @@ public class ExpertComputerPlayer extends Player  {
 		Point pointToScan = getOptimalShot();
 		boolean needToSearchNextLine = false;
 		
-		Point startPoint = null;
-		startPoint = new Point(pointToScan.getX()-1, pointToScan.getY()-1);
+		Point startPoint = new Point(pointToScan.getX()-1, pointToScan.getY()-1);
 		
 		if(!board.isValidShot(startPoint))
 		{
@@ -132,27 +143,57 @@ public class ExpertComputerPlayer extends Player  {
 		display.writeLine("start point: " + startPoint);
 		display.writeLine("end point: " + endPoint);
 		
-		Scan scan = new Scan(startPoint, endPoint, board);
-		return scan.getPointsToScan();
-		
-		/*
-		scanResults = scan.findShips();
-		
-		display.writeLine("Point to scan: " + pointToScan.toString() + " I did a scan of " + startPoint + " " + endPoint + " and I found:");
-		for(Point result : scanResults)
-		{
-			display.writeLine(result.toString());
-		}
-		*/
+		return (new Scan(startPoint, endPoint, board)).getPointsToScan();
 	}
 
 	@Override
 	public List<Shot> takeAShot()
 	{
+		display.writeLine("------------board when trying to attack------------");
+		display.printBoard();
+		
+		findPlaceToAttack();
+		
 		List<Shot> shots = new ArrayList<Shot>();
-		List<Point> pointsToAttack = new ArrayList<Point>();
 		List<Ship> ships = board.getActiveShips();
 
+		Ship ship = ships.get(shipToFireThisTurn);
+		
+		display.writeLine("shooting from: " + ship.getShipType());
+		
+		for(Point pointToAttack : pointsToAttack)
+		{
+			if(ship.isValidShot(pointToAttack))
+			{
+				display.writeLine("attacking/scanning: " + pointToAttack);
+				shots.add(new Shot(pointToAttack, ship.getShipType()));
+			}
+			else
+			{
+				display.writeLine("I (" + ship.getShipType() + ") want to attack: " + pointToAttack);
+				display.writeLine("\nBut I can't!  I'm too far away!");
+				scanResults.add(0, pointToAttack);
+
+				//That was in invalid scan you just did
+				if(pointsToAttack.size() > 1)
+					scanResults.clear();
+			}
+		}
+		
+		pointsToAttack.clear();
+		
+		//regardless if the carrier scanned, no more scans can be done
+		if(ship.getShipType() == ShipType.CARRIER)
+			didAScan = true;
+		
+		shipToFireThisTurn++;
+		shipsFiredThisTurn++;
+
+		return shots;
+	}
+
+	private void findPlaceToAttack()
+	{
 		if(scanResults.size() > 0)
 		{
 			pointsToAttack.add(scanResults.get(0));
@@ -164,7 +205,15 @@ public class ExpertComputerPlayer extends Player  {
 				pointsToAttack.add(shipDestroyer.getNextShot());
 			else
 			{
-				if(!didAScan)
+				boolean isThereACarrier = false;
+				List<Ship> ships = board.getActiveShips();
+				for(Ship s : ships)
+				{
+					if(s.getShipType() == ShipType.CARRIER)
+						isThereACarrier = true;
+				}
+				
+				if(!didAScan && isThereACarrier)
 				{
 					pointsToAttack = performCarrierScan();
 				}
@@ -174,24 +223,32 @@ public class ExpertComputerPlayer extends Player  {
 				}
 			}
 		}
-		
-		/*
-		if(!shipType.equals(ShipType.CARRIER)) //carrier always scans for now
+	}
+	
+	private Point findNextTarget()
+	{
+		if(scanResults.size() > 0)
 		{
+			return scanResults.remove(0);
 		}
-		*/
-
-		ShipType shipType = ships.get(shipToFireThisTurn).getShipType();
-		for(Point pointToAttack : pointsToAttack)
+		else
 		{
-			display.writeLine("attacking/scanning: " + pointToAttack);
-			shots.add(new Shot(pointToAttack, shipType));
+			if(shipDestroyer.hotOnTrail())
+				return shipDestroyer.getNextShot();
+			else
+			{
+				if(board.getActiveShips().contains((new ShipFactory()).getShip(ShipType.CARRIER)))
+				{
+					List<Point> carrierScan = performCarrierScan();
+					didAScan = false; //were just calculating where to move next
+					return carrierScan.get(0);
+				}
+				else
+				{
+					return getOptimalShot();
+				}
+			}
 		}
-		
-		shipToFireThisTurn++;
-		shipsFiredThisTurn++;
-
-		return shots;
 	}
 	
 	/*
@@ -280,8 +337,8 @@ public class ExpertComputerPlayer extends Player  {
 	{
 		List<HitResponse> hitResponses = new ArrayList<HitResponse>();
 		
-		display.writeLine("board before:");
-		display.printBoard();
+		//display.writeLine("board before:");
+		//display.printBoard();
 		
 		boolean dealDamage = true;
 		if(shots.size() > 1)
@@ -293,8 +350,8 @@ public class ExpertComputerPlayer extends Player  {
 			predictor.addInfo(shot);
 		}
 
-		display.writeLine("board after:");
-		display.printBoard();
+		//display.writeLine("board after:");
+		//display.printBoard();
 		
 		return hitResponses;
 	}

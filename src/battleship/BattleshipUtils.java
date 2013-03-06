@@ -6,6 +6,14 @@ import ships.Point;
 
 public class BattleshipUtils {
 
+	public static Point getClosestPoint(Point target, List<Point> shipLocation)
+	{
+		Point closestXPoint = BattleshipUtils.getClosestXPoint(shipLocation, target);
+		Point closestYPoint = BattleshipUtils.getClosestYPoint(shipLocation, target);
+		
+		return new Point(closestXPoint.getX(), closestYPoint.getY());
+	}
+	
 	public static Point getClosestXPoint(List<Point> points, Point target) {
 		int targetX = target.getX();
 		int minX = Integer.MAX_VALUE;
