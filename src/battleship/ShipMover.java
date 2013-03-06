@@ -65,45 +65,7 @@ public class ShipMover
 		else
 			return null;
 	}
-	
-	/*
-	private static Point getUpRotation(Board board, Ship ship, Point origStartingPoint, Point target)
-	{
-		return rotateShip(board, ship, origStartingPoint, target, Direction.UP);
-	}
-	
-	private static Point getDownRotation(Board board, Ship ship, Point origStartingPoint, Point target)
-	{
-		return rotateShip(board, ship, origStartingPoint, target, Direction.DOWN);
-	}
-	
-	private static Point getLeftRotation(Board board, Ship ship, Point origStartingPoint, Point target)
-	{
-		return rotateShip(board, ship, origStartingPoint, target, Direction.LEFT);
-	}
-	
-	private static Point getRightRotation(Board board, Ship ship, Point origStartingPoint, Point target)
-	{
-		return rotateShip(board, ship, origStartingPoint, target, Direction.RIGHT);
-	}
-	
-	private static Point rotateShip(Board board, Ship ship, Point origStartingPoint, Point target, Direction directionToRotate)
-	{
-		Point retVal = null;
-		
-		if(ship.getDirection() == directionToRotate)
-			return null;
 
-		List<Point> newShipLocation = getTempLocation(board, ship, origStartingPoint, directionToRotate);
-		
-		if(newShipLocation.size() > 0)
-			retVal = getClosestPoint(target, newShipLocation);
-		
-		return retVal;
-	}
-	
-	*/
-	
 	private static List<Point> getTempLocation(Board board, Ship ship, Point newStartingPoint, Direction newDirection)
 	{
 		Point origStartingPoint = ship.getStartPoint();
@@ -304,15 +266,14 @@ public class ShipMover
 		}
 		catch(InvalidShipPositionException e)
 		{
-			//NEED TO HANDLE THIS!!!
+			//Shouldn't come to this...
 			System.out.println("InvalidShipPositionException!!! " + e.getMessage());
 		}
 		catch(ShipDamagedException e)
 		{
-			//NEED TO HANDLE THIS!!!
+			//Shouldn't come to this...
 			System.out.println("ShipDamagedException!!! ");
 		}
-		
 	}
 	
 	private static int getBestDistance(Board board, Ship ship, Point newStartingPoint, Direction newDirection, Point target)
@@ -345,111 +306,5 @@ public class ShipMover
 	{
 		Ship ship = board.getShip(shipType);
 		utility(board, ship, target);
-		
-		/*
-		
-		if(!ship.isValidShot(target))
-		{
-			Point origStartingPoint = ship.getStartPoint();
-			Point newStartingPoint = origStartingPoint;
-			
-			Point closestPoint = GetClosestPoint(target, ship);
-			
-			int xDistance = BattleshipUtils.getXDistance(closestPoint, target);
-			int yDistance = BattleshipUtils.getYDistance(closestPoint, target);
-			
-			Direction direction = ship.getDirection();
-
-			int distanceToMove;
-			if((direction == Direction.UP || direction == Direction.DOWN) && xDistance > ship.getShootDistance())
-			{
-				distanceToMove = getMoveDistance(ship.getMoveDistance(), xDistance);
-
-				if(origStartingPoint.getX() < target.getX())
-					newStartingPoint = new Point(origStartingPoint.getX() + distanceToMove, origStartingPoint.getY());
-				else
-					newStartingPoint = new Point(origStartingPoint.getX() - distanceToMove, origStartingPoint.getY());
-			}
-			else if((direction == Direction.RIGHT || direction == Direction.LEFT) && yDistance > ship.getShootDistance())
-			{
-				distanceToMove = getMoveDistance(ship.getMoveDistance(), yDistance);
-
-				if(origStartingPoint.getY() < target.getY())
-					newStartingPoint = new Point(origStartingPoint.getX(), origStartingPoint.getY() + distanceToMove);
-				else
-					newStartingPoint = new Point(origStartingPoint.getX(), origStartingPoint.getY() - distanceToMove);
-			}
-			else
-			{
-				if(xDistance > ship.getShootDistance() || yDistance > ship.getShootDistance())
-				{
-					if(direction == Direction.UP || direction == Direction.DOWN)
-						direction = getNewDirection(ship, newStartingPoint, direction, Direction.RIGHT, Direction.LEFT);
-					else //(direction == Direction.RIGHT || direction == Direction.LEFT)
-						direction = getNewDirection(ship, newStartingPoint, direction, Direction.UP, Direction.DOWN);
-				}
-			}
-			
-			try
-			{
-				board.moveShip(ship.getShipType(), newStartingPoint, direction);
-			}
-			catch(InvalidShipPositionException e)
-			{
-				//NEED TO HANDLE THIS!!!
-				System.out.println("InvalidShipPositionException!!! " + e.getMessage());
-			}
-			catch(ShipDamagedException e)
-			{
-				//NEED TO HANDLE THIS!!!
-				System.out.println("ShipDamagedException!!! ");
-			}
-		}
-		*/
 	}
-
-	/*
-	private static Direction getNewDirection(Ship ship, Point newStartingPoint, 
-			Direction origDirection, Direction option1, Direction option2) 
-	{
-		int option1Dist = tryDifferentDirection(ship, newStartingPoint, option1, origDirection);
-		int option2Dist = tryDifferentDirection(ship, newStartingPoint, option2, origDirection);
-		
-		System.out.println("option1Dist : " + option1Dist + " option2Dist : " + option2Dist);
-		
-		if(option1Dist < option2Dist)
-			return option1;
-		else
-			return option2;
-	}
-
-	private int tryDifferentDirection(Board board, Ship ship, Point origStartingPoint, Direction directoinToTry, Direction origDirection)
-	{
-		int distance = Integer.MAX_VALUE;
-		
-		try
-		{
-			board.moveShip(ship.getShipType(), origStartingPoint, directoinToTry);
-
-			int xDist = BattleshipUtils.getXDistance(ship.getEndPoint(), target);
-			int yDist = BattleshipUtils.getYDistance(ship.getEndPoint(), target);
-			
-			distance = xDist + yDist;
-		}
-		catch(Exception e)
-		{ /-*ignore it, try the other way *-/ }
-		finally
-		{
-			//go back to the way it was...
-			try
-			{
-				board.moveShip(ship.getShipType(), origStartingPoint, origDirection);
-			}
-			catch(Exception e)
-			{ }
-		}
-		
-		return distance;
-	}
-	*/
 }
