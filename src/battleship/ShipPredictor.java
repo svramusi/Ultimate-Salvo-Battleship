@@ -56,27 +56,27 @@ public class ShipPredictor {
 		if(shot.getShipType() == ShipType.CARRIER)
 		{
 			carrierShots.add(shot.getPoint());
-			carrierParticleFilter.step(shot);
+			carrierParticleFilter.addShot(shot);
 		}
 		else if(shot.getShipType() == ShipType.BATTLESHIP)
 		{
 			battleShipShots.add(shot.getPoint());
-			battleshipParticleFilter.step(shot);
+			battleshipParticleFilter.addShot(shot);
 		}
 		else if(shot.getShipType() == ShipType.DESTROYER)
 		{
 			destroyerShots.add(shot.getPoint());
-			destroyerParticleFilter.step(shot);
+			destroyerParticleFilter.addShot(shot);
 		}
 		else if(shot.getShipType() == ShipType.PATROLBOAT)
 		{
 			pbShots.add(shot.getPoint());
-			pbParticleFilter.step(shot);
+			pbParticleFilter.addShot(shot);
 		}
 		else //if(s.getShipType() == ShipType.SUBMARINE)
 		{
 			subShots.add(shot.getPoint());
-			subParticleFilter.step(shot);
+			subParticleFilter.addShot(shot);
 		}
 	}
 	

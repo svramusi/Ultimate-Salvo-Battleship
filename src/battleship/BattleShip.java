@@ -10,7 +10,7 @@ import java.util.List;
 public class BattleShip {
 
 	public static void main(String[] args) {
-		Player player1 = new RandomComputerPlayer(new Board(), "computer_player1");
+		Player player1 = new ExpertComputerPlayer(new Board(), "computer_player1");
 		Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
 
 		Player activePlayer = player1;
@@ -18,8 +18,6 @@ public class BattleShip {
 		Player tempPlayer = null;
 
 		List<HitResponse> hitResults;
-		List<Point> actualShipLocation;
-
 		int turnCount = 0;
 
 		while(!player1.isDefeated() && !player2.isDefeated())
@@ -29,12 +27,7 @@ public class BattleShip {
 			{
 				List<Shot> shots = activePlayer.takeAShot();
 				
-				//ShipType shipTargeted = activePlayer.getTargedShipType();
-				//actualShipLocation = nonactivePlayer.getShipLocation(shipTargeted);
-				
 				hitResults = nonactivePlayer.isHit(shots);
-				
-				//activePlayer.informActualLocation(actualShipLocation);
 				activePlayer.getResponse(hitResults);
 			}
 
