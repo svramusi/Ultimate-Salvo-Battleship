@@ -33,7 +33,7 @@ public class ParticleFilter {
     	}
     }
     
-    public void step(Shot shot)
+    public void addShot(Shot shot)
     {
     	applyObservation(shot);
     	addNoise();
@@ -79,7 +79,7 @@ public class ParticleFilter {
     	}
     }
     
-    public void addNoise()
+    private void addNoise()
     {
 		Random random = new Random();
 		
@@ -110,11 +110,11 @@ public class ParticleFilter {
 		Random random = new Random();
 		
     	Particle[] newParticles = new Particle[particleCount];
-    	double [] c = new double[particleCount];
-    	c[0] = particles[0].getWeight();
+    	double [] totalWeight = new double[particleCount];
+    	totalWeight[0] = particles[0].getWeight();
     	
     	for(int i=1; i<particleCount; i++)
-    		c[i] = c[i-1] + particles[i].getWeight();
+    		totalWeight[i] = totalWeight[i-1] + particles[i].getWeight();
     	
     	double[] u = new double[particleCount];
     	u[0] = random.nextDouble()/particleCount;
@@ -124,13 +124,11 @@ public class ParticleFilter {
     	
     	for(int j=0; j<particleCount; j++)
     	{
-    		while(u[j] > c[i])
+    		while(u[j] > totalWeight[i])
     			i += 1;
     		
     		double newX;
     		double newY;
-    		double newWeight = 1.0/particleCount;
-    		
     		if(random.nextDouble() > confusion)
     		{
     			newX = particles[i].getX() + 0.5*noise*random.nextGaussian();
@@ -141,7 +139,8 @@ public class ParticleFilter {
         		newX = random.nextInt(board.getWidth());
         		newY = random.nextInt(board.getHeight());
     		}
-    		
+
+    		double newWeight = 1.0/particleCount;
 			newParticles[newParticleIndex++] = new Particle(newX, newY, newWeight);
 			
 			if(j+1 < particleCount)

@@ -9,7 +9,6 @@ import display.Display;
 import display.FileDisplay;
 
 public class ExpertComputerPlayer extends Player  {
-	private ShipPredictor predictor;
 	private Display display;
 
 	private int salvoCount;
@@ -19,7 +18,8 @@ public class ExpertComputerPlayer extends Player  {
 	//private Shot lastShot;
 	//private ShipType targetedShip;
 	//private List<Point> actualShipLocation;
-	
+
+	private ShipPredictor predictor;
 	private EnemyShips enemyShips;
 	private ShipDestroyer shipDestroyer;
 	
