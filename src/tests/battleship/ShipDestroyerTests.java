@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import expertAgentUtils.ShipDestroyer;
+
 import ships.Battleship;
 import ships.Carrier;
 import ships.Destroyer;
@@ -14,7 +16,6 @@ import ships.Submarine;
 import ships.Ship.Direction;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
-import battleship.ShipDestroyer;
 
 public class ShipDestroyerTests {
 

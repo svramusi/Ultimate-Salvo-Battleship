@@ -1,9 +1,9 @@
 package battleship;
 
+import battleshipAgents.ExpertComputerPlayer;
+import battleshipAgents.Player;
 import board.Board;
 import board.HitResponse;
-import ships.Point;
-import ships.Ship.ShipType;
 
 import java.util.List;
 

@@ -7,12 +7,12 @@ import org.junit.Test;
 
 import ships.*;
 import ships.Ship.Direction;
+import battleshipAgents.HumanPlayer;
+import battleshipAgents.Player;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
 import display.Display;
 import display.FileDisplay;
-import battleship.Player;
-import battleship.HumanPlayer;
 
 public class PlayerTests {
 
