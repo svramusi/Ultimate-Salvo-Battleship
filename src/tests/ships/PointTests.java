@@ -32,7 +32,7 @@ public class PointTests {
 		
 		assertEquals(p, p1);
 	}
-	
+
 	@Test
 	public void testNotEquals() {
 		Point p = new Point(0,0);
@@ -56,4 +56,14 @@ public class PointTests {
 		p1 = new Point(4,2);
 		assertEquals(4, p.getDistanceFrom(p1));
 	}
+    @Test
+    public void testPointCompare() {
+        Point p = new Point(0,0);
+        Point p1 = new Point(0,1);
+
+        assertEquals(-1, p.compareTo(p1));
+        assertEquals(1, p1.compareTo(p));
+        assertEquals(0, p.compareTo(p));
+    }
+
 }

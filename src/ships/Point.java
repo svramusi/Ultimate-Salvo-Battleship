@@ -1,6 +1,6 @@
 package ships;
 
-public class Point {
+public class Point implements Comparable<Point> {
 
 	private int x;
 	private int y;
@@ -55,4 +55,16 @@ public class Point {
 				return false;
 		}
 	}
+
+    @Override
+    public int compareTo(Point p) {
+        if(this.x == p.getX())
+        {
+            return this.y - p.getY();
+        }
+        else
+        {
+            return this.x - p.getX();
+        }
+    }
 }
