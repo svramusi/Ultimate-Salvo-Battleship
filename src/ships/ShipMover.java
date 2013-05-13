@@ -104,20 +104,20 @@ public class ShipMover
 		Point bestHorizontal = getBestHorizontalMovement(ship, origStartingPoint, target);
 		Point bestVertical = getBestVerticalMovement(ship, origStartingPoint, target);
 
-		/*
-		Point upRotation = getUpRotation(board, ship, origStartingPoint, target);
-		Point downRotation = getDownRotation(board, ship, origStartingPoint, target);
-		Point leftRotation = getLeftRotation(board, ship, origStartingPoint, target);
-		Point rightRotation = getRightRotation(board, ship, origStartingPoint, target);
-		*/
 
-		/*
-		System.out.println("\n\n-------------------------");
-		System.out.println("best origStartingPoint: " + origStartingPoint);
-		System.out.println("best horizontal: " + bestHorizontal);
-		System.out.println("best bestVertical: " + bestVertical);
-		System.out.println("-------------------------\n\n");
-		*/
+//		Point upRotation = getUpRotation(board, ship, origStartingPoint, target);
+//		Point downRotation = getDownRotation(board, ship, origStartingPoint, target);
+//		Point leftRotation = getLeftRotation(board, ship, origStartingPoint, target);
+//		Point rightRotation = getRightRotation(board, ship, origStartingPoint, target);
+
+
+
+//		System.out.println("\n\n-------------------------");
+//		System.out.println("best origStartingPoint: " + origStartingPoint);
+//		System.out.println("best horizontal: " + bestHorizontal);
+//		System.out.println("best bestVertical: " + bestVertical);
+//		System.out.println("-------------------------\n\n");
+
 
 		int horizontalDistance = getBestDistance(board, ship, bestHorizontal, ship.getDirection(), target);
 		int verticalDistance = getBestDistance(board, ship, bestVertical, ship.getDirection(), target);
@@ -151,21 +151,19 @@ public class ShipMover
 			endRotation2 = getBestDistance(board, ship, origEndingPoint, Direction.DOWN, target);
 			newDirection2 = Direction.DOWN;
 		}
-		
-		/*
-		System.out.println("\n\n-------------------------");
-		System.out.println("best horizontalDistance: " + horizontalDistance);
-		System.out.println("best verticalDistance: " + verticalDistance);
 
-		System.out.println("\nbest upDistanceStart: " + upDistanceStart);
-		System.out.println("best downDistanceStart: " + downDistanceStart);
-		System.out.println("best leftDistanceStart: " + leftDistanceStart);
-		System.out.println("best rightDistanceStart: " + rightDistanceStart);
-
-		System.out.println("\nbest endRotation1: " + endRotation1);
-		System.out.println("best endRotation2: " + endRotation2);
-		System.out.println("-------------------------\n\n");
-		*/
+//		System.out.println("\n\n-------------------------");
+//		System.out.println("best horizontalDistance: " + horizontalDistance);
+//		System.out.println("best verticalDistance: " + verticalDistance);
+//
+//		System.out.println("\nbest upDistanceStart: " + upDistanceStart);
+//		System.out.println("best downDistanceStart: " + downDistanceStart);
+//		System.out.println("best leftDistanceStart: " + leftDistanceStart);
+//		System.out.println("best rightDistanceStart: " + rightDistanceStart);
+//
+//		System.out.println("\nbest endRotation1: " + endRotation1);
+//		System.out.println("best endRotation2: " + endRotation2);
+//		System.out.println("-------------------------\n\n");
 		
 		Point newStartingPoint = origStartingPoint;
 		Direction newDirection = ship.getDirection();
@@ -257,6 +255,9 @@ public class ShipMover
 			newDirection = newDirection2;
 		}
 		
+//		System.out.println("new starting point: " + newStartingPoint);
+//		System.out.println("new direction: " + newDirection);
+		
 		List<Point> desiredLocation = new ArrayList<Point>();
 		try
 		{
@@ -277,9 +278,11 @@ public class ShipMover
 		{
 		    try{
 		        board.moveShip(ship.getShipType(), origStartingPoint, origDirection);
-		    } catch (Exception e) { }
+		    } catch (Exception e) {
+		        System.out.println("Caught an exception when I shouldn't have!!!");
+		    }
 		}
-		
+
 		return desiredLocation;
 	}
 	

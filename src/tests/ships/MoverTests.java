@@ -142,7 +142,7 @@ public class MoverTests {
     }
 
     @Test
-    public void testGetSpacesCoveredVertical() {
+    public void testGetDesiredPathVertical() {
         submarine.setStartPoint(new Point(6,0), Direction.DOWN);
 
         try {
@@ -166,13 +166,13 @@ public class MoverTests {
         assertTrue(desiredLocation.contains(new Point(2,0)));
         assertTrue(desiredLocation.contains(new Point(3,0)));
 
-        List<Point> spacesCovered = submarineMover.getSpacesCovered();
-        assertTrue(spacesCovered.contains(new Point(4,0)));
-        assertTrue(spacesCovered.contains(new Point(5,0)));
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertTrue(desiredPath.contains(new Point(4,0)));
+        assertTrue(desiredPath.contains(new Point(5,0)));
     }
 
     @Test
-    public void testGetSpacesCoveredHorizontal() {
+    public void testGetDesiredPathHorizontal() {
         submarine.setStartPoint(new Point(0,0), Direction.RIGHT);
 
         try {
@@ -196,13 +196,13 @@ public class MoverTests {
         assertTrue(desiredLocation.contains(new Point(0,6)));
         assertTrue(desiredLocation.contains(new Point(0,5)));
 
-        List<Point> spacesCovered = submarineMover.getSpacesCovered();
-        assertTrue(spacesCovered.contains(new Point(0,3)));
-        assertTrue(spacesCovered.contains(new Point(0,4)));
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertTrue(desiredPath.contains(new Point(0,3)));
+        assertTrue(desiredPath.contains(new Point(0,4)));
     }
 
     @Test
-    public void testGetSpacesCoveredNoMove() {
+    public void testGetDesiredPathNoMove() {
         submarine.setStartPoint(new Point(0,0), Direction.RIGHT);
 
         try {
@@ -226,8 +226,8 @@ public class MoverTests {
         assertTrue(desiredLocation.contains(new Point(0,1)));
         assertTrue(desiredLocation.contains(new Point(0,2)));
 
-        List<Point> spacesCovered = submarineMover.getSpacesCovered();
-        assertEquals(0, spacesCovered.size());
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertEquals(0, desiredPath.size());
     }
 
     @Test
@@ -241,5 +241,85 @@ public class MoverTests {
         carrierMover.setTarget(target);
         
         assertEquals(target, carrierMover.getTarget());
+    }
+
+    @Test
+    public void testIsPathIntersections() {
+        submarine.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,3), Direction.UP);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(5,8), board);
+        patrolboatMover.calculateDesiredLocation(new Point(9,3), board);
+
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertTrue(desiredPath.contains(new Point(5,3)));
+        assertTrue(desiredPath.contains(new Point(5,4)));
+
+        desiredPath = patrolboatMover.getDesiredPath();
+        assertTrue(desiredPath.contains(new Point(5,3)));
+        
+        assertTrue(submarineMover.isPathIntersection());
+        assertTrue(patrolboatMover.isPathIntersection());
+    }
+
+    @Test
+    public void testIsPathIntersectionWithDestination() {
+        submarine.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,3), Direction.UP);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(5,8), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,3), board);
+
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertTrue(desiredPath.contains(new Point(5,3)));
+        assertTrue(desiredPath.contains(new Point(5,4)));
+
+        desiredPath = patrolboatMover.getDesiredPath();
+        assertEquals(0, desiredPath.size());
+        
+        assertTrue(submarineMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+    }
+
+    @Test
+    public void testIsDesiredLocationIntersection() {
+        submarine.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,3), Direction.UP);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(5,4), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,3), board);
+
+        List<Point> desiredPath = submarineMover.getDesiredPath();
+        assertEquals(0, desiredPath.size());
+
+        desiredPath = patrolboatMover.getDesiredPath();
+        assertEquals(0, desiredPath.size());
+        
+        assertFalse(submarineMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(submarineMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
     }
 }
