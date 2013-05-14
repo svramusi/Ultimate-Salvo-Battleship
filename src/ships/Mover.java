@@ -13,6 +13,7 @@ import ships.Ship.ShipType;
 public class Mover {
     private Point target;
     private Ship ship;
+    private ShipType intersectingShipType;
     private List<Mover> observerCollection;
     private List<Point> desiredLocation;
     private List<Point> desiredPath;
@@ -21,6 +22,7 @@ public class Mover {
 
     public Mover(Ship ship) {
         this.ship = ship;
+        intersectingShipType = null;
         observerCollection = new ArrayList<Mover>();
         desiredLocation = new ArrayList<Point>();
         desiredPath = new ArrayList<Point>();
@@ -135,10 +137,12 @@ public class Mover {
 
     public boolean checkIntersection(Map<ShipType, List<Point>> mapToCheck, List<Point> pointsToCheck) {
         for(Map.Entry<ShipType, List<Point>> mapEntry : mapToCheck.entrySet()) {
-//          ShipType shipType = mapEntry.getKey();
+            ShipType shipType = mapEntry.getKey();
 
-            if(isThereASimilar(mapEntry.getValue(), pointsToCheck))
+            if(isThereASimilar(mapEntry.getValue(), pointsToCheck)) {
+                intersectingShipType = shipType;
                 return true;
+            }
         }
         
         return false;
@@ -160,5 +164,27 @@ public class Mover {
 
     public int getNumberOfObservers() {
         return observerCollection.size();
+    }
+
+    public boolean shouldDelayMove() {
+        if(isPathIntersection()) {
+            if(this.ship.doIHaveRightOfWay(this.intersectingShipType))
+                return false;
+            else
+                return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean shouldCalcNewPosition() {
+        if(isDestinationIntersection()) {
+            if(this.ship.doIHaveRightOfWay(this.intersectingShipType))
+                return false;
+            else
+                return true;
+        } else {
+            return false;
+        }
     }
 }
