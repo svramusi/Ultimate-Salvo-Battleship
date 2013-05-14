@@ -1,4 +1,4 @@
-package tests.battleship;
+package tests.expertAgentUtils;
 
 import static org.junit.Assert.*;
 
