@@ -37,4 +37,10 @@ public class Submarine extends Ship {
 
 		return false;
 	}
+
+	@Override
+	public boolean doIHaveRightOfWay(ShipType shipType) {
+	    //Sub always has right of way
+	    return true;
+	}
 }

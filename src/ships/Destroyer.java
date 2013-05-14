@@ -21,4 +21,12 @@ public class Destroyer extends Ship {
 	public int getSize() {
 		return 3;
 	}
+
+    @Override
+    public boolean doIHaveRightOfWay(ShipType shipType) {
+        if(shipType.equals(ShipType.SUBMARINE) || shipType.equals(ShipType.PATROLBOAT))
+            return false;
+        else
+            return true;
+    }
 }

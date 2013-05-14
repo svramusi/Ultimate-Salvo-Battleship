@@ -249,4 +249,12 @@ public class CarrierTests {
 
 		assertFalse(c.isValidShot(new Point(9,7)));
 	}
+
+    @Test
+    public void testDoIHaveRightOfWay() {
+        assertFalse(c.doIHaveRightOfWay(ShipType.BATTLESHIP));
+        assertFalse(c.doIHaveRightOfWay(ShipType.DESTROYER));
+        assertFalse(c.doIHaveRightOfWay(ShipType.PATROLBOAT));
+        assertFalse(c.doIHaveRightOfWay(ShipType.SUBMARINE));
+    }
 }

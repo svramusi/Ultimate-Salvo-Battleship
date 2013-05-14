@@ -168,4 +168,12 @@ public class BattleshipTests {
 
 		assertFalse(b.isValidShot(new Point(0,5)));
 	}
+
+    @Test
+    public void testDoIHaveRightOfWay() {
+        assertTrue(b.doIHaveRightOfWay(ShipType.CARRIER));
+        assertFalse(b.doIHaveRightOfWay(ShipType.DESTROYER));
+        assertFalse(b.doIHaveRightOfWay(ShipType.PATROLBOAT));
+        assertFalse(b.doIHaveRightOfWay(ShipType.SUBMARINE));
+    }
 }

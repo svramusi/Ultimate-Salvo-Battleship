@@ -21,4 +21,10 @@ public class Carrier extends Ship {
 	public int getSize() {
 		return 5;
 	}
+
+    @Override
+    public boolean doIHaveRightOfWay(ShipType shipType) {
+        //Carrier never has right of way
+        return false;
+    }
 }

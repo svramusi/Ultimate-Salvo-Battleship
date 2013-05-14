@@ -17,6 +17,7 @@ public abstract class Ship {
 	public abstract int getMoveDistance();
 	public abstract int getShootDistance();
 	public abstract int getSize();
+	public abstract boolean doIHaveRightOfWay(ShipType shipType);
 
 	public Ship(ShipType shipType)
 	{

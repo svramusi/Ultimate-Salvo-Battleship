@@ -159,4 +159,12 @@ public class PatrolBoatTests {
 		assertFalse(pb.isValidShot(new Point(4,0)));
 		assertFalse(pb.isValidShot(new Point(3,3)));
 	}
+
+    @Test
+    public void testDoIHaveRightOfWay() {
+        assertTrue(pb.doIHaveRightOfWay(ShipType.CARRIER));
+        assertTrue(pb.doIHaveRightOfWay(ShipType.BATTLESHIP));
+        assertTrue(pb.doIHaveRightOfWay(ShipType.DESTROYER));
+        assertFalse(pb.doIHaveRightOfWay(ShipType.SUBMARINE));
+    }
 }

@@ -164,4 +164,12 @@ public class DestroyerTests {
 		assertFalse(d.isValidShot(new Point(6,0)));
 		assertFalse(d.isValidShot(new Point(5,5)));
 	}
+
+    @Test
+    public void testDoIHaveRightOfWay() {
+        assertTrue(d.doIHaveRightOfWay(ShipType.CARRIER));
+        assertTrue(d.doIHaveRightOfWay(ShipType.BATTLESHIP));
+        assertFalse(d.doIHaveRightOfWay(ShipType.PATROLBOAT));
+        assertFalse(d.doIHaveRightOfWay(ShipType.SUBMARINE));
+    }
 }

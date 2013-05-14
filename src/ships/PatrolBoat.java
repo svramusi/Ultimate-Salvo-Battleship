@@ -21,4 +21,12 @@ public class PatrolBoat extends Ship {
 	public int getSize() {
 		return 2;
 	}
+
+    @Override
+    public boolean doIHaveRightOfWay(ShipType shipType) {
+        if(shipType.equals(ShipType.SUBMARINE))
+            return false;
+        else
+            return true;
+    }
 }
