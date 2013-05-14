@@ -41,6 +41,10 @@ public class Mover {
         observerCollection.add(shipMover);
     }
 
+    public void unregister(Mover shipMover) {
+        observerCollection.remove(shipMover);
+    }
+
     public ShipType getShipType() {
         return ship.getShipType();
     }
@@ -152,5 +156,9 @@ public class Mover {
 
     public boolean isDestinationIntersection() {
         return checkIntersection(observerDesiredLocations, this.desiredLocation);
+    }
+
+    public int getNumberOfObservers() {
+        return observerCollection.size();
     }
 }

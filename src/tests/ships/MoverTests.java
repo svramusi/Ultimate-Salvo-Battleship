@@ -240,7 +240,10 @@ public class MoverTests {
         Point target = new Point(0,0);
         carrierMover.setTarget(target);
         
-        assertEquals(target, carrierMover.getTarget());
+        assertEquals(4, carrierMover.getNumberOfObservers());
+        
+        carrierMover.unregister(submarineMover);
+        assertEquals(3, carrierMover.getNumberOfObservers());
     }
 
     @Test
