@@ -60,7 +60,7 @@ public class ExpertComputerPlayer extends Player  {
         List<Ship> activeShips = board.getActiveShips();
 		for(Ship ship : activeShips)
 		{
-			ShipMover.moveShip(ship, target, board);
+//			ShipMover.moveShip(ship, target, board);
 		}
 
 		salvoCount = activeShips.size();

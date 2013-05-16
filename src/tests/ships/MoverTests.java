@@ -79,14 +79,6 @@ public class MoverTests {
     }
 
     @Test
-    public void testMoverTakesTargetPosition() {
-        Point target = new Point(0,0);
-        carrierMover.setTarget(target);
-        
-        assertEquals(target, carrierMover.getTarget());
-    }
-
-    @Test
     public void testGetDesiredLocation() {
         submarine.setStartPoint(new Point(3,0), Direction.DOWN);
 
@@ -236,9 +228,6 @@ public class MoverTests {
 
     @Test
     public void testObserverPattern() {
-        Point target = new Point(0,0);
-        carrierMover.setTarget(target);
-        
         assertEquals(4, carrierMover.getNumberOfObservers());
         
         carrierMover.unregister(submarineMover);
@@ -417,5 +406,72 @@ public class MoverTests {
 
         assertFalse(submarineMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
+    }
+
+    @Test
+    public void testCanMoveShip() {
+        submarine.setStartPoint(new Point(9,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(9,9), board);
+        patrolboatMover.calculateDesiredLocation(new Point(5,0), board);
+
+        assertFalse(submarineMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertFalse(submarineMover.isDestinationIntersection());
+        assertFalse(patrolboatMover.isDestinationIntersection());
+
+        assertFalse(submarineMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+        
+        submarineMover.move(board);
+        patrolboatMover.move(board);
+
+        List<Point> actualLocation = board.getShipLocation(ShipType.SUBMARINE);
+        assertTrue(actualLocation.contains(new Point(9,7)));
+        assertTrue(actualLocation.contains(new Point(9,6)));
+        assertTrue(actualLocation.contains(new Point(9,5)));
+
+        actualLocation = board.getShipLocation(ShipType.PATROLBOAT);
+        assertTrue(actualLocation.contains(new Point(3,0)));
+        assertTrue(actualLocation.contains(new Point(2,0)));
+    }
+
+    @Test
+    public void testShouldDelayThenMove() {
+        submarine.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,3), Direction.UP);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(5,8), board);
+        patrolboatMover.calculateDesiredLocation(new Point(9,3), board);
+
+        assertTrue(submarineMover.isPathIntersection());
+        assertTrue(patrolboatMover.isPathIntersection());
+
+        assertFalse(submarineMover.shouldDelayMove());
+        assertTrue(patrolboatMover.shouldDelayMove());
+        
+        submarineMover.move(board);
+
+        assertFalse(submarineMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertFalse(submarineMover.shouldDelayMove());
+        assertFalse(patrolboatMover.shouldDelayMove());
     }
 }

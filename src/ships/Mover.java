@@ -11,14 +11,15 @@ import board.Board;
 import ships.Ship.ShipType;
 
 public class Mover {
-    private Point target;
     private Ship ship;
+    private Point destination;
     private ShipType intersectingShipType;
     private List<Mover> observerCollection;
     private List<Point> desiredLocation;
     private List<Point> desiredPath;
     private Map<ShipType, List<Point>> observerDesiredLocations;
     private Map<ShipType, List<Point>> observerDesiredPaths;
+    private boolean iveMoved;
 
     public Mover(Ship ship) {
         this.ship = ship;
@@ -29,14 +30,8 @@ public class Mover {
 
         observerDesiredLocations = new HashMap<ShipType, List<Point>>();
         observerDesiredPaths = new HashMap<ShipType, List<Point>>();
-    }
 
-    public void setTarget(Point target) {
-        this.target = target;
-    }
-    
-    public Point getTarget() {
-        return this.target;
+        iveMoved = false;
     }
 
     public void register(Mover shipMover) {
@@ -51,11 +46,14 @@ public class Mover {
         return ship.getShipType();
     }
 
-    public void calculateDesiredLocation(Point point, Board board) {
+    public void calculateDesiredLocation(Point destination, Board board) {
+        iveMoved = false;
+
+        this.destination = destination;
         this.desiredLocation.clear();
         this.desiredPath.clear();
 
-        this.desiredLocation = ShipMover.moveShip(this.ship, point, board);
+        this.desiredLocation = ShipMover.testMoveShip(this.ship, destination, board);
         this.desiredPath = calculateDesiredPath(desiredLocation);
         
         for(Mover observer : observerCollection) {
@@ -70,6 +68,11 @@ public class Mover {
 
     private void notifyDesiredPath(ShipType shipType, List<Point> path) {
         observerDesiredPaths.put(shipType, path);
+    }
+
+    private void notifyMove(ShipType shipType) {
+        observerDesiredLocations.remove(shipType);
+        observerDesiredPaths.remove(shipType);
     }
 
     public List<Point> getDesiredLocation() {
@@ -149,6 +152,9 @@ public class Mover {
     }
 
     public boolean isPathIntersection() {
+        if(iveMoved)
+            return false;
+
         if(checkIntersection(observerDesiredPaths, this.desiredPath))
             return true;
 
@@ -167,6 +173,9 @@ public class Mover {
     }
 
     public boolean shouldDelayMove() {
+        if(iveMoved)
+            return false;
+
         if(isPathIntersection()) {
             if(this.ship.doIHaveRightOfWay(this.intersectingShipType))
                 return false;
@@ -178,6 +187,9 @@ public class Mover {
     }
 
     public boolean shouldCalcNewPosition() {
+        if(iveMoved)
+            return false;
+
         if(isDestinationIntersection()) {
             if(this.ship.doIHaveRightOfWay(this.intersectingShipType))
                 return false;
@@ -185,6 +197,17 @@ public class Mover {
                 return true;
         } else {
             return false;
+        }
+    }
+
+    public void move(Board board) {
+        if(this.destination != null) {
+            ShipMover.moveShip(this.ship, this.destination, board);
+            iveMoved = true;
+
+            for(Mover observer : observerCollection) {
+                observer.notifyMove(getShipType());
+            }
         }
     }
 }

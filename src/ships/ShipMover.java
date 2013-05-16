@@ -91,7 +91,7 @@ public class ShipMover
 		
 		return retVal;
 	}
-	private static List<Point> utility(Board board, Ship ship, Point target)
+	private static List<Point> utility(Board board, Ship ship, Point target, boolean testMove)
 	{
 		//Don't move unless you have to...
 		if(ship.isValidShot(target))
@@ -276,10 +276,12 @@ public class ShipMover
 		}
 		finally
 		{
-		    try{
-		        board.moveShip(ship.getShipType(), origStartingPoint, origDirection);
-		    } catch (Exception e) {
-		        System.out.println("Caught an exception when I shouldn't have!!!");
+		    if(testMove) {
+    		    try {
+    		        board.moveShip(ship.getShipType(), origStartingPoint, origDirection);
+    		    } catch (Exception e) {
+    		        System.out.println("Caught an exception when I shouldn't have!!!");
+    		    }
 		    }
 		}
 
@@ -303,9 +305,14 @@ public class ShipMover
 		
 		return xDistance + yDistance;
 	}
-	
-	public static List<Point> moveShip(Ship ship, Point target, Board board)
-	{
-		return utility(board, ship, target);
-	}
+
+    public static List<Point> testMoveShip(Ship ship, Point target, Board board)
+    {
+        return utility(board, ship, target, true);
+    }
+
+    public static List<Point> moveShip(Ship ship, Point target, Board board)
+    {
+        return utility(board, ship, target, false);
+    }
 }
