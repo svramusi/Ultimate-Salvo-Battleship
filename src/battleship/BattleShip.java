@@ -9,38 +9,38 @@ import java.util.List;
 
 public class BattleShip {
 
-	public static void main(String[] args) {
-		Player player1 = new ExpertComputerPlayer(new Board(), "computer_player1");
-		Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
+    public static void main(String[] args) {
+        Player player1 = new ExpertComputerPlayer(new Board(), "computer_player1");
+        Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
 
-		Player activePlayer = player1;
-		Player nonactivePlayer = player2;
-		Player tempPlayer = null;
+        Player activePlayer = player1;
+        Player nonactivePlayer = player2;
+        Player tempPlayer = null;
 
-		List<HitResponse> hitResults;
-		int turnCount = 0;
+        List<HitResponse> hitResults;
+        int turnCount = 0;
 
-		while(!player1.isDefeated() && !player2.isDefeated())
-		{
-			activePlayer.moveShips();
-			while(!activePlayer.isTurnOver())
-			{
-				List<Shot> shots = activePlayer.takeAShot();
-				
-				hitResults = nonactivePlayer.isHit(shots);
-				activePlayer.getResponse(hitResults);
-			}
+        while(!player1.isDefeated() && !player2.isDefeated())
+        {
+            activePlayer.moveShips();
+            while(!activePlayer.isTurnOver())
+            {
+                List<Shot> shots = activePlayer.takeAShot();
 
-			tempPlayer = activePlayer;
-			activePlayer = nonactivePlayer;
-			nonactivePlayer = tempPlayer;
-			turnCount++;
-		}
+                hitResults = nonactivePlayer.isHit(shots);
+                activePlayer.getResponse(hitResults);
+            }
 
-		System.out.println("The game is over after " + turnCount/2 + " turns");
-		if(player1.isDefeated())
-			System.out.println(player2.getName() + " wins!!");
-		else
-			System.out.println(player1.getName() + " wins!!");
-	}
+            tempPlayer = activePlayer;
+            activePlayer = nonactivePlayer;
+            nonactivePlayer = tempPlayer;
+            turnCount++;
+        }
+
+        System.out.println("The game is over after " + turnCount/2 + " turns");
+        if(player1.isDefeated())
+            System.out.println(player2.getName() + " wins!!");
+        else
+            System.out.println(player1.getName() + " wins!!");
+    }
 }

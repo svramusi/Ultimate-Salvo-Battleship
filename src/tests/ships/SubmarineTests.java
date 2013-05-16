@@ -18,139 +18,139 @@ import ships.Ship.ShipType;
 
 public class SubmarineTests {
 
-	private Submarine s;
-	@Before
-	public void setUp() throws Exception {
-		s = new Submarine();
-	}
-	
-	@Test
-	public void testShipGetMoveDistance() {
-		assertEquals(5, s.getMoveDistance());
-	}
-	
-	@Test
-	public void testShootDistance() {
-		assertEquals(1, s.getShootDistance());
-	}
-	
-	@Test
-	public void testGetSize() {
-		assertEquals(3, s.getSize());
-	}
+    private Submarine s;
+    @Before
+    public void setUp() throws Exception {
+        s = new Submarine();
+    }
+    
+    @Test
+    public void testShipGetMoveDistance() {
+        assertEquals(5, s.getMoveDistance());
+    }
+    
+    @Test
+    public void testShootDistance() {
+        assertEquals(1, s.getShootDistance());
+    }
+    
+    @Test
+    public void testGetSize() {
+        assertEquals(3, s.getSize());
+    }
 
-	@Test
-	public void testGetStartPoint() {
-		assertEquals(new Point(0,0), s.getStartPoint());
-		assertEquals(new Point(0,2), s.getEndPoint());
-	}
-	
-	@Test
-	public void testSetStartPoint() {
-		s.setStartPoint(new Point(2,0), Ship.Direction.UP);
-		assertEquals(new Point(2,0), s.getStartPoint());
-		assertEquals(new Point(0,0), s.getEndPoint());
-		
-		s.setStartPoint(new Point(0,0), Ship.Direction.DOWN);
-		assertEquals(new Point(0,0), s.getStartPoint());
-		assertEquals(new Point(2,0), s.getEndPoint());
-		
-		s.setStartPoint(new Point(0,0), Ship.Direction.RIGHT);
-		assertEquals(new Point(0,0), s.getStartPoint());
-		assertEquals(new Point(0,2), s.getEndPoint());
-		
-		s.setStartPoint(new Point(0,2), Ship.Direction.LEFT);
-		assertEquals(new Point(0,2), s.getStartPoint());
-		assertEquals(new Point(0,0), s.getEndPoint());
-	}
+    @Test
+    public void testGetStartPoint() {
+        assertEquals(new Point(0,0), s.getStartPoint());
+        assertEquals(new Point(0,2), s.getEndPoint());
+    }
+    
+    @Test
+    public void testSetStartPoint() {
+        s.setStartPoint(new Point(2,0), Ship.Direction.UP);
+        assertEquals(new Point(2,0), s.getStartPoint());
+        assertEquals(new Point(0,0), s.getEndPoint());
+        
+        s.setStartPoint(new Point(0,0), Ship.Direction.DOWN);
+        assertEquals(new Point(0,0), s.getStartPoint());
+        assertEquals(new Point(2,0), s.getEndPoint());
+        
+        s.setStartPoint(new Point(0,0), Ship.Direction.RIGHT);
+        assertEquals(new Point(0,0), s.getStartPoint());
+        assertEquals(new Point(0,2), s.getEndPoint());
+        
+        s.setStartPoint(new Point(0,2), Ship.Direction.LEFT);
+        assertEquals(new Point(0,2), s.getStartPoint());
+        assertEquals(new Point(0,0), s.getEndPoint());
+    }
 
-	@Test
-	public void testConvertToDamageIndex() {
-		s.setStartPoint(new Point(0,0), Direction.DOWN);
+    @Test
+    public void testConvertToDamageIndex() {
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertEquals(0, s.convertToDamageIndex(new Point(0,0)));
-		assertEquals(1, s.convertToDamageIndex(new Point(1,0)));
-		assertEquals(2, s.convertToDamageIndex(new Point(2,0)));
+        assertEquals(0, s.convertToDamageIndex(new Point(0,0)));
+        assertEquals(1, s.convertToDamageIndex(new Point(1,0)));
+        assertEquals(2, s.convertToDamageIndex(new Point(2,0)));
 
-		assertEquals(-1, s.convertToDamageIndex(new Point(9,9)));
-	}
+        assertEquals(-1, s.convertToDamageIndex(new Point(9,9)));
+    }
 
-	@Test
-	public void testTakesDamage() {
-		s.setStartPoint(new Point(0,0), Direction.DOWN);
+    @Test
+    public void testTakesDamage() {
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(s.isAHit(new Point(0,0), true));
-		assertTrue(s.isAHit(new Point(1,0), true));
-		assertFalse(s.isAHit(new Point(9,9), true));
-	}
-	
-	@Test
-	public void testSunk() {
-		s.setStartPoint(new Point(0,0), Direction.DOWN);
+        assertTrue(s.isAHit(new Point(0,0), true));
+        assertTrue(s.isAHit(new Point(1,0), true));
+        assertFalse(s.isAHit(new Point(9,9), true));
+    }
+    
+    @Test
+    public void testSunk() {
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(s.isAHit(new Point(0,0), true));
-		assertTrue(s.isSunk());
-	}
-	
-	@Test
-	public void testIsDamaged() {
-		s.setStartPoint(new Point(0,0), Direction.DOWN);
+        assertTrue(s.isAHit(new Point(0,0), true));
+        assertTrue(s.isSunk());
+    }
+    
+    @Test
+    public void testIsDamaged() {
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		assertTrue(s.isAHit(new Point(0,0), true));
+        assertTrue(s.isAHit(new Point(0,0), true));
 
-		assertTrue(s.isDamaged(new Point(0,0)));
-		assertFalse(s.isDamaged(new Point(1,0)));
-		assertFalse(s.isDamaged(new Point(9,9)));
-	}
-	
-	
-	@Test
-	public void testGetShipName() {
-		assertEquals("SUBMARINE", s.getName());
-	}
+        assertTrue(s.isDamaged(new Point(0,0)));
+        assertFalse(s.isDamaged(new Point(1,0)));
+        assertFalse(s.isDamaged(new Point(9,9)));
+    }
+    
+    
+    @Test
+    public void testGetShipName() {
+        assertEquals("SUBMARINE", s.getName());
+    }
 
-	@Test
-	public void testGetShipLocation() {
-		List<Point> shipLocation;
+    @Test
+    public void testGetShipLocation() {
+        List<Point> shipLocation;
 
-		s.setStartPoint(new Point(2,0), Direction.UP);
-		
-		shipLocation = s.getShipLocation();
-		assertEquals(new Point(2,0), shipLocation.get(0));
-		assertEquals(new Point(1,0), shipLocation.get(1));
-		assertEquals(new Point(0,0), shipLocation.get(2));
-		
-		s.setStartPoint(new Point(0,0), Direction.DOWN);
-		
-		shipLocation = s.getShipLocation();
-		assertEquals(new Point(0,0), shipLocation.get(0));
-		assertEquals(new Point(1,0), shipLocation.get(1));
-		assertEquals(new Point(2,0), shipLocation.get(2));
-		
-		s.setStartPoint(new Point(0,2), Direction.LEFT);
-		
-		shipLocation = s.getShipLocation();
-		assertEquals(new Point(0,2), shipLocation.get(0));
-		assertEquals(new Point(0,1), shipLocation.get(1));
-		assertEquals(new Point(0,0), shipLocation.get(2));
-		
-		s.setStartPoint(new Point(0,0), Direction.RIGHT);
-		
-		shipLocation = s.getShipLocation();
-		assertEquals(new Point(0,0), shipLocation.get(0));
-		assertEquals(new Point(0,1), shipLocation.get(1));
-		assertEquals(new Point(0,2), shipLocation.get(2));
-	}
-	
-	@Test
-	public void testShipType() {
-		assertEquals(ShipType.SUBMARINE, s.getShipType());
-	}
-	
-	@Test
-	public void testIsSubmerged() {
-		assertTrue(s.isSubmerged());
-	}
+        s.setStartPoint(new Point(2,0), Direction.UP);
+        
+        shipLocation = s.getShipLocation();
+        assertEquals(new Point(2,0), shipLocation.get(0));
+        assertEquals(new Point(1,0), shipLocation.get(1));
+        assertEquals(new Point(0,0), shipLocation.get(2));
+        
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
+        
+        shipLocation = s.getShipLocation();
+        assertEquals(new Point(0,0), shipLocation.get(0));
+        assertEquals(new Point(1,0), shipLocation.get(1));
+        assertEquals(new Point(2,0), shipLocation.get(2));
+        
+        s.setStartPoint(new Point(0,2), Direction.LEFT);
+        
+        shipLocation = s.getShipLocation();
+        assertEquals(new Point(0,2), shipLocation.get(0));
+        assertEquals(new Point(0,1), shipLocation.get(1));
+        assertEquals(new Point(0,0), shipLocation.get(2));
+        
+        s.setStartPoint(new Point(0,0), Direction.RIGHT);
+        
+        shipLocation = s.getShipLocation();
+        assertEquals(new Point(0,0), shipLocation.get(0));
+        assertEquals(new Point(0,1), shipLocation.get(1));
+        assertEquals(new Point(0,2), shipLocation.get(2));
+    }
+    
+    @Test
+    public void testShipType() {
+        assertEquals(ShipType.SUBMARINE, s.getShipType());
+    }
+    
+    @Test
+    public void testIsSubmerged() {
+        assertTrue(s.isSubmerged());
+    }
     
     @Test
     public void testValidShot() {

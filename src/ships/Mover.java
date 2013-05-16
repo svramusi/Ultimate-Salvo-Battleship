@@ -61,7 +61,7 @@ public class Mover {
             System.out.println("Caught and exception when I shouldn't have!");
         }
         this.desiredPath = calculateDesiredPath(desiredLocation);
-        
+
         for(Mover observer : observerCollection) {
             observer.notifyDesiredLocation(getShipType(), this.desiredLocation);
             observer.notifyDesiredPath(getShipType(), this.desiredPath);
@@ -153,7 +153,7 @@ public class Mover {
                 return true;
             }
         }
-        
+
         return false;
     }
 

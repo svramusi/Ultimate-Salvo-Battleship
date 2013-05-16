@@ -24,7 +24,7 @@ import board.Board;
 
 
 public class ShipMoverTests {
-    
+
     private ShipMover shipMover;
 
     private Board board;
@@ -41,12 +41,12 @@ public class ShipMoverTests {
     private PatrolBoat patrolboat;
     private Submarine submarine;
 
-	@Before
-	public void setUp() throws Exception {
-	    shipMover = new ShipMover();
+    @Before
+    public void setUp() throws Exception {
+        shipMover = new ShipMover();
 
-		board = new Board();
-		board.clearBoard();
+        board = new Board();
+        board.clearBoard();
 
         carrier = new Carrier();
         battleship = new Battleship();
@@ -90,7 +90,7 @@ public class ShipMoverTests {
         shipMover.add(destroyerMover);
         shipMover.add(patrolboatMover);
         shipMover.add(submarineMover);
-	}
+    }
 
     @Test
     public void testMovesSingleShip() {

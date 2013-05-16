@@ -13,77 +13,77 @@ import ships.Ship.Direction;
 import ships.Ship.ShipType;
 
 public abstract class Player {
-	private String playerName;
-	protected Board board;
+    private String playerName;
+    protected Board board;
 
-	protected boolean doneWithTurn;
+    protected boolean doneWithTurn;
 
-	public abstract void moveShips();
-	public abstract List<Shot> takeAShot();
-	public abstract List<HitResponse> isHit(List<Shot> shots);
-	public abstract void getResponse(List<HitResponse> hitResponses);
-	
-	//public abstract ShipType getTargedShipType();
-	//public abstract void informActualLocation(List<Point> actualShipLocation);
-	
-	public Player(Board board, String playerName)
-	{
-		this.playerName = playerName;
-		this.board = board;
+    public abstract void moveShips();
+    public abstract List<Shot> takeAShot();
+    public abstract List<HitResponse> isHit(List<Shot> shots);
+    public abstract void getResponse(List<HitResponse> hitResponses);
 
-		board.clearBoard();
+    //public abstract ShipType getTargedShipType();
+    //public abstract void informActualLocation(List<Point> actualShipLocation);
 
-		Carrier c = new Carrier();
-		c.setStartPoint(new Point(0,0), Direction.DOWN);
+    public Player(Board board, String playerName)
+    {
+        this.playerName = playerName;
+        this.board = board;
 
-		Battleship b = new Battleship();
-		b.setStartPoint(new Point(0,9), Direction.DOWN);
+        board.clearBoard();
 
-		Destroyer d = new Destroyer();
-		d.setStartPoint(new Point(9,0), Direction.UP);
+        Carrier c = new Carrier();
+        c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-		Submarine s = new Submarine();
-		s.setStartPoint(new Point(9,9), Direction.UP);
+        Battleship b = new Battleship();
+        b.setStartPoint(new Point(0,9), Direction.DOWN);
 
-		PatrolBoat pb = new PatrolBoat();
-		pb.setStartPoint(new Point(5,5), Direction.LEFT);
+        Destroyer d = new Destroyer();
+        d.setStartPoint(new Point(9,0), Direction.UP);
 
-		try {
-			board.addShip(c);
-			board.addShip(b);
-			board.addShip(d);
-			board.addShip(pb);
-			board.addShip(s);
-		} catch (InvalidShipPositionException e) {
-			fail("caught InvalidShipPositionException when I shouldn't have");
-		}
-	}
-	
-	public String getName()
-	{
-		return playerName;
-	}
+        Submarine s = new Submarine();
+        s.setStartPoint(new Point(9,9), Direction.UP);
 
-	public HitResponse isHit(Point shot, boolean dealDamage)
-	{
-		return board.isHit(shot, dealDamage);
-	}
-	
-	public List<Point> getShipLocation(ShipType shipType)
-	{
-		return board.getShipLocation(shipType);
-	}
+        PatrolBoat pb = new PatrolBoat();
+        pb.setStartPoint(new Point(5,5), Direction.LEFT);
 
-	public boolean isDefeated()
-	{
-		if(board.getActiveShips().size() > 0)
-			return false;
-		else
-			return true;
-	}
+        try {
+            board.addShip(c);
+            board.addShip(b);
+            board.addShip(d);
+            board.addShip(pb);
+            board.addShip(s);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+    }
 
-	public boolean isTurnOver()
-	{
-		return doneWithTurn;
-	}
+    public String getName()
+    {
+        return playerName;
+    }
+
+    public HitResponse isHit(Point shot, boolean dealDamage)
+    {
+        return board.isHit(shot, dealDamage);
+    }
+
+    public List<Point> getShipLocation(ShipType shipType)
+    {
+        return board.getShipLocation(shipType);
+    }
+
+    public boolean isDefeated()
+    {
+        if(board.getActiveShips().size() > 0)
+            return false;
+        else
+            return true;
+    }
+
+    public boolean isTurnOver()
+    {
+        return doneWithTurn;
+    }
 }

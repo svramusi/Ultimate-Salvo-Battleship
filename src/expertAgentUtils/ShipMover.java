@@ -11,7 +11,7 @@ import battleshipExceptions.InvalidShipPositionException;
 import battleshipExceptions.ShipDamagedException;
 import board.Board;
 
-public class ShipMover 
+public class ShipMover
 {
     private List<Mover> movers;
 

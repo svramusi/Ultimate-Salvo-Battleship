@@ -8,284 +8,284 @@ import java.util.*;
 
 public class Board {
 
-	private int width;
-	private int height;
-	private List<Ship> ships;
+    private int width;
+    private int height;
+    private List<Ship> ships;
 
-	private List<Ship> recentlyDamagedShips;
-	private List<Ship> shipsDamagedLastTurn;
-	
-	public Board()
-	{
-		width = 10;
-		height = 10;
-		ships = new ArrayList<Ship>();
-		recentlyDamagedShips = new ArrayList<Ship>();
-		shipsDamagedLastTurn = new ArrayList<Ship>();
-	}
-	
-	public int getWidth()
-	{
-		return width;
-	}
-	
-	public int getHeight()
-	{
-		return height;
-	}
-	
-	public void addShip(Ship newShip) throws InvalidShipPositionException
-	{
-		validateShipPositionOnBoard(newShip); // throws InvalidShipPositionException
-		ships.add(newShip);
-	}
+    private List<Ship> recentlyDamagedShips;
+    private List<Ship> shipsDamagedLastTurn;
 
-	private boolean hasBeenDamaged(Ship ship) {
-		if(recentlyDamagedShips.contains(ship) || shipsDamagedLastTurn.contains(ship))
-			return true;
-		else
-			return false;
-	}
-	
-	public void moveShip(Ship.ShipType shipType, Point startingPoint, Ship.Direction direction) throws InvalidShipPositionException, ShipDamagedException
-	{
-		Ship movingShip = findShip(shipType);
-		Point origStartingPoint = movingShip.getStartPoint();
-		Ship.Direction origDirection = movingShip.getDirection();
+    public Board()
+    {
+        width = 10;
+        height = 10;
+        ships = new ArrayList<Ship>();
+        recentlyDamagedShips = new ArrayList<Ship>();
+        shipsDamagedLastTurn = new ArrayList<Ship>();
+    }
 
-		if(hasBeenDamaged(movingShip))
-			throw new ShipDamagedException(movingShip);
+    public int getWidth()
+    {
+        return width;
+    }
 
-		if(!movingShip.isValidMove(startingPoint, direction))
-		{
-			//Need to set this so the exception is correct
-			ShipFactory factory = new ShipFactory();
-			Ship tempShip = factory.getShip(movingShip.getShipType());
-			tempShip.setStartPoint(startingPoint, direction);
-			throw new InvalidShipPositionException(tempShip, null);
-		}
-		
-		movingShip.setStartPoint(startingPoint, direction);
-		
-		try
-		{
-			validateShipPositionOnBoard(movingShip);
-		}
-		catch(InvalidShipPositionException e)
-		{
-			movingShip.setStartPoint(origStartingPoint, origDirection);
-			throw e;
-		}
-	}
+    public int getHeight()
+    {
+        return height;
+    }
 
-	private Ship findShip(Ship.ShipType shipType) 
-	{
-		Ship movingShip = null;
-		
-		for(Ship s : ships)
-		{
-			if(s.getShipType() == shipType)
-			{
-				movingShip = s;
-			}
-		}
-		return movingShip;
-	}
-	
-	private void validateShipPositionOnBoard(Ship ship) throws InvalidShipPositionException
-	{
-		if(!isInBounds(ship))
-			throw new InvalidShipPositionException(ship, null);
+    public void addShip(Ship newShip) throws InvalidShipPositionException
+    {
+        validateShipPositionOnBoard(newShip); // throws InvalidShipPositionException
+        ships.add(newShip);
+    }
 
-		Ship collidingShip = findCollision(ship, false);
-		if(collidingShip != null)
-			throw new InvalidShipPositionException(ship, collidingShip);
-	}
-	
-	private boolean isInBounds(Ship s)
-	{
-		int startPointX = s.getStartPoint().getX();
-		int startPointY = s.getStartPoint().getY();
-		int endPointX = s.getEndPoint().getX();
-		int endPointY = s.getEndPoint().getY();
-		
-		if(startPointX < 0)
-			return false;
-		else if(startPointY < 0)
-			return false;
-		else if(endPointX < 0)
-			return false;
-		else if(endPointY < 0)
-			return false;
-		else if(startPointY >= getWidth())
-			return false;
-		else if(startPointX >= getHeight())
-			return false;
-		else if(endPointY >= getWidth())
-			return false;
-		else if(endPointX >= getHeight())
-			return false;
-		else
-			return true;
-	}
-	
-	private Ship findCollision(Ship checkShip, boolean ignoreSubmerged)
-	{
-		for(Ship s : getActiveShips())
-		{
-			if(s.getShipType() != checkShip.getShipType())
-			{
-				if(shipCollision(checkShip, s, ignoreSubmerged))
-					return s;
-			}
-		}
-		
-		return null;
-	}
-	
-	public void clearBoard()
-	{
-		ships.clear();
-	}
-	
-	public boolean shipCollision(Ship ship1, Ship ship2, boolean ignoreSubmerged)
-	{
-		if(!ignoreSubmerged)
-		{
-			if(ship1.isSubmerged() || ship2.isSubmerged())
-				return false;
-		}
-		
-		List<Point> ship1Location = ship1.getShipLocation();
-		List<Point> ship2Location = ship2.getShipLocation();
-		
-		for(Point ship1Point : ship1Location)
-		{
-			for(Point ship2Point : ship2Location)
-			{
-				if(ship1Point.equals(ship2Point))
-					return true;
-			}
-		}
-		
-		return false;
-	}
+    private boolean hasBeenDamaged(Ship ship) {
+        if(recentlyDamagedShips.contains(ship) || shipsDamagedLastTurn.contains(ship))
+            return true;
+        else
+            return false;
+    }
 
-	public List<Ship> getAllShips()
-	{
-		return ships;
-	}
+    public void moveShip(Ship.ShipType shipType, Point startingPoint, Ship.Direction direction) throws InvalidShipPositionException, ShipDamagedException
+    {
+        Ship movingShip = findShip(shipType);
+        Point origStartingPoint = movingShip.getStartPoint();
+        Ship.Direction origDirection = movingShip.getDirection();
 
-	public List<Ship> getActiveShips()
-	{
-		List<Ship> activeShips = new ArrayList<Ship>();
-		for(Ship s : getAllShips())
-		{
-			if(!s.isSunk())
-				activeShips.add(s);
-		}
-		return activeShips;
-	}
+        if(hasBeenDamaged(movingShip))
+            throw new ShipDamagedException(movingShip);
 
-	public boolean isUnderAnotherShip(Ship s) {
-		if(s.getShipType() != Ship.ShipType.SUBMARINE)
-			return false;
+        if(!movingShip.isValidMove(startingPoint, direction))
+        {
+            //Need to set this so the exception is correct
+            ShipFactory factory = new ShipFactory();
+            Ship tempShip = factory.getShip(movingShip.getShipType());
+            tempShip.setStartPoint(startingPoint, direction);
+            throw new InvalidShipPositionException(tempShip, null);
+        }
 
-		if(findCollision(s, true) != null)
-			return true;
-		else
-			return false;
-	}
+        movingShip.setStartPoint(startingPoint, direction);
 
-	public HitResponse isHit(Point shot, boolean takesDamage)
-	{
-		boolean isAHit = false;
-		ShipType sunkShip = null;
-		
-		for(Ship ship : getActiveShips())
-		{
-			if(!isUnderAnotherShip(ship))
-			{
-				if(ship.isAHit(shot, takesDamage))
-				{
-					isAHit = true;
-					if(ship.isSunk())
-						sunkShip = ship.getShipType();
+        try
+        {
+            validateShipPositionOnBoard(movingShip);
+        }
+        catch(InvalidShipPositionException e)
+        {
+            movingShip.setStartPoint(origStartingPoint, origDirection);
+            throw e;
+        }
+    }
 
-					if(takesDamage)
-						recentlyDamagedShips.add(ship);
-				}
-			}
-		}
+    private Ship findShip(Ship.ShipType shipType) 
+    {
+        Ship movingShip = null;
 
-		return new HitResponse(shot, isAHit, sunkShip);
-	}
+        for(Ship s : ships)
+        {
+            if(s.getShipType() == shipType)
+            {
+                movingShip = s;
+            }
+        }
+        return movingShip;
+    }
 
-	public void nextTurn() {
-		shipsDamagedLastTurn.clear();
-		shipsDamagedLastTurn.addAll(recentlyDamagedShips);
-		recentlyDamagedShips.clear();
-	}
+    private void validateShipPositionOnBoard(Ship ship) throws InvalidShipPositionException
+    {
+        if(!isInBounds(ship))
+            throw new InvalidShipPositionException(ship, null);
 
-	public boolean isValidShot(Point point) {
-		int x = point.getX();
-		int y = point.getY();
+        Ship collidingShip = findCollision(ship, false);
+        if(collidingShip != null)
+            throw new InvalidShipPositionException(ship, collidingShip);
+    }
 
-		if(x < 0 || y < 0 || x > 9 || y > 9)
-			return false;
-		else
-			return true;
-	}
+    private boolean isInBounds(Ship s)
+    {
+        int startPointX = s.getStartPoint().getX();
+        int startPointY = s.getStartPoint().getY();
+        int endPointX = s.getEndPoint().getX();
+        int endPointY = s.getEndPoint().getY();
 
-	public List<Point> getShipLocation(Ship.ShipType shipType)
-	{
-		for(Ship s : getActiveShips())
-		{
-			if(s.getShipType().equals(shipType))
-				return s.getShipLocation();
-		}
+        if(startPointX < 0)
+            return false;
+        else if(startPointY < 0)
+            return false;
+        else if(endPointX < 0)
+            return false;
+        else if(endPointY < 0)
+            return false;
+        else if(startPointY >= getWidth())
+            return false;
+        else if(startPointX >= getHeight())
+            return false;
+        else if(endPointY >= getWidth())
+            return false;
+        else if(endPointX >= getHeight())
+            return false;
+        else
+            return true;
+    }
 
-		//Shouldn't get here...
-		return new ArrayList<Point>();
-	}
-	
-	public boolean isShipSunk(ShipType shipType)
-	{
-		for(Ship s : getAllShips())
-		{
-			if(s.getShipType().equals(shipType))
-				return s.isSunk();
-		}
-		
-		//Shouldn't get here!
-		return false;
-	}
+    private Ship findCollision(Ship checkShip, boolean ignoreSubmerged)
+    {
+        for(Ship s : getActiveShips())
+        {
+            if(s.getShipType() != checkShip.getShipType())
+            {
+                if(shipCollision(checkShip, s, ignoreSubmerged))
+                    return s;
+            }
+        }
 
-	public int getBoundingBoxSize(Point point, ShipType shipType) {
-		int shootDistance = (new ShipFactory()).getShip(shipType).getShootDistance();
+        return null;
+    }
 
-		int boundingBoxSize = 0;
+    public void clearBoard()
+    {
+        ships.clear();
+    }
 
-		for(int row=point.getX()-shootDistance; row<=point.getX()+shootDistance; row++)
-		{
-			for(int col=point.getY()-shootDistance; col<=point.getY()+shootDistance; col++)
-			{
-				if(isValidShot(new Point(row,col)))
-					boundingBoxSize++;
-			}
-		}
+    public boolean shipCollision(Ship ship1, Ship ship2, boolean ignoreSubmerged)
+    {
+        if(!ignoreSubmerged)
+        {
+            if(ship1.isSubmerged() || ship2.isSubmerged())
+                return false;
+        }
 
-		return boundingBoxSize;
-	}
+        List<Point> ship1Location = ship1.getShipLocation();
+        List<Point> ship2Location = ship2.getShipLocation();
 
-	public Ship getShip(ShipType shipType) {
+        for(Point ship1Point : ship1Location)
+        {
+            for(Point ship2Point : ship2Location)
+            {
+                if(ship1Point.equals(ship2Point))
+                    return true;
+            }
+        }
 
-		for(Ship ship : getAllShips())
-		{
-			if(ship.getShipType().equals(shipType))
-				return ship;
-		}
+        return false;
+    }
 
-		return null;
-	}
+    public List<Ship> getAllShips()
+    {
+        return ships;
+    }
+
+    public List<Ship> getActiveShips()
+    {
+        List<Ship> activeShips = new ArrayList<Ship>();
+        for(Ship s : getAllShips())
+        {
+            if(!s.isSunk())
+                activeShips.add(s);
+        }
+        return activeShips;
+    }
+
+    public boolean isUnderAnotherShip(Ship s) {
+        if(s.getShipType() != Ship.ShipType.SUBMARINE)
+            return false;
+
+        if(findCollision(s, true) != null)
+            return true;
+        else
+            return false;
+    }
+
+    public HitResponse isHit(Point shot, boolean takesDamage)
+    {
+        boolean isAHit = false;
+        ShipType sunkShip = null;
+
+        for(Ship ship : getActiveShips())
+        {
+            if(!isUnderAnotherShip(ship))
+            {
+                if(ship.isAHit(shot, takesDamage))
+                {
+                    isAHit = true;
+                    if(ship.isSunk())
+                        sunkShip = ship.getShipType();
+
+                    if(takesDamage)
+                        recentlyDamagedShips.add(ship);
+                }
+            }
+        }
+
+        return new HitResponse(shot, isAHit, sunkShip);
+    }
+
+    public void nextTurn() {
+        shipsDamagedLastTurn.clear();
+        shipsDamagedLastTurn.addAll(recentlyDamagedShips);
+        recentlyDamagedShips.clear();
+    }
+
+    public boolean isValidShot(Point point) {
+        int x = point.getX();
+        int y = point.getY();
+
+        if(x < 0 || y < 0 || x > 9 || y > 9)
+            return false;
+        else
+            return true;
+    }
+
+    public List<Point> getShipLocation(Ship.ShipType shipType)
+    {
+        for(Ship s : getActiveShips())
+        {
+            if(s.getShipType().equals(shipType))
+                return s.getShipLocation();
+        }
+
+        //Shouldn't get here...
+        return new ArrayList<Point>();
+    }
+
+    public boolean isShipSunk(ShipType shipType)
+    {
+        for(Ship s : getAllShips())
+        {
+            if(s.getShipType().equals(shipType))
+                return s.isSunk();
+        }
+
+        //Shouldn't get here!
+        return false;
+    }
+
+    public int getBoundingBoxSize(Point point, ShipType shipType) {
+        int shootDistance = (new ShipFactory()).getShip(shipType).getShootDistance();
+
+        int boundingBoxSize = 0;
+
+        for(int row=point.getX()-shootDistance; row<=point.getX()+shootDistance; row++)
+        {
+            for(int col=point.getY()-shootDistance; col<=point.getY()+shootDistance; col++)
+            {
+                if(isValidShot(new Point(row,col)))
+                    boundingBoxSize++;
+            }
+        }
+
+        return boundingBoxSize;
+    }
+
+    public Ship getShip(ShipType shipType) {
+
+        for(Ship ship : getAllShips())
+        {
+            if(ship.getShipType().equals(shipType))
+                return ship;
+        }
+
+        return null;
+    }
 }

@@ -24,39 +24,39 @@ import ships.*;
 
 public class ShipLocations {
 
-	private List<List<Info>> shipLocations;
-	
-	public ShipLocations(Board board)
-	{
-		shipLocations = new ArrayList<List<Info>>();
+    private List<List<Info>> shipLocations;
 
-		for(int i=0;i<board.getHeight();i++)
-			shipLocations.add(new ArrayList<Info>());
+    public ShipLocations(Board board)
+    {
+        shipLocations = new ArrayList<List<Info>>();
 
-		List<Ship> ships = board.getActiveShips();
-		for(Ship s : ships)
-		{
-			for(Point p : s.getShipLocation())
-			{
-				shipLocations.get(p.getX()).add(convertToInfo(p, s));
-			}
-		}
-	}
-	
-	public Info getShip(int row, int col)
-	{
-		List<Info> cols = shipLocations.get(row);
-		for(Info i : cols)
-		{
-			if(i.getCol() == col)
-				return i;
-		}
-		
-		return null;
-	}
-	
-	private Info convertToInfo(Point p, Ship s)
-	{
-		return new Info(s.getShipType(), p.getY(), s.isDamaged(p));
-	}
+        for(int i=0;i<board.getHeight();i++)
+            shipLocations.add(new ArrayList<Info>());
+
+        List<Ship> ships = board.getActiveShips();
+        for(Ship s : ships)
+        {
+            for(Point p : s.getShipLocation())
+            {
+                shipLocations.get(p.getX()).add(convertToInfo(p, s));
+            }
+        }
+    }
+
+    public Info getShip(int row, int col)
+    {
+        List<Info> cols = shipLocations.get(row);
+        for(Info i : cols)
+        {
+            if(i.getCol() == col)
+                return i;
+        }
+
+        return null;
+    }
+
+    private Info convertToInfo(Point p, Ship s)
+    {
+        return new Info(s.getShipType(), p.getY(), s.isDamaged(p));
+    }
 }
