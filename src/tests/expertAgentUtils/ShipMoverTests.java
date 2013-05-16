@@ -188,4 +188,30 @@ public class ShipMoverTests {
         assertTrue(shipLocation.contains(new Point(5,3)));
         assertTrue(shipLocation.contains(new Point(4,3)));
     }
+
+    @Test
+    public void testMovesTwoShipsToSameDestination() {
+        destroyer.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,4), Direction.UP);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        shipMover.setTargetDestination(ShipType.DESTROYER, new Point(5,9), board);
+        shipMover.setTargetDestination(ShipType.PATROLBOAT, new Point(7,4), board);
+        shipMover.moveShips(board);
+
+        List<Point> shipLocation = board.getShipLocation(ShipType.DESTROYER);
+        assertTrue(shipLocation.contains(new Point(5,3)));
+        assertTrue(shipLocation.contains(new Point(5,2)));
+        assertTrue(shipLocation.contains(new Point(5,1)));
+
+        shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
+        assertTrue(shipLocation.contains(new Point(4,4)));
+        assertTrue(shipLocation.contains(new Point(5,4)));
+    }
 }

@@ -7,6 +7,8 @@ import ships.Ship.ShipType;
 import java.util.List;
 import java.util.ArrayList;
 
+import battleshipExceptions.InvalidShipPositionException;
+import battleshipExceptions.ShipDamagedException;
 import board.Board;
 
 public class ShipMover 
@@ -36,10 +38,17 @@ public class ShipMover
         while(movedShips < totalShips) {
             movedShips = 0;
             for(Mover mover : movers) {
-                if(mover.shouldDelayMove()) {
-
+                if(mover.shouldDelayMove() || mover.shouldCalcNewPosition()) {
                 } else {
-                    mover.move(board);
+                    try {
+                        mover.move(board);
+                    } catch(InvalidShipPositionException e) {
+                        System.out.println("Caught invalid ship position exception.");
+                    }
+                    catch(ShipDamagedException e) {
+                        System.out.println("Caught invalid ship damaged exception.");
+                    }
+
                     movedShips++;
                 }
             }

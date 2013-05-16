@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import battleshipExceptions.InvalidShipPositionException;
+import battleshipExceptions.ShipDamagedException;
 import board.Board;
 
 import ships.Ship.ShipType;
@@ -53,7 +55,11 @@ public class Mover {
         this.desiredLocation.clear();
         this.desiredPath.clear();
 
-        this.desiredLocation = ShipMover.testMoveShip(this.ship, destination, board);
+        try {
+            this.desiredLocation = ShipMover.testMoveShip(this.ship, destination, board);
+        } catch (Exception e) {
+            System.out.println("Caught and exception when I shouldn't have!");
+        }
         this.desiredPath = calculateDesiredPath(desiredLocation);
         
         for(Mover observer : observerCollection) {
@@ -200,7 +206,7 @@ public class Mover {
         }
     }
 
-    public void move(Board board) {
+    public void move(Board board) throws InvalidShipPositionException, ShipDamagedException {
         if(this.destination != null) {
             ShipMover.moveShip(this.ship, this.destination, board);
             iveMoved = true;

@@ -432,8 +432,12 @@ public class MoverTests {
         assertFalse(submarineMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
         
-        submarineMover.move(board);
-        patrolboatMover.move(board);
+        try {
+            submarineMover.move(board);
+            patrolboatMover.move(board);
+        } catch (Exception e) {
+            fail("caught exception when I shouldn't have");
+        }
 
         List<Point> actualLocation = board.getShipLocation(ShipType.SUBMARINE);
         assertTrue(actualLocation.contains(new Point(9,7)));
@@ -466,7 +470,11 @@ public class MoverTests {
         assertFalse(submarineMover.shouldDelayMove());
         assertTrue(patrolboatMover.shouldDelayMove());
         
-        submarineMover.move(board);
+        try {
+            submarineMover.move(board);
+        } catch (Exception e) {
+            fail("caught exception when I shouldn't have");
+        }
 
         assertFalse(submarineMover.isPathIntersection());
         assertFalse(patrolboatMover.isPathIntersection());
