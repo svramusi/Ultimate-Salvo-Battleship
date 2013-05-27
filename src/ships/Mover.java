@@ -10,6 +10,7 @@ import battleshipExceptions.InvalidShipPositionException;
 import battleshipExceptions.ShipDamagedException;
 import board.Board;
 
+import ships.Ship.Direction;
 import ships.Ship.ShipType;
 
 public class Mover {
@@ -68,11 +69,27 @@ public class Mover {
         }
     }
 
+    private void removePreviousEntry(Map<ShipType, List<Point>> mapToClean, ShipType shipType) {
+        boolean needsToBeCleaned = false;
+
+        for(Map.Entry<ShipType, List<Point>> mapEntry : mapToClean.entrySet()) {
+            if (mapEntry.getKey().equals(shipType))
+                needsToBeCleaned = true;
+        }
+
+        //Do this after the fact because we don't trust removing an entry in the middle of an iterator
+        if (needsToBeCleaned) {
+            mapToClean.remove(shipType);
+        }
+    }
+
     private void notifyDesiredLocation(ShipType shipType, List<Point> location) {
+        removePreviousEntry(observerDesiredLocations, shipType);
         observerDesiredLocations.put(shipType, location);
     }
 
     private void notifyDesiredPath(ShipType shipType, List<Point> path) {
+        removePreviousEntry(observerDesiredPaths, shipType);
         observerDesiredPaths.put(shipType, path);
     }
 
@@ -204,6 +221,75 @@ public class Mover {
         } else {
             return false;
         }
+    }
+
+    public Direction getCollisionDirection(Point collisionPoint, Point startingPoint) {
+        int collisionX = collisionPoint.getX();
+        int collisionY = collisionPoint.getY();
+
+        int startingX = startingPoint.getX();
+        int startingY = startingPoint.getY();
+
+        if (startingX == collisionX) {
+            if (collisionY < startingY) return Direction.LEFT;
+            else return Direction.RIGHT;
+        } else {
+            if (startingX < collisionX) return Direction.DOWN;
+            else return Direction.UP;
+        }
+    }
+
+    public List<Point> recalculateDesiredLocation() {
+        iveMoved = false;
+        List<Point> recalculatedDesiredLocation = new ArrayList<Point>();
+
+        List<Point> origDesiredLocation = this.desiredLocation;
+
+        //Do we need to do something with this??
+        List<Point> origDesiredPath = this.desiredPath;
+
+        List<Point> intersectingShipLocation = this.observerDesiredLocations.get(this.intersectingShipType);
+
+        Point collisionPoint = null;
+
+        for (Point intersectingShip : intersectingShipLocation) {
+            for (Point origDesired : origDesiredLocation)
+                if (intersectingShip.equals(origDesired))
+                    collisionPoint = origDesired;
+        }
+
+        int collisionX = collisionPoint.getX();
+        int collisionY = collisionPoint.getY();
+
+        Direction collisionDirection = getCollisionDirection(collisionPoint, this.ship.getStartPoint());
+
+        if (collisionDirection.equals(Direction.RIGHT)) {
+            for (int i=0; i<this.ship.getSize(); i++) {
+                recalculatedDesiredLocation.add(new Point(collisionX, collisionY - 1 - i));
+            }
+        }
+        else if (collisionDirection.equals(Direction.LEFT)) {
+            for (int i=0; i<this.ship.getSize(); i++) {
+                recalculatedDesiredLocation.add(new Point(collisionX, collisionY + 1 + i));
+            }
+        }
+        else if (collisionDirection.equals(Direction.DOWN)) {
+            for (int i=0; i<this.ship.getSize(); i++) {
+                recalculatedDesiredLocation.add(new Point(collisionX - 1 - i, collisionY));
+            }
+        }
+        else if (collisionDirection.equals(Direction.UP)) {
+            for (int i=0; i<this.ship.getSize(); i++) {
+                recalculatedDesiredLocation.add(new Point(collisionX + 1 + i, collisionY));
+            }
+        }
+
+        for(Mover observer : observerCollection) {
+            observer.notifyDesiredLocation(getShipType(), this.desiredLocation);
+            observer.notifyDesiredPath(getShipType(), this.desiredPath);
+        }
+
+        return recalculatedDesiredLocation;
     }
 
     public void move(Board board) throws InvalidShipPositionException, ShipDamagedException {

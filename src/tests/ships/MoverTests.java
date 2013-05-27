@@ -482,4 +482,268 @@ public class MoverTests {
         assertFalse(submarineMover.shouldDelayMove());
         assertFalse(patrolboatMover.shouldDelayMove());
     }
+
+    @Test
+    public void testRecalculateDesiredLocationFromTheRightNoMove() {
+        destroyer.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,3), Direction.UP);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(5,9), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,3), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+        
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(5,2)));
+        assertTrue(newPosition.contains(new Point(5,1)));
+        assertTrue(newPosition.contains(new Point(5,0)));
+        
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+
+    @Test
+    public void testRecalculateDesiredLocationFromTheRightMove() {
+        destroyer.setStartPoint(new Point(5,0), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,4), Direction.UP);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(5,9), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,4), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+        
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(5,3)));
+        assertTrue(newPosition.contains(new Point(5,2)));
+        assertTrue(newPosition.contains(new Point(5,1)));
+        
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+
+    @Test
+    public void testRecalculateDesiredLocationFromTheLeftNoMove() {
+        destroyer.setStartPoint(new Point(5,7), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,6), Direction.UP);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(5,0), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,6), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(5,7)));
+        assertTrue(newPosition.contains(new Point(5,8)));
+        assertTrue(newPosition.contains(new Point(5,9)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+
+    @Test
+    public void testRecalculateDesiredLocationFromTheLeftMove() {
+        destroyer.setStartPoint(new Point(5,7), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(4,5), Direction.UP);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(5,0), board);
+        patrolboatMover.calculateDesiredLocation(new Point(7,5), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(5,6)));
+        assertTrue(newPosition.contains(new Point(5,7)));
+        assertTrue(newPosition.contains(new Point(5,8)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+
+    @Test
+    public void testRecalculateDesiredLocationFromDownNoMove() {
+        destroyer.setStartPoint(new Point(2,2), Direction.UP);
+        patrolboat.setStartPoint(new Point(3,1), Direction.LEFT);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(8,2), board);
+        patrolboatMover.calculateDesiredLocation(new Point(3,5), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(2,2)));
+        assertTrue(newPosition.contains(new Point(1,2)));
+        assertTrue(newPosition.contains(new Point(0,2)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+
+    @Test
+    public void testRecalculateDesiredLocationFromDownMove() {
+        destroyer.setStartPoint(new Point(2,2), Direction.UP);
+        patrolboat.setStartPoint(new Point(4,1), Direction.LEFT);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(8,2), board);
+        patrolboatMover.calculateDesiredLocation(new Point(4,5), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(3,2)));
+        assertTrue(newPosition.contains(new Point(2,2)));
+        assertTrue(newPosition.contains(new Point(1,2)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+        }
+    
+    @Test
+    public void testRecalculateDesiredLocationFromUpNoMove() {
+        destroyer.setStartPoint(new Point(7,2), Direction.DOWN);
+        patrolboat.setStartPoint(new Point(6,1), Direction.LEFT);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(1,2), board);
+        patrolboatMover.calculateDesiredLocation(new Point(6,5), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(7,2)));
+        assertTrue(newPosition.contains(new Point(8,2)));
+        assertTrue(newPosition.contains(new Point(9,2)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
+    
+    @Test
+    public void testRecalculateDesiredLocationFromUpMove() {
+        destroyer.setStartPoint(new Point(7,2), Direction.DOWN);
+        patrolboat.setStartPoint(new Point(5,1), Direction.LEFT);
+
+        try {
+            board.addShip(destroyer);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        destroyerMover.calculateDesiredLocation(new Point(1,2), board);
+        patrolboatMover.calculateDesiredLocation(new Point(5,5), board);
+
+        assertFalse(destroyerMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(destroyerMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertTrue(destroyerMover.shouldCalcNewPosition());
+        assertFalse(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(6,2)));
+        assertTrue(newPosition.contains(new Point(7,2)));
+        assertTrue(newPosition.contains(new Point(8,2)));
+
+        List<Point> newPath = destroyerMover.getDesiredPath();
+        assertEquals(0, newPath.size());
+    }
 }
