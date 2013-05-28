@@ -38,19 +38,24 @@ public class ShipMover
         while(movedShips < totalShips) {
             movedShips = 0;
             for(Mover mover : movers) {
-                if(mover.shouldDelayMove() || mover.shouldCalcNewPosition()) {
-                } else {
-                    try {
-                        mover.move(board);
-                    } catch(InvalidShipPositionException e) {
-                        System.out.println("Caught invalid ship position exception.");
-                    }
-                    catch(ShipDamagedException e) {
-                        System.out.println("Caught invalid ship damaged exception.");
-                    }
-
-                    movedShips++;
+                if(mover.shouldDelayMove()) {
+                    continue;
                 }
+
+                if(mover.shouldCalcNewPosition()) {
+                    mover.recalculateDesiredLocation();
+                }
+
+                try {
+                    mover.move(board);
+                } catch(InvalidShipPositionException e) {
+                    System.out.println("Caught invalid ship position exception.");
+                }
+                catch(ShipDamagedException e) {
+                    System.out.println("Caught invalid ship damaged exception.");
+                }
+
+                movedShips++;
             }
         }
     }

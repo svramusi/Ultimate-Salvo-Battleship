@@ -301,4 +301,10 @@ public class ShipMover
     {
         return utility(board, ship, target, false);
     }
+
+    public static List<Point> moveShip(Ship ship, Point newStartingPoint, Direction newDirection, Board board) throws InvalidShipPositionException, ShipDamagedException
+    {
+        board.moveShip(ship.getShipType(), newStartingPoint, newDirection);
+        return ship.getShipLocation();
+    }
 }

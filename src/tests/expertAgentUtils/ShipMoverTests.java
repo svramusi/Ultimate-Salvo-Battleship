@@ -191,7 +191,7 @@ public class ShipMoverTests {
 
     @Test
     public void testMovesTwoShipsToSameDestination() {
-        destroyer.setStartPoint(new Point(5,0), Direction.RIGHT);
+        destroyer.setStartPoint(new Point(5,2), Direction.LEFT);
         patrolboat.setStartPoint(new Point(4,4), Direction.UP);
 
         try {

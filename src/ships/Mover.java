@@ -23,6 +23,9 @@ public class Mover {
     private Map<ShipType, List<Point>> observerDesiredLocations;
     private Map<ShipType, List<Point>> observerDesiredPaths;
     private boolean iveMoved;
+    private boolean recalculated;
+    private Point recalculatedStart;
+    private Direction recalculatedDirection;
 
     public Mover(Ship ship) {
         this.ship = ship;
@@ -35,6 +38,10 @@ public class Mover {
         observerDesiredPaths = new HashMap<ShipType, List<Point>>();
 
         iveMoved = false;
+
+        recalculated = false;
+        recalculatedStart = null;
+        recalculatedDirection = null;
     }
 
     public void register(Mover shipMover) {
@@ -51,6 +58,9 @@ public class Mover {
 
     public void calculateDesiredLocation(Point destination, Board board) {
         iveMoved = false;
+        recalculated = false;
+        recalculatedStart = null;
+        recalculatedDirection = null;
 
         this.destination = destination;
         this.desiredLocation.clear();
@@ -223,7 +233,7 @@ public class Mover {
         }
     }
 
-    public Direction getCollisionDirection(Point collisionPoint, Point startingPoint) {
+    private Direction getCollisionDirection(Point collisionPoint, Point startingPoint) {
         int collisionX = collisionPoint.getX();
         int collisionY = collisionPoint.getY();
 
@@ -261,42 +271,52 @@ public class Mover {
             for (int i=0; i<this.ship.getSize(); i++) {
                 newLocation.add(new Point(collisionX, collisionY - 1 - i));
             }
+            recalculatedDirection = Direction.LEFT;
         }
         else if (collisionDirection.equals(Direction.LEFT)) {
             for (int i=0; i<this.ship.getSize(); i++) {
                 newLocation.add(new Point(collisionX, collisionY + 1 + i));
             }
+            recalculatedDirection = Direction.RIGHT;
         }
         else if (collisionDirection.equals(Direction.DOWN)) {
             for (int i=0; i<this.ship.getSize(); i++) {
                 newLocation.add(new Point(collisionX - 1 - i, collisionY));
             }
+            recalculatedDirection = Direction.UP;
         }
         else if (collisionDirection.equals(Direction.UP)) {
             for (int i=0; i<this.ship.getSize(); i++) {
                 newLocation.add(new Point(collisionX + 1 + i, collisionY));
             }
+            recalculatedDirection = Direction.DOWN;
         }
+        recalculatedStart = newLocation.get(0);
 
         return newLocation;
     }
 
-    public List<Point> recalculateDesiredLocation() {
+    public void recalculateDesiredLocation() {
         iveMoved = false;
-        this.desiredLocation = getNewLocation(findCollisionPoint(this.desiredLocation, this.observerDesiredLocations.get(this.intersectingShipType)));
+        Point collisionPoint = findCollisionPoint(this.desiredLocation, this.observerDesiredLocations.get(this.intersectingShipType));
+        this.desiredLocation = getNewLocation(collisionPoint);
         this.desiredPath = calculateDesiredPath(this.desiredLocation);
+        this.recalculated = true;
 
         for(Mover observer : observerCollection) {
             observer.notifyDesiredLocation(getShipType(), this.desiredLocation);
             observer.notifyDesiredPath(getShipType(), this.desiredPath);
         }
-
-        return this.desiredLocation;
     }
 
     public void move(Board board) throws InvalidShipPositionException, ShipDamagedException {
-        if(this.destination != null) {
-            ShipMover.moveShip(this.ship, this.destination, board);
+        if (this.destination != null) {
+            if (this.recalculated) {
+                ShipMover.moveShip(this.ship, this.recalculatedStart, this.recalculatedDirection, board);
+            } else {
+                ShipMover.moveShip(this.ship, this.destination, board);
+            }
+
             iveMoved = true;
 
             for(Mover observer : observerCollection) {

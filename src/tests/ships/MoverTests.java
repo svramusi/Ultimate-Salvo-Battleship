@@ -506,8 +506,9 @@ public class MoverTests {
 
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
-        
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(5,2)));
         assertTrue(newPosition.contains(new Point(5,1)));
         assertTrue(newPosition.contains(new Point(5,0)));
@@ -539,8 +540,9 @@ public class MoverTests {
 
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
-        
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(5,3)));
         assertTrue(newPosition.contains(new Point(5,2)));
         assertTrue(newPosition.contains(new Point(5,1)));
@@ -573,7 +575,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(5,7)));
         assertTrue(newPosition.contains(new Point(5,8)));
         assertTrue(newPosition.contains(new Point(5,9)));
@@ -606,7 +609,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(5,6)));
         assertTrue(newPosition.contains(new Point(5,7)));
         assertTrue(newPosition.contains(new Point(5,8)));
@@ -639,7 +643,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(2,2)));
         assertTrue(newPosition.contains(new Point(1,2)));
         assertTrue(newPosition.contains(new Point(0,2)));
@@ -672,7 +677,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(3,2)));
         assertTrue(newPosition.contains(new Point(2,2)));
         assertTrue(newPosition.contains(new Point(1,2)));
@@ -705,7 +711,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(7,2)));
         assertTrue(newPosition.contains(new Point(8,2)));
         assertTrue(newPosition.contains(new Point(9,2)));
@@ -738,7 +745,8 @@ public class MoverTests {
         assertTrue(destroyerMover.shouldCalcNewPosition());
         assertFalse(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = destroyerMover.recalculateDesiredLocation();
+        destroyerMover.recalculateDesiredLocation();
+        List<Point> newPosition = destroyerMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(6,2)));
         assertTrue(newPosition.contains(new Point(7,2)));
         assertTrue(newPosition.contains(new Point(8,2)));
@@ -771,7 +779,8 @@ public class MoverTests {
         assertFalse(submarineMover.shouldCalcNewPosition());
         assertTrue(patrolboatMover.shouldCalcNewPosition());
 
-        List<Point> newPosition = patrolboatMover.recalculateDesiredLocation();
+        patrolboatMover.recalculateDesiredLocation();
+        List<Point> newPosition = patrolboatMover.getDesiredLocation();
         assertTrue(newPosition.contains(new Point(6,3)));
         assertTrue(newPosition.contains(new Point(5,3)));
 
