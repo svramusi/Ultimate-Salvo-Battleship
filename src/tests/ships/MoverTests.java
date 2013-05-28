@@ -746,4 +746,36 @@ public class MoverTests {
         List<Point> newPath = destroyerMover.getDesiredPath();
         assertEquals(0, newPath.size());
     }
+
+    @Test
+    public void testNewPathIsCalculatedAfterPositionRecalc() {
+        submarine.setStartPoint(new Point(7,2), Direction.RIGHT);
+        patrolboat.setStartPoint(new Point(3,3), Direction.UP);
+
+        try {
+            board.addShip(submarine);
+            board.addShip(patrolboat);
+        } catch (InvalidShipPositionException e) {
+            fail("caught InvalidShipPositionException when I shouldn't have");
+        }
+
+        submarineMover.calculateDesiredLocation(new Point(7,4), board);
+        patrolboatMover.calculateDesiredLocation(new Point(9,3), board);
+
+        assertFalse(submarineMover.isPathIntersection());
+        assertFalse(patrolboatMover.isPathIntersection());
+
+        assertTrue(submarineMover.isDestinationIntersection());
+        assertTrue(patrolboatMover.isDestinationIntersection());
+
+        assertFalse(submarineMover.shouldCalcNewPosition());
+        assertTrue(patrolboatMover.shouldCalcNewPosition());
+
+        List<Point> newPosition = patrolboatMover.recalculateDesiredLocation();
+        assertTrue(newPosition.contains(new Point(6,3)));
+        assertTrue(newPosition.contains(new Point(5,3)));
+
+        List<Point> newPath = patrolboatMover.getDesiredPath();
+        assertTrue(newPath.contains(new Point(4,3)));
+    }
 }

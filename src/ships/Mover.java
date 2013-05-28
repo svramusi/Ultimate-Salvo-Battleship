@@ -239,24 +239,18 @@ public class Mover {
         }
     }
 
-    public List<Point> recalculateDesiredLocation() {
-        iveMoved = false;
-        List<Point> recalculatedDesiredLocation = new ArrayList<Point>();
-
-        List<Point> origDesiredLocation = this.desiredLocation;
-
-        //Do we need to do something with this??
-        List<Point> origDesiredPath = this.desiredPath;
-
-        List<Point> intersectingShipLocation = this.observerDesiredLocations.get(this.intersectingShipType);
-
-        Point collisionPoint = null;
-
+    private Point findCollisionPoint(List<Point> origDesiredLocation, List<Point> intersectingShipLocation) {
         for (Point intersectingShip : intersectingShipLocation) {
             for (Point origDesired : origDesiredLocation)
                 if (intersectingShip.equals(origDesired))
-                    collisionPoint = origDesired;
+                    return origDesired;
         }
+
+        return null;
+    }
+
+    private List<Point> getNewLocation(Point collisionPoint) {
+        List<Point> newLocation = new ArrayList<Point>();
 
         int collisionX = collisionPoint.getX();
         int collisionY = collisionPoint.getY();
@@ -265,31 +259,39 @@ public class Mover {
 
         if (collisionDirection.equals(Direction.RIGHT)) {
             for (int i=0; i<this.ship.getSize(); i++) {
-                recalculatedDesiredLocation.add(new Point(collisionX, collisionY - 1 - i));
+                newLocation.add(new Point(collisionX, collisionY - 1 - i));
             }
         }
         else if (collisionDirection.equals(Direction.LEFT)) {
             for (int i=0; i<this.ship.getSize(); i++) {
-                recalculatedDesiredLocation.add(new Point(collisionX, collisionY + 1 + i));
+                newLocation.add(new Point(collisionX, collisionY + 1 + i));
             }
         }
         else if (collisionDirection.equals(Direction.DOWN)) {
             for (int i=0; i<this.ship.getSize(); i++) {
-                recalculatedDesiredLocation.add(new Point(collisionX - 1 - i, collisionY));
+                newLocation.add(new Point(collisionX - 1 - i, collisionY));
             }
         }
         else if (collisionDirection.equals(Direction.UP)) {
             for (int i=0; i<this.ship.getSize(); i++) {
-                recalculatedDesiredLocation.add(new Point(collisionX + 1 + i, collisionY));
+                newLocation.add(new Point(collisionX + 1 + i, collisionY));
             }
         }
+
+        return newLocation;
+    }
+
+    public List<Point> recalculateDesiredLocation() {
+        iveMoved = false;
+        this.desiredLocation = getNewLocation(findCollisionPoint(this.desiredLocation, this.observerDesiredLocations.get(this.intersectingShipType)));
+        this.desiredPath = calculateDesiredPath(this.desiredLocation);
 
         for(Mover observer : observerCollection) {
             observer.notifyDesiredLocation(getShipType(), this.desiredLocation);
             observer.notifyDesiredPath(getShipType(), this.desiredPath);
         }
 
-        return recalculatedDesiredLocation;
+        return this.desiredLocation;
     }
 
     public void move(Board board) throws InvalidShipPositionException, ShipDamagedException {
