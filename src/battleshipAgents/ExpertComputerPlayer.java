@@ -27,6 +27,7 @@ public class ExpertComputerPlayer extends Player  {
     private ShipPredictor predictor;
     private EnemyShips enemyShips;
     private ShipDestroyer shipDestroyer;
+    private ShipMover shipMover;
 
     private List<Point> pointsToAttack;
     private List<Point> scanResults;
@@ -40,6 +41,13 @@ public class ExpertComputerPlayer extends Player  {
         predictor = new ShipPredictor(board);
         enemyShips = new EnemyShips();
         shipDestroyer = new ShipDestroyer(board);
+        shipMover = new ShipMover();
+
+        List<Ship> activeShips = board.getActiveShips();
+        for(Ship ship : activeShips)
+        {
+            shipMover.add(new Mover(ship));
+        }
 
         didAScan = false;
         scanResults = new ArrayList<Point>();
@@ -60,8 +68,10 @@ public class ExpertComputerPlayer extends Player  {
         List<Ship> activeShips = board.getActiveShips();
         for(Ship ship : activeShips)
         {
-//          ShipMover.moveShip(ship, target, board);
+            shipMover.setTargetDestination(ship.getShipType(), target, board);
         }
+
+        shipMover.moveShips(board);
 
         salvoCount = activeShips.size();
         shipsFiredThisTurn = 0;

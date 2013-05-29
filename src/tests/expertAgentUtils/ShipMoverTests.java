@@ -214,4 +214,44 @@ public class ShipMoverTests {
         assertTrue(shipLocation.contains(new Point(4,4)));
         assertTrue(shipLocation.contains(new Point(5,4)));
     }
+
+//    @Test
+//    //This error goes far beyond the scope of this project
+//    //The problem is that the first move is to pivot to get around the ship
+//    //Not move close and wait for it to move
+//    public void testMovesThreeShipsToSameDestination() {
+//        battleship.setStartPoint(new Point(4,6), Direction.RIGHT);
+//        destroyer.setStartPoint(new Point(5,2), Direction.LEFT);
+//        patrolboat.setStartPoint(new Point(4,4), Direction.UP);
+//
+//        try {
+//            board.addShip(battleship);
+//            board.addShip(destroyer);
+//            board.addShip(patrolboat);
+//        } catch (InvalidShipPositionException e) {
+//            fail("caught InvalidShipPositionException when I shouldn't have");
+//        }
+//
+//        shipMover.setTargetDestination(ShipType.BATTLESHIP, new Point(4,0), board);
+//        shipMover.setTargetDestination(ShipType.DESTROYER, new Point(5,9), board);
+//        shipMover.setTargetDestination(ShipType.PATROLBOAT, new Point(7,4), board);
+//        shipMover.moveShips(board);
+//
+//        List<Point> shipLocation = board.getShipLocation(ShipType.DESTROYER);
+//        assertTrue(shipLocation.contains(new Point(5,3)));
+//        assertTrue(shipLocation.contains(new Point(5,2)));
+//        assertTrue(shipLocation.contains(new Point(5,1)));
+//
+//        List<Point> battleShipLocation = board.getShipLocation(ShipType.BATTLESHIP);
+//        for (Point p : battleShipLocation)
+//            System.out.println(p);
+//        assertTrue(battleShipLocation.contains(new Point(4,5)));
+//        assertTrue(battleShipLocation.contains(new Point(4,6)));
+//        assertTrue(battleShipLocation.contains(new Point(4,7)));
+//        assertTrue(battleShipLocation.contains(new Point(4,8)));
+//
+//        shipLocation = board.getShipLocation(ShipType.PATROLBOAT);
+//        assertTrue(shipLocation.contains(new Point(4,4)));
+//        assertTrue(shipLocation.contains(new Point(5,4)));
+//    }
 }
