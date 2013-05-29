@@ -1,11 +1,11 @@
 package tests.expertAgentUtils;
 
 import static org.junit.Assert.*;
+import improvedExpertAgentUtils.ShipDestroyer;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import expertAgentUtils.ShipDestroyer;
 
 import ships.Battleship;
 import ships.Carrier;

@@ -9,8 +9,8 @@ import java.util.List;
 public class BattleShip {
 
     public static void main(String[] args) {
-        Player player1 = new ExpertComputerPlayer(new Board(), "computer_player1");
-        Player player2 = new RandomComputerPlayer(new Board(), "computer_player2");
+        Player player1 = new ImprovedExpertComputerPlayer(new Board(), "computer_player1");
+        Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
 
         Player activePlayer = player1;
         Player nonactivePlayer = player2;

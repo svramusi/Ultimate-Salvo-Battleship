@@ -2,12 +2,13 @@ package tests.expertAgentUtils;
 
 import static org.junit.Assert.*;
 
+import improvedExpertAgentUtils.ShipMover;
+
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import expertAgentUtils.ShipMover;
 
 import ships.Battleship;
 import ships.Carrier;
