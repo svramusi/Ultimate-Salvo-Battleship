@@ -1,7 +1,6 @@
 package battleship;
 
-import battleshipAgents.ExpertComputerPlayer;
-import battleshipAgents.Player;
+import battleshipAgents.*;
 import board.Board;
 import board.HitResponse;
 
@@ -11,7 +10,7 @@ public class BattleShip {
 
     public static void main(String[] args) {
         Player player1 = new ExpertComputerPlayer(new Board(), "computer_player1");
-        Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
+        Player player2 = new RandomComputerPlayer(new Board(), "computer_player2");
 
         Player activePlayer = player1;
         Player nonactivePlayer = player2;
