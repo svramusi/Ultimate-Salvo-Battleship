@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import board.Board;
 

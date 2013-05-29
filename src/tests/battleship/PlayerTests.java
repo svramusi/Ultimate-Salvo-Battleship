@@ -11,8 +11,8 @@ import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
 import display.Display;
 import display.FileDisplay;
-import battleship.Player;
-import battleship.HumanPlayer;
+import battleshipAgents.Player;
+import battleshipAgents.HumanPlayer;
 
 public class PlayerTests {
 

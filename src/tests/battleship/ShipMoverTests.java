@@ -15,11 +15,11 @@ import ships.Point;
 import ships.Submarine;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
-import battleship.ShipDestroyer;
+import expertAgentUtils.ShipDestroyer;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
 
-import battleship.ShipMover;
+import expertAgentUtils.ShipMover;
 
 public class ShipMoverTests {
 	

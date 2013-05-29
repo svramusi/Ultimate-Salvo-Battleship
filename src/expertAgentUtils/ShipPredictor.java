@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 import java.util.*;
 
@@ -6,6 +6,7 @@ import ships.Point;
 import board.Board;
 import ships.Ship.ShipType;
 import ships.*;
+import battleship.Shot;
 
 public class ShipPredictor {
 	private List<Point> carrierShots;

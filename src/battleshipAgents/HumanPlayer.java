@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import java.util.*;
 
@@ -9,6 +9,7 @@ import display.ConsoleDisplay;
 import ships.Point;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
+import battleship.Shot;
 
 import battleshipExceptions.InvalidShipPositionException;
 

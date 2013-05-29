@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import ships.*;
 import ships.Ship.ShipType;
@@ -8,6 +8,7 @@ import board.Board;
 import display.Display;
 import display.FileDisplay;
 import battleshipExceptions.*;
+import battleship.Shot;
 
 import java.util.*;
 

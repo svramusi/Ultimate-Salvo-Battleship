@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 public class Particle {
 	private double x;

@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 import ships.Ship.*;
 import ships.*;
@@ -6,6 +6,7 @@ import ships.Ship.Direction;
 import battleshipExceptions.InvalidShipPositionException;
 import battleshipExceptions.ShipDamagedException;
 import board.Board;
+import battleship.BattleshipUtils;
 
 import java.util.*;
 

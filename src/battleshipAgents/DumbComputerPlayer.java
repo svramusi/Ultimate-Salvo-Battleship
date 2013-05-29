@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import java.util.*;
 
@@ -8,6 +8,7 @@ import board.Board;
 import board.HitResponse;
 import display.Display;
 import display.FileDisplay;
+import battleship.Shot;
 
 public class DumbComputerPlayer extends ComputerPlayer {
 	private Display display;

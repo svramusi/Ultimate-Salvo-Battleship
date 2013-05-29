@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import static org.junit.Assert.fail;
 import java.util.List;
@@ -10,6 +10,7 @@ import board.HitResponse;
 import ships.*;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
+import battleship.Shot;
 
 public abstract class Player {
 	private String playerName;

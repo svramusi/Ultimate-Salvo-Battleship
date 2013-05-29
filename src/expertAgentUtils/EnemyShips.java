@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 import display.Display;
 import ships.*;

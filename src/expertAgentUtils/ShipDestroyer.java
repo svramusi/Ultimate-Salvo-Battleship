@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 import ships.Point;
 import board.Board;

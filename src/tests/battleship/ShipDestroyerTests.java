@@ -14,7 +14,7 @@ import ships.Submarine;
 import ships.Ship.Direction;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
-import battleship.ShipDestroyer;
+import expertAgentUtils.ShipDestroyer;
 
 public class ShipDestroyerTests {
 

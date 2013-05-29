@@ -1,4 +1,4 @@
-package battleship;
+package battleshipAgents;
 
 import java.util.*;
 
@@ -7,6 +7,8 @@ import ships.Ship.ShipType;
 import board.*;
 import display.Display;
 import display.FileDisplay;
+import battleship.Shot;
+import expertAgentUtils.*;
 
 public class ExpertComputerPlayer extends Player  {
 	private Display display;

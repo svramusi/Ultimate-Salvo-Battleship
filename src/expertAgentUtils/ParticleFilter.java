@@ -1,4 +1,4 @@
-package battleship;
+package expertAgentUtils;
 
 import java.util.*;
 
@@ -6,6 +6,7 @@ import ships.*;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
 import board.Board;
+import battleship.Shot;
 
 public class ParticleFilter {
 
