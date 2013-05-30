@@ -3,6 +3,7 @@ package tests.expertAgentUtils;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -254,4 +255,31 @@ public class ShipMoverTests {
 //        assertTrue(shipLocation.contains(new Point(4,4)));
 //        assertTrue(shipLocation.contains(new Point(5,4)));
 //    }
+
+    @Test
+    public void testGetDistance() {
+        assertEquals(1, shipMover.getDistance(new Point(0,0), new Point(0,1)));
+        assertEquals(2, shipMover.getDistance(new Point(0,0), new Point(0,2)));
+        assertEquals(1, shipMover.getDistance(new Point(0,0), new Point(1,0)));
+        assertEquals(2, shipMover.getDistance(new Point(0,0), new Point(2,0)));
+        assertEquals(4, shipMover.getDistance(new Point(0,0), new Point(2,2)));
+
+        assertEquals(1, shipMover.getDistance(new Point(1,0), new Point(1,1)));
+        assertEquals(2, shipMover.getDistance(new Point(1,0), new Point(1,2)));
+        assertEquals(1, shipMover.getDistance(new Point(1,0), new Point(1,1)));
+        assertEquals(2, shipMover.getDistance(new Point(1,0), new Point(0,1)));
+    }
+
+    @Test
+    public void testGetMinDistance() {
+        List<Point> points = new ArrayList<Point>();
+        points.add(new Point(0,0));
+        points.add(new Point(0,1));
+        points.add(new Point(0,2));
+
+        assertEquals(0, shipMover.getMinDistance(points, new Point(0,0)));
+        assertEquals(1, shipMover.getMinDistance(points, new Point(1,0)));
+        assertEquals(2, shipMover.getMinDistance(points, new Point(2,0)));
+        assertEquals(1, shipMover.getMinDistance(points, new Point(0,3)));
+    }
 }

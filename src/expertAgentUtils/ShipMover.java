@@ -59,4 +59,24 @@ public class ShipMover
             }
         }
     }
+
+    public int getDistance(Point point1, Point point2) {
+        int xDistance = Math.abs(point1.getX() - point2.getX());
+        int yDistance = Math.abs(point1.getY() - point2.getY());
+
+        return xDistance + yDistance;
+    }
+
+    public int getMinDistance(List<Point> points, Point targetPoint) {
+        double minDistance = Double.POSITIVE_INFINITY;
+
+        int distance = 0;
+        for (Point p : points) {
+            distance = getDistance(p, targetPoint);
+            if (distance < minDistance)
+                minDistance = distance;
+        }
+
+        return (int)minDistance;
+    }
 }
