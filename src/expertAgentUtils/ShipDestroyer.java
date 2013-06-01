@@ -3,6 +3,7 @@ package expertAgentUtils;
 import ships.Point;
 import ships.Ship.ShipType;
 import board.Board;
+import battleshipExceptions.ShipMovedException;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class ShipDestroyer
     private Board board;
 
     private ShipType attackingShip;
+    private int numPossibleShots;
 
     // Need to handle tracking 2 different ships
 
@@ -39,6 +41,7 @@ public class ShipDestroyer
         foundShipButDidntSink = false;
         lastShotWasAHit = false;
         attackingShip = null;
+        numPossibleShots = 4;
     }
 
     public boolean hotOnTrail()
@@ -84,7 +87,7 @@ public class ShipDestroyer
         return false;
     }
 
-    private Point getRandomShot()
+    private Point getRandomShot() throws ShipMovedException
     {
         Random random = new Random();
 
@@ -119,10 +122,22 @@ public class ShipDestroyer
 
             nextShot = new Point(nextX, nextY);
 
-            if (!board.isValidShot(nextShot) || alreadyTriedShot(nextShot))
+            if (!board.isValidShot(nextShot))
+            {
+                numPossibleShots--;
                 validShot = false;
-            else
+            } else if (alreadyTriedShot(nextShot))
+            {
+                validShot = false;
+            } else
+            {
                 validShot = true;
+            }
+
+            // We've tried as many shots as there are possibilities (4 in
+            // non-edge case), the ship has moved
+            if (numPossibleShots == missed.size())
+                throw new ShipMovedException();
         }
 
         return nextShot;
@@ -192,12 +207,13 @@ public class ShipDestroyer
         return nextShot;
     }
 
-    public Point getNextShot()
+    public Point getNextShot() throws ShipMovedException
     {
         Point nextShot = null;
         if (lastHit.equals(origHit))
+        {
             nextShot = getRandomShot();
-        else
+        } else
         {
             if (lastShotWasAHit)
             {

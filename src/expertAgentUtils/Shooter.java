@@ -9,6 +9,7 @@ import ships.Ship.ShipType;
 import battleship.Shot;
 import board.Board;
 import board.Scan;
+import battleshipExceptions.ShipMovedException;
 
 public class Shooter
 {
@@ -123,10 +124,20 @@ public class Shooter
             pointsToAttack.add(scanResult.getNextResult());
         } else
         {
+            boolean shipHasMoved = true;
             if (shipDestroyer.hotOnTrail())
             {
-                pointsToAttack.add(shipDestroyer.getNextShot());
-            } else
+                try
+                {
+                    pointsToAttack.add(shipDestroyer.getNextShot());
+                    shipHasMoved = false;
+                } catch (ShipMovedException e)
+                {
+                    shipDestroyer.reset();
+                }
+            }
+
+            if (shipHasMoved)
             {
                 if (amIACarrier() && !didAScan)
                 {
