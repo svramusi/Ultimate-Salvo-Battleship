@@ -38,7 +38,7 @@ public class ShipMover
     // }
     // }
 
-    public void setAllTargets(Map<ShipType, Point> allTargets, Board board)
+    public void setAllTargets(Map<ShipType, MetaData> allTargets, Board board)
     {
         for (Mover mover : movers)
         {

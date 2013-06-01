@@ -13,6 +13,8 @@ import board.Board;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
 
+import expertAgentUtils.MetaData;
+
 public class Mover
 {
     private Ship ship;
@@ -62,11 +64,11 @@ public class Mover
         return ship.getShipType();
     }
 
-    public void setAllTargets(Map<ShipType, Point> allTargets, Board board)
+    public void setAllTargets(Map<ShipType, MetaData> allTargets, Board board)
     {
         // Need to change this!
         this.targetedShip = findClosestShip(allTargets);
-        calculateDesiredLocation(allTargets.get(targetedShip), board);
+        calculateDesiredLocation(allTargets.get(targetedShip).getPoint(), board);
     }
 
     private int getDistance(Point point1, Point point2)
@@ -92,16 +94,16 @@ public class Mover
         return minDistance;
     }
 
-    private ShipType findClosestShip(Map<ShipType, Point> allTargets)
+    private ShipType findClosestShip(Map<ShipType, MetaData> allTargets)
     {
         ShipType closestShip = null;
         double shortestDistance = Double.POSITIVE_INFINITY;
 
         List<Point> currentLocation = ship.getShipLocation();
 
-        for (Map.Entry<ShipType, Point> mapEntry : allTargets.entrySet())
+        for (Map.Entry<ShipType, MetaData> mapEntry : allTargets.entrySet())
         {
-            double distance = getMinDistance(currentLocation, mapEntry.getValue());
+            double distance = getMinDistance(currentLocation, mapEntry.getValue().getPoint());
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;

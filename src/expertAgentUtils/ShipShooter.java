@@ -37,9 +37,9 @@ public class ShipShooter
         turnOver = true;
     }
 
-    public Map<ShipType, Point> getAllTargets(Board board)
+    public Map<ShipType, MetaData> getAllTargets(Board board)
     {
-        Map<ShipType, Point> allTargets = new HashMap<ShipType, Point>();
+        Map<ShipType, MetaData> allTargets = new HashMap<ShipType, MetaData>();
         List<ShipType> possibleTargets = new ArrayList<ShipType>();
 
         for (Ship ship : enemyShips.getFloatingShips())
@@ -56,7 +56,7 @@ public class ShipShooter
         {
             // We only really care about one point in the list of scan results,
             // right?
-            allTargets.put(scanResult.getShipType(), scanner);
+            allTargets.put(scanResult.getShipType(), new MetaData(scanner, false, true, false));
             possibleTargets.remove(scanResult.getShipType());
         }
 
@@ -67,7 +67,7 @@ public class ShipShooter
             {
                 if (possibleTargets.contains(attackingShip))
                 {
-                    allTargets.put(attackingShip, shooter.getLastAttack());
+                    allTargets.put(attackingShip, new MetaData(shooter.getLastAttack(), true, false, false));
                     possibleTargets.remove(attackingShip);
                 }
             }
@@ -77,7 +77,7 @@ public class ShipShooter
         Shooter shooter = shooters.get(0);
         for (ShipType possibleTarget : possibleTargets)
         {
-            allTargets.put(possibleTarget, shooter.getOptimalShot(possibleTarget));
+            allTargets.put(possibleTarget, new MetaData(shooter.getOptimalShot(possibleTarget), false, false, true));
         }
         // We don't like to remove elements inside of an iterator...
         possibleTargets.clear();
