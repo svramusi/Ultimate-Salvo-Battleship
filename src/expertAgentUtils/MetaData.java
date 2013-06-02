@@ -36,4 +36,10 @@ public class MetaData
     {
         return isBestGuess;
     }
+
+    @Override
+    public String toString()
+    {
+        return "point: " + point + " is attacking: " + isAttacking + " isScanResult: " + isScanResult + " isBestGuess: " + isBestGuess;
+    }
 }

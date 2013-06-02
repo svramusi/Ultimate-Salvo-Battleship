@@ -27,7 +27,7 @@ public class ImprovedExpertComputerPlayer extends Player
 
         for (Ship ship : activeShips)
         {
-            shipMover.add(new Mover(ship));
+            shipMover.add(new Mover(ship, display));
         }
     }
 
@@ -46,7 +46,7 @@ public class ImprovedExpertComputerPlayer extends Player
         shipMover.setActiveShips(activeShips);
         shipShooter.setActiveShips(activeShips);
 
-        shipMover.setAllTargets(shipShooter.getAllTargets(board), board);
+        shipMover.setAllTargets(shipShooter.getAllTargets(board, display), board);
 
         Map<ShipType, ShipType> allTargetedShips = shipMover.getAllTargetedShips();
         for (Map.Entry<ShipType, ShipType> mapEntry : allTargetedShips.entrySet())
@@ -61,7 +61,13 @@ public class ImprovedExpertComputerPlayer extends Player
         // shipShooter.getTarget(ship.getShipType(), board), board);
         // }
 
+
+        display.writeLine("-------------------- BEFORE MOVING --------------------");
+        display.printBoard();
         shipMover.moveShips(board);
+
+        display.writeLine("-------------------- AFTER MOVING --------------------");
+        display.printBoard();
         doneWithTurn = false;
     }
 

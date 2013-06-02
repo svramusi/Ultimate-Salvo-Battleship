@@ -29,7 +29,7 @@ public class ShipShooter
 
         for (Ship ship : ships)
         {
-            shooters.add(new Shooter(board, ship));
+            shooters.add(new Shooter(board, ship, display));
         }
 
         scanResult = new ScanResult();
@@ -54,7 +54,7 @@ public class ShipShooter
         shooters.removeAll(shootersToRemove);
     }
 
-    public Map<ShipType, MetaData> getAllTargets(Board board)
+    public Map<ShipType, MetaData> getAllTargets(Board board, Display display)
     {
         Map<ShipType, MetaData> allTargets = new HashMap<ShipType, MetaData>();
         List<ShipType> possibleTargets = new ArrayList<ShipType>();
@@ -69,10 +69,13 @@ public class ShipShooter
         // ship, yet not attacked yet. Target those first so they ships don't
         // get away.
 
+        display.writeLine(Integer.toString(scanResult.size()));
+
         for (Point scanner : scanResult.getAll())
         {
             // We only really care about one point in the list of scan results,
             // right?
+            display.writeLine("adding scanner " + scanner + " as a target location");
             allTargets.put(scanResult.getShipType(), new MetaData(scanner, false, true,
                     false));
             possibleTargets.remove(scanResult.getShipType());
@@ -85,8 +88,11 @@ public class ShipShooter
             {
                 if (possibleTargets.contains(attackingShip))
                 {
-                    allTargets.put(attackingShip, new MetaData(shooter.getLastAttack(),
-                            true, false, false));
+                    Point lastAttack = shooter.getLastAttack();
+                    display.writeLine("adding last attack " + lastAttack
+                            + " as a target location");
+                    allTargets.put(attackingShip, new MetaData(lastAttack, true, false,
+                            false));
                     possibleTargets.remove(attackingShip);
                 }
             }
@@ -96,6 +102,8 @@ public class ShipShooter
         Shooter shooter = shooters.get(0);
         for (ShipType possibleTarget : possibleTargets)
         {
+            display.writeLine("adding best guess "
+                    + shooter.getOptimalShot(possibleTarget) + " as a target location");
             allTargets.put(possibleTarget,
                     new MetaData(shooter.getOptimalShot(possibleTarget), false, false,
                             true));
@@ -158,7 +166,7 @@ public class ShipShooter
             {
                 display.writeLine("I (" + ship.getShipType() + ") want to attack: "
                         + placeToAttack);
-                display.writeLine("\nBut I can't!  I'm too far away!");
+                display.writeLine("But I can't!  I'm too far away!");
                 currentShooter.undoLastAttack(placeToAttack);
 
                 // That was in invalid scan you just did
@@ -176,7 +184,10 @@ public class ShipShooter
     {
         Shooter lastShooter = shooters.get(currentShooterIndex - 1);
 
-        if (hitResponses.size() == 1)
+        if (hitResponses.size() == 0)
+        {
+            // You missed...
+        } else if (hitResponses.size() == 1)
         {
             HitResponse response = hitResponses.get(0);
 
@@ -205,7 +216,7 @@ public class ShipShooter
         } else
         // IT WAS A SCAN!
         {
-            scanResult = new ScanResult();
+            scanResult.clear();
             scanResult.setTargetedShip(lastShooter.getTargetedShip());
             for (HitResponse response : hitResponses)
             {

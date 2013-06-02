@@ -43,6 +43,14 @@ public class ShipMover
         {
             mover.setAllTargets(allTargets, board);
         }
+
+        for (Mover mover : movers)
+        {
+            if (mover.didDeferMove())
+            {
+                mover.setAllTargets(allTargets, board);
+            }
+        }
     }
 
     public Map<ShipType, ShipType> getAllTargetedShips()
