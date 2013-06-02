@@ -42,10 +42,15 @@ public class ImprovedExpertComputerPlayer extends Player
         display.writeLine("************************* START TURN *************************");
         board.nextTurn();
 
+        List<ShipType> activeShips = board.getActiveShipTypes();
+        shipMover.setActiveShips(activeShips);
+        shipShooter.setActiveShips(activeShips);
+
         shipMover.setAllTargets(shipShooter.getAllTargets(board), board);
 
         Map<ShipType, ShipType> allTargetedShips = shipMover.getAllTargetedShips();
-        for(Map.Entry<ShipType, ShipType> mapEntry : allTargetedShips.entrySet()) {
+        for (Map.Entry<ShipType, ShipType> mapEntry : allTargetedShips.entrySet())
+        {
             shipShooter.setTargetedShip(mapEntry.getKey(), mapEntry.getValue());
         }
 

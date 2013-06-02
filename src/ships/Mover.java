@@ -68,6 +68,7 @@ public class Mover
     {
         // Need to change this!
         this.targetedShip = findClosestShip(allTargets);
+
         calculateDesiredLocation(allTargets.get(targetedShip).getPoint(), board);
     }
 
@@ -103,7 +104,8 @@ public class Mover
 
         for (Map.Entry<ShipType, MetaData> mapEntry : allTargets.entrySet())
         {
-            double distance = getMinDistance(currentLocation, mapEntry.getValue().getPoint());
+            double distance = getMinDistance(currentLocation, mapEntry.getValue()
+                    .getPoint());
             if (distance < shortestDistance)
             {
                 shortestDistance = distance;
@@ -442,6 +444,14 @@ public class Mover
             {
                 observer.notifyMove(getShipType());
             }
+        }
+    }
+
+    public void sunk()
+    {
+        for (Mover observer : observerCollection)
+        {
+            observer.unregister(this);
         }
     }
 }

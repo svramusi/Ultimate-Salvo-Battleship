@@ -1,7 +1,6 @@
 package expertAgentUtils;
 
 import ships.Mover;
-import ships.Point;
 import ships.Ship.ShipType;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class ShipMover
     public Map<ShipType, ShipType> getAllTargetedShips()
     {
         Map<ShipType, ShipType> allTargetedShips = new HashMap<ShipType, ShipType>();
-        
+
         for (Mover mover : movers)
         {
             allTargetedShips.put(mover.getShipType(), mover.getTargetedShip());
@@ -92,5 +91,24 @@ public class ShipMover
                 movedShips++;
             }
         }
+    }
+
+    public void setActiveShips(List<ShipType> activeShips)
+    {
+        if (movers.size() == activeShips.size())
+            return;
+
+        List<Mover> shipsToRemove = new ArrayList<Mover>();
+
+        for (Mover mover : movers)
+        {
+            if (!activeShips.contains(mover.getShipType()))
+            {
+                mover.sunk();
+                shipsToRemove.add(mover);
+            }
+        }
+
+        movers.removeAll(shipsToRemove);
     }
 }

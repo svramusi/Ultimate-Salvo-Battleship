@@ -187,6 +187,17 @@ public class Board {
         return activeShips;
     }
 
+    public List<ShipType> getActiveShipTypes()
+    {
+        List<ShipType> activeShips = new ArrayList<ShipType>();
+        for (Ship s : getAllShips())
+        {
+            if (!s.isSunk())
+                activeShips.add(s.getShipType());
+        }
+        return activeShips;
+    }
+
     public boolean isUnderAnotherShip(Ship s) {
         if(s.getShipType() != Ship.ShipType.SUBMARINE)
             return false;
