@@ -3,6 +3,7 @@ package board;
 import ships.*;
 import ships.Ship.ShipType;
 import battleshipExceptions.*;
+import battleship.Shot;
 
 import java.util.*;
 
@@ -208,7 +209,7 @@ public class Board {
             return false;
     }
 
-    public HitResponse isHit(Point shot, boolean takesDamage)
+    public HitResponse isHit(Shot shot, boolean takesDamage)
     {
         boolean isAHit = false;
         ShipType sunkShip = null;
@@ -229,7 +230,7 @@ public class Board {
             }
         }
 
-        return new HitResponse(shot, isAHit, sunkShip);
+        return new HitResponse(shot.getPoint(), isAHit, sunkShip);
     }
 
     public void nextTurn() {

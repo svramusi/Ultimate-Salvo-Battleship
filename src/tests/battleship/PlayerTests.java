@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import ships.*;
 import ships.Ship.Direction;
+import ships.Ship.ShipType;
+import battleship.Shot;
 import battleshipAgents.HumanPlayer;
 import battleshipAgents.Player;
 import battleshipExceptions.InvalidShipPositionException;
@@ -59,8 +61,8 @@ public class PlayerTests {
 
     @Test
     public void testIsHit() {
-        assertTrue(player.isHit(new Point(0,0), true).isAHit());
-        assertFalse(player.isHit(new Point(8,8), true).isAHit());
+        assertTrue(player.isHit(new Shot(new Point(0,0), ShipType.CARRIER), true).isAHit());
+        assertFalse(player.isHit(new Shot(new Point(8,8), ShipType.CARRIER), true).isAHit());
     }
 
     @Test

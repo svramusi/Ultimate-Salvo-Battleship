@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import battleship.Shot;
+
 import ships.Destroyer;
 import ships.Point;
 import ships.Ship;
@@ -77,18 +79,18 @@ public class DestroyerTests {
     public void testTakesDamage() {
         d.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(d.isAHit(new Point(0,0), true));
-        assertTrue(d.isAHit(new Point(1,0), true));
-        assertFalse(d.isAHit(new Point(9,9), true));
+        assertTrue(d.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(d.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertFalse(d.isAHit(new Shot(new Point(9,9), ShipType.CARRIER), true));
     }
     
     @Test
     public void testSunk() {
         d.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(d.isAHit(new Point(0,0), true));
-        assertTrue(d.isAHit(new Point(1,0), true));
-        assertTrue(d.isAHit(new Point(2,0), true));
+        assertTrue(d.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(d.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertTrue(d.isAHit(new Shot(new Point(2,0), ShipType.CARRIER), true));
         
         assertTrue(d.isSunk());
     }
@@ -97,11 +99,22 @@ public class DestroyerTests {
     public void testIsDamaged() {
         d.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(d.isAHit(new Point(0,0), true));
+        assertTrue(d.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
 
         assertTrue(d.isDamaged(new Point(0,0)));
         assertFalse(d.isDamaged(new Point(1,0)));
         assertFalse(d.isDamaged(new Point(9,9)));
+    }
+    
+    @Test
+    public void testGetSunkBySubOnOneShot() {
+        d.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        assertTrue(d.isAHit(new Shot(new Point(0,0), ShipType.SUBMARINE), true));
+
+        assertTrue(d.isDamaged(new Point(0,0)));
+        assertTrue(d.isDamaged(new Point(1,0)));
+        assertTrue(d.isSunk());
     }
     
     @Test

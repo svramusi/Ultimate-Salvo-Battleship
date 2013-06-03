@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import battleship.Shot;
+
 import java.util.*;
 
 import ships.Battleship;
@@ -78,19 +80,19 @@ public class BattleshipTests {
     public void testTakesDamage() {
         b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(b.isAHit(new Point(0,0), true));
-        assertTrue(b.isAHit(new Point(1,0), true));
-        assertFalse(b.isAHit(new Point(9,9), true));
+        assertTrue(b.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(b.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertFalse(b.isAHit(new Shot(new Point(9,9), ShipType.CARRIER), true));
     }
     
     @Test
     public void testSunk() {
         b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(b.isAHit(new Point(0,0), true));
-        assertTrue(b.isAHit(new Point(1,0), true));
-        assertTrue(b.isAHit(new Point(2,0), true));
-        assertTrue(b.isAHit(new Point(3,0), true));
+        assertTrue(b.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(b.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertTrue(b.isAHit(new Shot(new Point(2,0), ShipType.CARRIER), true));
+        assertTrue(b.isAHit(new Shot(new Point(3,0), ShipType.CARRIER), true));
         
         assertTrue(b.isSunk());
     }
@@ -99,11 +101,22 @@ public class BattleshipTests {
     public void testIsDamaged() {
         b.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(b.isAHit(new Point(0,0), true));
+        assertTrue(b.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
 
         assertTrue(b.isDamaged(new Point(0,0)));
         assertFalse(b.isDamaged(new Point(1,0)));
         assertFalse(b.isDamaged(new Point(9,9)));
+    }
+    
+    @Test
+    public void testGetSunkBySubOnOneShot() {
+        b.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        assertTrue(b.isAHit(new Shot(new Point(0,0), ShipType.SUBMARINE), true));
+
+        assertTrue(b.isDamaged(new Point(0,0)));
+        assertTrue(b.isDamaged(new Point(1,0)));
+        assertTrue(b.isSunk());
     }
     
     @Test

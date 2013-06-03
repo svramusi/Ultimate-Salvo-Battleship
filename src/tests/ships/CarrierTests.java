@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import battleship.Shot;
+
 import ships.Carrier;
 import ships.Point;
 import ships.Ship;
@@ -79,20 +81,20 @@ public class CarrierTests {
     public void testTakesDamage() {
         c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(c.isAHit(new Point(0,0), true));
-        assertTrue(c.isAHit(new Point(1,0), true));
-        assertFalse(c.isAHit(new Point(9,9), true));
+        assertTrue(c.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(c.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertFalse(c.isAHit(new Shot(new Point(9,9), ShipType.CARRIER), true));
     }
     
     @Test
     public void testSunk() {
         c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(c.isAHit(new Point(0,0), true));
-        assertTrue(c.isAHit(new Point(1,0), true));
-        assertTrue(c.isAHit(new Point(2,0), true));
-        assertTrue(c.isAHit(new Point(3,0), true));
-        assertTrue(c.isAHit(new Point(4,0), true));
+        assertTrue(c.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(c.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertTrue(c.isAHit(new Shot(new Point(2,0), ShipType.CARRIER), true));
+        assertTrue(c.isAHit(new Shot(new Point(3,0), ShipType.CARRIER), true));
+        assertTrue(c.isAHit(new Shot(new Point(4,0), ShipType.CARRIER), true));
         
         assertTrue(c.isSunk());
     }
@@ -101,11 +103,22 @@ public class CarrierTests {
     public void testIsDamaged() {
         c.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(c.isAHit(new Point(0,0), true));
+        assertTrue(c.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
 
         assertTrue(c.isDamaged(new Point(0,0)));
         assertFalse(c.isDamaged(new Point(1,0)));
         assertFalse(c.isDamaged(new Point(9,9)));
+    }
+    
+    @Test
+    public void testGetSunkBySubOnOneShot() {
+        c.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        assertTrue(c.isAHit(new Shot(new Point(0,0), ShipType.SUBMARINE), true));
+
+        assertTrue(c.isDamaged(new Point(0,0)));
+        assertTrue(c.isDamaged(new Point(1,0)));
+        assertTrue(c.isSunk());
     }
     
     @Test
