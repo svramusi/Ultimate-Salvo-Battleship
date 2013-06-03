@@ -1,17 +1,17 @@
 package expertAgentUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import display.Display;
-
-import battleship.Shot;
-import board.HitResponse;
-
-import ships.Ship.ShipType;
 import ships.Point;
 import ships.Ship;
-
+import ships.Ship.ShipType;
+import battleship.Shot;
 import board.Board;
+import board.HitResponse;
+import display.Display;
 
 public class ShipShooter
 {
@@ -190,13 +190,21 @@ public class ShipShooter
                 display.writeLine("I shot at: " + response.getLocation().toString()
                         + " and I hit something!");
 
-                lastShooter.registerHit(response.getLocation());
+                for (Shooter shooter : shooters)
+                {
+                    shooter.registerHit(lastShooter.getTargetedShip(),
+                            response.getLocation());
+                }
             } else
             {
                 display.writeLine("I shot at: " + response.getLocation().toString()
                         + " and I missed!");
 
-                lastShooter.registerMiss(response.getLocation());
+                for (Shooter shooter : shooters)
+                {
+                    shooter.registerMiss(lastShooter.getTargetedShip(),
+                            response.getLocation());
+                }
             }
 
             if (response.getSunkShip() != null)

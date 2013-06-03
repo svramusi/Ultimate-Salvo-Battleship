@@ -7,9 +7,9 @@ import ships.Point;
 import ships.Ship;
 import ships.Ship.ShipType;
 import battleship.Shot;
+import battleshipExceptions.ShipMovedException;
 import board.Board;
 import board.Scan;
-import battleshipExceptions.ShipMovedException;
 import display.Display;
 
 public class Shooter
@@ -25,6 +25,8 @@ public class Shooter
     private boolean didAScan;
     private boolean lastAttackWasFromScan;
 
+    private List<Point> placesToAttack;
+
     public Shooter(Board board, Ship ship, Display display) {
         scanResult = new ScanResult();
         targetedShipType = null;
@@ -35,6 +37,8 @@ public class Shooter
 
         didAScan = false;
         lastAttackWasFromScan = false;
+
+        placesToAttack = new ArrayList<Point>();
     }
 
     public Ship getShip()
@@ -59,8 +63,6 @@ public class Shooter
 
         if (targetedShipMetaData != null && targetedShipMetaData.isAttacking())
         {
-            // need to communicate hits with each other!!!!!
-
             // Throws a nasty concurrent errors if you don't clone the list
             List<Point> previousHits = new ArrayList<Point>(
                     targetedShipMetaData.getPoints());
@@ -79,6 +81,9 @@ public class Shooter
                 display.writeLine("adding " + previousHit);
                 shipDestroyer.hit(previousHit, targetedShip);
             }
+        } else if (targetedShipMetaData != null && targetedShipMetaData.isBestGuess())
+        {
+            placesToAttack = targetedShipMetaData.getPoints();
         }
     }
 
@@ -196,19 +201,23 @@ public class Shooter
 
     public List<Point> findPlacesToAttack(Board board)
     {
-        List<Point> placesToAttack = findPlacesToAttack(board, false);
+        // List<Point> placesToAttack = findPlacesToAttack(board, false);
 
         // Regardless if the carrier scanned, no more scans can be done
         // It doesn't even matter if you're not the carrier!
         didAScan = true;
 
+        // Use the target that was found in findNextTarget()
         return placesToAttack;
     }
 
-    public Point findNextTarget(Board board)
-    {
-        return findPlacesToAttack(board, true).get(0);
-    }
+    // public Point findNextTarget(Board board)
+    // {
+    // placesToAttack = findPlacesToAttack(board, true);
+    // display.writeLine("THE NEXT PLACE TO ATTACK IS: " +
+    // placesToAttack.get(0));
+    // return placesToAttack.get(0);
+    // }
 
     public void undoLastAttack(Point lastAttack)
     {
@@ -222,16 +231,23 @@ public class Shooter
         scanResult.clear();
     }
 
-    public void registerHit(Point location)
+    public void registerHit(ShipType targetedShip, Point location)
     {
-        shipDestroyer.hit(location, targetedShipType);
+        if (this.targetedShipType == null)
+            return;
+
+        if (this.targetedShipType.equals(targetedShip))
+            shipDestroyer.hit(location, targetedShipType);
     }
 
-    public void registerMiss(Point location)
+    public void registerMiss(ShipType targetedShip, Point location)
     {
         // It doesn't need to know about every miss...
-        if (shipDestroyer.hotOnTrail())
+        if (shipDestroyer.hotOnTrail()
+                && shipDestroyer.getAttackingShipType().equals(targetedShip))
+        {
             shipDestroyer.miss(location);
+        }
     }
 
     public void sunk(Point location)
