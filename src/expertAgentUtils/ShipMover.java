@@ -53,13 +53,16 @@ public class ShipMover
         }
     }
 
-    public Map<ShipType, ShipType> getAllTargetedShips()
+    public Map<ShipType, Map<ShipType, MetaData>> getAllTargetedShips()
     {
-        Map<ShipType, ShipType> allTargetedShips = new HashMap<ShipType, ShipType>();
+        Map<ShipType, Map<ShipType, MetaData>> allTargetedShips = new HashMap<ShipType, Map<ShipType, MetaData>>();
 
         for (Mover mover : movers)
         {
-            allTargetedShips.put(mover.getShipType(), mover.getTargetedShip());
+            Map<ShipType, MetaData> shipData = new HashMap<ShipType, MetaData>();
+            shipData.put(mover.getTargetedShip(), mover.getMetaData());
+
+            allTargetedShips.put(mover.getShipType(), shipData);
         }
 
         return allTargetedShips;

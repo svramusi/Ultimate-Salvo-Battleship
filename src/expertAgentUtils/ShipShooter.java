@@ -71,13 +71,10 @@ public class ShipShooter
 
         display.writeLine(Integer.toString(scanResult.size()));
 
-        for (Point scanner : scanResult.getAll())
+        if (scanResult.size() > 0)
         {
-            // We only really care about one point in the list of scan results,
-            // right?
-            display.writeLine("adding scanner " + scanner + " as a target location");
-            allTargets.put(scanResult.getShipType(), new MetaData(scanner, false, true,
-                    false));
+            allTargets.put(scanResult.getShipType(), new MetaData(scanResult.getAll(),
+                    false, true, false));
             possibleTargets.remove(scanResult.getShipType());
         }
 
@@ -88,11 +85,8 @@ public class ShipShooter
             {
                 if (possibleTargets.contains(attackingShip))
                 {
-                    Point lastAttack = shooter.getLastAttack();
-                    display.writeLine("adding last attack " + lastAttack
-                            + " as a target location");
-                    allTargets.put(attackingShip, new MetaData(lastAttack, true, false,
-                            false));
+                    allTargets.put(attackingShip, new MetaData(shooter.getAllHits(),
+                            true, false, false));
                     possibleTargets.remove(attackingShip);
                 }
             }
@@ -102,11 +96,10 @@ public class ShipShooter
         Shooter shooter = shooters.get(0);
         for (ShipType possibleTarget : possibleTargets)
         {
-            display.writeLine("adding best guess "
-                    + shooter.getOptimalShot(possibleTarget) + " as a target location");
-            allTargets.put(possibleTarget,
-                    new MetaData(shooter.getOptimalShot(possibleTarget), false, false,
-                            true));
+            List<Point> optimalShot = new ArrayList<Point>();
+            optimalShot.add(shooter.getOptimalShot(possibleTarget));
+
+            allTargets.put(possibleTarget, new MetaData(optimalShot, false, false, true));
         }
         // We don't like to remove elements inside of an iterator...
         possibleTargets.clear();
@@ -115,14 +108,15 @@ public class ShipShooter
         return allTargets;
     }
 
-    public void setTargetedShip(ShipType yourShip, ShipType enemyShip)
+    public void setTargetedShipMetaData(ShipType yourShip, ShipType enemyShip,
+            MetaData targetMetaData)
     {
         currentShooterIndex = 0;
         for (Shooter shooter : shooters)
         {
             if (shooter.getShipType().equals(yourShip))
             {
-                shooter.setTargetedShip(enemyShip);
+                shooter.setTargetedShipMetaData(enemyShip, targetMetaData);
             }
         }
     }
@@ -211,7 +205,10 @@ public class ShipShooter
                 enemyShips.sunkShip(sunkShip);
                 display.writeLine("You sunk their " + sunkShip + "!");
 
-                lastShooter.sunk();
+                for (Shooter shooter : shooters)
+                {
+                    shooter.sunk(lastShooter.getTargetedShip());
+                }
             }
         } else
         // IT WAS A SCAN!

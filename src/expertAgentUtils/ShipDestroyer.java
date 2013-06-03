@@ -12,9 +12,10 @@ public class ShipDestroyer
     private boolean foundShipButDidntSink;
     private boolean lastShotWasAHit;
 
-    private Point origHit;
-    private Point lastHit;
+    // private Point origHit;
+    // private Point lastHit;
 
+    private List<Point> hits;
     private List<Point> missed;
 
     private Board board;
@@ -26,6 +27,7 @@ public class ShipDestroyer
 
     public ShipDestroyer(Board board) {
         this.board = board;
+        hits = new ArrayList<Point>();
         missed = new ArrayList<Point>();
 
         reset();
@@ -33,15 +35,26 @@ public class ShipDestroyer
 
     public void reset()
     {
-        origHit = null;
-        lastHit = null;
+        // origHit = null;
+        // lastHit = null;
 
+        hits.clear();
         missed.clear();
 
         foundShipButDidntSink = false;
         lastShotWasAHit = false;
         attackingShip = null;
         numPossibleShots = 4;
+    }
+
+    private Point getFirstHit()
+    {
+        return hits.get(0);
+    }
+
+    private Point getLastHit()
+    {
+        return hits.get(hits.size() - 1);
     }
 
     public boolean hotOnTrail()
@@ -60,14 +73,17 @@ public class ShipDestroyer
         foundShipButDidntSink = true;
         lastShotWasAHit = true;
 
-        if (origHit == null)
-        {
-            origHit = point;
-            lastHit = point;
-        } else
-        {
-            lastHit = point;
-        }
+        if (!hits.contains(point))
+            hits.add(point);
+
+        // if (origHit == null)
+        // {
+        // origHit = point;
+        // lastHit = point;
+        // } else
+        // {
+        // lastHit = point;
+        // }
     }
 
     public void miss(Point point)
@@ -97,6 +113,7 @@ public class ShipDestroyer
         int nextX;
         int nextY;
 
+        Point origHit = hits.get(0);
         int origX = origHit.getX();
         int origY = origHit.getY();
 
@@ -145,7 +162,7 @@ public class ShipDestroyer
 
     private boolean isYIncreasing()
     {
-        if (lastHit.getY() > origHit.getY())
+        if (getLastHit().getY() > getFirstHit().getY())
             return true;
         else
             return false;
@@ -153,7 +170,7 @@ public class ShipDestroyer
 
     private boolean isYDecreasing()
     {
-        if (lastHit.getY() < origHit.getY())
+        if (getLastHit().getY() < getFirstHit().getY())
             return true;
         else
             return false;
@@ -161,7 +178,7 @@ public class ShipDestroyer
 
     private boolean isXIncreasing()
     {
-        if (lastHit.getX() > origHit.getX())
+        if (getLastHit().getX() > getFirstHit().getX())
             return true;
         else
             return false;
@@ -169,7 +186,7 @@ public class ShipDestroyer
 
     private boolean isXDecreasing()
     {
-        if (lastHit.getX() < origHit.getX())
+        if (getLastHit().getX() < getFirstHit().getX())
             return true;
         else
             return false;
@@ -180,13 +197,13 @@ public class ShipDestroyer
         Point nextShot = null;
 
         if (isXIncreasing())
-            nextShot = new Point(lastHit.getX() + 1, lastHit.getY());
+            nextShot = new Point(getLastHit().getX() + 1, getLastHit().getY());
         else if (isXDecreasing())
-            nextShot = new Point(lastHit.getX() - 1, lastHit.getY());
+            nextShot = new Point(getLastHit().getX() - 1, getLastHit().getY());
         else if (isYIncreasing())
-            nextShot = new Point(lastHit.getX(), lastHit.getY() + 1);
+            nextShot = new Point(getLastHit().getX(), getLastHit().getY() + 1);
         else if (isYDecreasing())
-            nextShot = new Point(lastHit.getX(), lastHit.getY() - 1);
+            nextShot = new Point(getLastHit().getX(), getLastHit().getY() - 1);
 
         return nextShot;
     }
@@ -196,13 +213,13 @@ public class ShipDestroyer
         Point nextShot = null;
 
         if (isXIncreasing())
-            nextShot = new Point(origHit.getX() - 1, origHit.getY());
+            nextShot = new Point(getFirstHit().getX() - 1, getFirstHit().getY());
         else if (isXDecreasing())
-            nextShot = new Point(origHit.getX() + 1, origHit.getY());
+            nextShot = new Point(getFirstHit().getX() + 1, getFirstHit().getY());
         else if (isYIncreasing())
-            nextShot = new Point(origHit.getX(), origHit.getY() - 1);
+            nextShot = new Point(getFirstHit().getX(), getFirstHit().getY() - 1);
         else if (isYDecreasing())
-            nextShot = new Point(origHit.getX(), origHit.getY() + 1);
+            nextShot = new Point(getFirstHit().getX(), getFirstHit().getY() + 1);
 
         return nextShot;
     }
@@ -210,7 +227,7 @@ public class ShipDestroyer
     public Point getNextShot() throws ShipMovedException
     {
         Point nextShot = null;
-        if (lastHit.equals(origHit))
+        if (getLastHit().equals(getFirstHit()))
         {
             nextShot = getRandomShot();
         } else
@@ -227,11 +244,9 @@ public class ShipDestroyer
         return nextShot;
     }
 
-    public Point getLastHit()
+    public List<Point> getAllHits()
     {
-        // Is it possible for this to be null? If it's null, then we shouldn't
-        // be using the ship destroyer.
-        return lastHit;
+        return hits;
     }
 
 }

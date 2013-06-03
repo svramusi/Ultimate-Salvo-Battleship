@@ -14,9 +14,9 @@ import display.Display;
 
 public class Shooter
 {
+    private ShipType targetedShipType;
 
     private ScanResult scanResult;
-    private ShipType targetedShipType;
     private ShipDestroyer shipDestroyer;
     private ShipPredictor predictor;
     private Ship ship;
@@ -52,9 +52,31 @@ public class Shooter
         this.scanResult = scanResult;
     }
 
-    public void setTargetedShip(ShipType targetedShip)
+    public void setTargetedShipMetaData(ShipType targetedShip,
+            MetaData targetedShipMetaData)
     {
         this.targetedShipType = targetedShip;
+
+        if (targetedShipMetaData != null && targetedShipMetaData.isAttacking())
+        {
+            // need to communicate hits with eachother!!!!!
+
+            // Throws a nasty concurrent errors if you don't clone the list
+            List<Point> previousHits = new ArrayList<Point>(
+                    targetedShipMetaData.getPoints());
+
+            if (previousHits.size() > 0)
+            {
+                // This is correct... right?
+                shipDestroyer.reset();
+            }
+
+            for (Point previousHit : previousHits)
+            {
+                display.writeLine("adding " + previousHit);
+                shipDestroyer.hit(previousHit, targetedShip);
+            }
+        }
     }
 
     public ShipType getTargetedShip()
@@ -209,10 +231,13 @@ public class Shooter
             shipDestroyer.miss(location);
     }
 
-    public void sunk()
+    public void sunk(ShipType sunkShip)
     {
-        shipDestroyer.reset();
-        this.targetedShipType = null;
+        if (this.targetedShipType.equals(sunkShip))
+        {
+            shipDestroyer.reset();
+            this.targetedShipType = null;
+        }
     }
 
     public void reset()
@@ -233,8 +258,8 @@ public class Shooter
         return shipDestroyer.getAttackingShipType();
     }
 
-    public Point getLastAttack()
+    public List<Point> getAllHits()
     {
-        return shipDestroyer.getLastHit();
+        return shipDestroyer.getAllHits();
     }
 }

@@ -10,6 +10,7 @@ import display.Display;
 import display.FileDisplay;
 import expertAgentUtils.ShipMover;
 import expertAgentUtils.ShipShooter;
+import expertAgentUtils.MetaData;
 
 public class ImprovedExpertComputerPlayer extends Player
 {
@@ -48,10 +49,16 @@ public class ImprovedExpertComputerPlayer extends Player
 
         shipMover.setAllTargets(shipShooter.getAllTargets(board, display), board);
 
-        Map<ShipType, ShipType> allTargetedShips = shipMover.getAllTargetedShips();
-        for (Map.Entry<ShipType, ShipType> mapEntry : allTargetedShips.entrySet())
+        Map<ShipType, Map<ShipType, MetaData>> allTargetedShips = shipMover
+                .getAllTargetedShips();
+        for (Map.Entry<ShipType, Map<ShipType, MetaData>> mapEntry : allTargetedShips
+                .entrySet())
         {
-            shipShooter.setTargetedShip(mapEntry.getKey(), mapEntry.getValue());
+            for (Map.Entry<ShipType, MetaData> mapEntry2 : mapEntry.getValue().entrySet())
+            {
+                shipShooter.setTargetedShipMetaData(mapEntry.getKey(),
+                        mapEntry2.getKey(), mapEntry2.getValue());
+            }
         }
 
         // List<Ship> activeShips = getActiveShips();
@@ -60,7 +67,6 @@ public class ImprovedExpertComputerPlayer extends Player
         // shipMover.setTargetDestination(ship.getShipType(),
         // shipShooter.getTarget(ship.getShipType(), board), board);
         // }
-
 
         display.writeLine("-------------------- BEFORE MOVING --------------------");
         display.printBoard();
@@ -95,7 +101,7 @@ public class ImprovedExpertComputerPlayer extends Player
 
         for (Shot shot : shots)
         {
-            hitResponses.add(isHit(shot.getPoint(), dealDamage));
+            hitResponses.add(isHit(shot, dealDamage));
         }
 
         shipShooter.addInfo(shots);

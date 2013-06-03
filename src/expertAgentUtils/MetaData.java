@@ -1,25 +1,27 @@
 package expertAgentUtils;
 
+import java.util.List;
+
 import ships.Point;
 
 public class MetaData
 {
-    private Point point;
+    private List<Point> points;
     private boolean isAttacking;
     private boolean isScanResult;
     private boolean isBestGuess;
 
-    public MetaData(Point point, boolean isAttacking, boolean isScanResult,
+    public MetaData(List<Point> points, boolean isAttacking, boolean isScanResult,
             boolean isBestGuess) {
-        this.point = point;
+        this.points = points;
         this.isAttacking = isAttacking;
         this.isScanResult = isScanResult;
         this.isBestGuess = isBestGuess;
     }
 
-    public Point getPoint()
+    public List<Point> getPoints()
     {
-        return point;
+        return points;
     }
 
     public boolean isAttacking()
@@ -40,6 +42,16 @@ public class MetaData
     @Override
     public String toString()
     {
-        return "point: " + point + " is attacking: " + isAttacking + " isScanResult: " + isScanResult + " isBestGuess: " + isBestGuess;
+        StringBuilder sb = new StringBuilder();
+        sb.append("points: ");
+        for (Point point : points)
+        {
+            sb.append(point + " _ ");
+        }
+
+        sb.append(" is attacking: " + isAttacking + " isScanResult: " + isScanResult
+                + " isBestGuess: " + isBestGuess);
+
+        return sb.toString();
     }
 }
