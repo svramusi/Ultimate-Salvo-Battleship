@@ -59,7 +59,7 @@ public class Shooter
 
         if (targetedShipMetaData != null && targetedShipMetaData.isAttacking())
         {
-            // need to communicate hits with eachother!!!!!
+            // need to communicate hits with each other!!!!!
 
             // Throws a nasty concurrent errors if you don't clone the list
             List<Point> previousHits = new ArrayList<Point>(
@@ -68,7 +68,10 @@ public class Shooter
             if (previousHits.size() > 0)
             {
                 // This is correct... right?
-                shipDestroyer.reset();
+                if (this.targetedShipType.equals(shipDestroyer.getAttackingShipType()))
+                    shipDestroyer.clearHits();
+                else
+                    shipDestroyer.reset();
             }
 
             for (Point previousHit : previousHits)
@@ -231,9 +234,9 @@ public class Shooter
             shipDestroyer.miss(location);
     }
 
-    public void sunk(ShipType sunkShip)
+    public void sunk(Point location)
     {
-        if (this.targetedShipType.equals(sunkShip))
+        if (shipDestroyer.isTargeting(location))
         {
             shipDestroyer.reset();
             this.targetedShipType = null;

@@ -207,7 +207,7 @@ public class ShipShooter
 
                 for (Shooter shooter : shooters)
                 {
-                    shooter.sunk(lastShooter.getTargetedShip());
+                    shooter.sunk(response.getLocation());
                 }
             }
         } else

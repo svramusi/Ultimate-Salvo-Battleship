@@ -47,6 +47,11 @@ public class ShipDestroyer
         numPossibleShots = 4;
     }
 
+    public void clearHits()
+    {
+        hits.clear();
+    }
+
     private Point getFirstHit()
     {
         return hits.get(0);
@@ -249,4 +254,14 @@ public class ShipDestroyer
         return hits;
     }
 
+    public boolean isTargeting(Point location)
+    {
+        for (Point p : getAllHits())
+        {
+            if (p.equals(location))
+                return true;
+        }
+
+        return false;
+    }
 }
