@@ -1,14 +1,18 @@
 package battleship;
 
-import battleshipAgents.*;
+import java.util.List;
+
+import battleshipAgents.ExpertComputerPlayer;
+import battleshipAgents.ImprovedExpertComputerPlayer;
+import battleshipAgents.Player;
 import board.Board;
 import board.HitResponse;
 
-import java.util.List;
+public class BattleShip
+{
 
-public class BattleShip {
-
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         Player player1 = new ImprovedExpertComputerPlayer(new Board(), "computer_player1");
         Player player2 = new ExpertComputerPlayer(new Board(), "computer_player2");
 
@@ -19,10 +23,10 @@ public class BattleShip {
         List<HitResponse> hitResults;
         int turnCount = 0;
 
-        while(!player1.isDefeated() && !player2.isDefeated())
+        while (!player1.isDefeated() && !player2.isDefeated())
         {
             activePlayer.moveShips();
-            while(!activePlayer.isTurnOver())
+            while (!activePlayer.isTurnOver())
             {
                 List<Shot> shots = activePlayer.takeAShot();
 
@@ -36,8 +40,8 @@ public class BattleShip {
             turnCount++;
         }
 
-        System.out.println("The game is over after " + turnCount/2 + " turns");
-        if(player1.isDefeated())
+        System.out.println("The game is over after " + turnCount / 2 + " turns");
+        if (player1.isDefeated())
             System.out.println(player2.getName() + " wins!!");
         else
             System.out.println(player1.getName() + " wins!!");

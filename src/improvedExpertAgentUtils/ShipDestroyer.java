@@ -1,11 +1,13 @@
-package expertAgentUtils;
+package improvedExpertAgentUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import ships.Point;
 import ships.Ship.ShipType;
-import board.Board;
 import battleshipExceptions.ShipMovedException;
-
-import java.util.*;
+import board.Board;
 
 public class ShipDestroyer
 {

@@ -1,19 +1,18 @@
 package ships;
 
+import improvedExpertAgentUtils.MetaData;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-
-import battleshipExceptions.InvalidShipPositionException;
-import battleshipExceptions.ShipDamagedException;
-import board.Board;
 
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
-
-import expertAgentUtils.MetaData;
+import battleshipExceptions.InvalidShipPositionException;
+import battleshipExceptions.ShipDamagedException;
+import board.Board;
 import display.Display;
 
 public class Mover

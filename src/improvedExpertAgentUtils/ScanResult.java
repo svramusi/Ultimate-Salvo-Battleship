@@ -1,7 +1,7 @@
-package expertAgentUtils;
+package improvedExpertAgentUtils;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import ships.Point;
 import ships.Ship.ShipType;

@@ -1,13 +1,12 @@
-package expertAgentUtils;
+package improvedExpertAgentUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ships.Mover;
 import ships.Ship.ShipType;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 import battleshipExceptions.InvalidShipPositionException;
 import battleshipExceptions.ShipDamagedException;
 import board.Board;

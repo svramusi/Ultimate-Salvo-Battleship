@@ -1,10 +1,11 @@
-package expertAgentUtils;
+package improvedExpertAgentUtils;
 
-import display.Display;
-import ships.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import ships.Ship;
 import ships.Ship.ShipType;
-
-import java.util.*;
+import ships.ShipFactory;
 
 public class EnemyShips
 {

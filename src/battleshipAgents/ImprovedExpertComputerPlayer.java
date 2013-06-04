@@ -1,16 +1,21 @@
 package battleshipAgents;
 
-import java.util.*;
+import improvedExpertAgentUtils.MetaData;
+import improvedExpertAgentUtils.ShipMover;
+import improvedExpertAgentUtils.ShipShooter;
 
-import ships.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import ships.Mover;
+import ships.Ship;
 import ships.Ship.ShipType;
 import battleship.Shot;
-import board.*;
+import board.Board;
+import board.HitResponse;
 import display.Display;
 import display.FileDisplay;
-import expertAgentUtils.ShipMover;
-import expertAgentUtils.ShipShooter;
-import expertAgentUtils.MetaData;
 
 public class ImprovedExpertComputerPlayer extends Player
 {
