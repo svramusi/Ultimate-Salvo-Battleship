@@ -3,7 +3,6 @@ package battleshipAgents;
 import static org.junit.Assert.fail;
 import java.util.List;
 
-import display.Display;
 import battleship.Shot;
 import battleshipExceptions.InvalidShipPositionException;
 import board.Board;
@@ -64,7 +63,7 @@ public abstract class Player {
         return playerName;
     }
 
-    public HitResponse isHit(Point shot, boolean dealDamage)
+    public HitResponse isHit(Shot shot, boolean dealDamage)
     {
         return board.isHit(shot, dealDamage);
     }

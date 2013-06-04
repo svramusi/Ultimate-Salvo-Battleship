@@ -14,6 +14,7 @@ import ships.Ship;
 import ships.Submarine;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
+import battleship.Shot;
 
 
 public class SubmarineTests {
@@ -79,16 +80,16 @@ public class SubmarineTests {
     public void testTakesDamage() {
         s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(s.isAHit(new Point(0,0), true));
-        assertTrue(s.isAHit(new Point(1,0), true));
-        assertFalse(s.isAHit(new Point(9,9), true));
+        assertTrue(s.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(s.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertFalse(s.isAHit(new Shot(new Point(9,9), ShipType.CARRIER), true));
     }
     
     @Test
     public void testSunk() {
         s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(s.isAHit(new Point(0,0), true));
+        assertTrue(s.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
         assertTrue(s.isSunk());
     }
     
@@ -96,13 +97,23 @@ public class SubmarineTests {
     public void testIsDamaged() {
         s.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(s.isAHit(new Point(0,0), true));
+        assertTrue(s.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
 
         assertTrue(s.isDamaged(new Point(0,0)));
         assertFalse(s.isDamaged(new Point(1,0)));
         assertFalse(s.isDamaged(new Point(9,9)));
     }
-    
+
+    @Test
+    public void testGetSunkBySubOnOneShot() {
+        s.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        assertTrue(s.isAHit(new Shot(new Point(0,0), ShipType.SUBMARINE), true));
+
+        assertTrue(s.isDamaged(new Point(0,0)));
+        assertTrue(s.isDamaged(new Point(1,0)));
+        assertTrue(s.isSunk());
+    }
     
     @Test
     public void testGetShipName() {

@@ -75,7 +75,7 @@ public class DumbComputerPlayer extends ComputerPlayer {
 
         for(Shot shot : shots)
         {
-            hitResponses.add(isHit(shot.getPoint(), dealDamage));
+            hitResponses.add(isHit(shot, dealDamage));
         }
 
         display.writeLine("board after:");

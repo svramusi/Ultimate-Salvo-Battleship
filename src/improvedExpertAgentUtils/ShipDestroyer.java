@@ -1,26 +1,33 @@
-package improvedExpertAgentUtils;
+package expertAgentUtils;
 
 import ships.Point;
+import ships.Ship.ShipType;
 import board.Board;
+import battleshipExceptions.ShipMovedException;
 
 import java.util.*;
 
-public class ShipDestroyer {
+public class ShipDestroyer
+{
     private boolean foundShipButDidntSink;
     private boolean lastShotWasAHit;
 
-    private Point origHit;
-    private Point lastHit;
+    // private Point origHit;
+    // private Point lastHit;
 
+    private List<Point> hits;
     private List<Point> missed;
 
     private Board board;
 
-    //Need to handle tracking 2 different ships
+    private ShipType attackingShip;
+    private int numPossibleShots;
 
-    public ShipDestroyer(Board board)
-    {
+    // Need to handle tracking 2 different ships
+
+    public ShipDestroyer(Board board) {
         this.board = board;
+        hits = new ArrayList<Point>();
         missed = new ArrayList<Point>();
 
         reset();
@@ -28,13 +35,31 @@ public class ShipDestroyer {
 
     public void reset()
     {
-        origHit = null;
-        lastHit = null;
+        // origHit = null;
+        // lastHit = null;
 
+        hits.clear();
         missed.clear();
 
         foundShipButDidntSink = false;
         lastShotWasAHit = false;
+        attackingShip = null;
+        numPossibleShots = 4;
+    }
+
+    public void clearHits()
+    {
+        hits.clear();
+    }
+
+    private Point getFirstHit()
+    {
+        return hits.get(0);
+    }
+
+    private Point getLastHit()
+    {
+        return hits.get(hits.size() - 1);
     }
 
     public boolean hotOnTrail()
@@ -42,15 +67,28 @@ public class ShipDestroyer {
         return foundShipButDidntSink;
     }
 
-    public void hit(Point point)
+    public ShipType getAttackingShipType()
     {
+        return this.attackingShip;
+    }
+
+    public void hit(Point point, ShipType attackingShip)
+    {
+        this.attackingShip = attackingShip;
         foundShipButDidntSink = true;
         lastShotWasAHit = true;
 
-        if(origHit == null)
-            origHit = point;
-        else
-            lastHit = point;
+        if (!hits.contains(point))
+            hits.add(point);
+
+        // if (origHit == null)
+        // {
+        // origHit = point;
+        // lastHit = point;
+        // } else
+        // {
+        // lastHit = point;
+        // }
     }
 
     public void miss(Point point)
@@ -61,16 +99,16 @@ public class ShipDestroyer {
 
     private boolean alreadyTriedShot(Point shot)
     {
-        for(Point previousShot : missed)
+        for (Point previousShot : missed)
         {
-            if(previousShot.equals(shot))
+            if (previousShot.equals(shot))
                 return true;
         }
 
         return false;
     }
 
-    private Point getRandomShot()
+    private Point getRandomShot() throws ShipMovedException
     {
         Random random = new Random();
 
@@ -80,25 +118,25 @@ public class ShipDestroyer {
         int nextX;
         int nextY;
 
+        Point origHit = hits.get(0);
         int origX = origHit.getX();
         int origY = origHit.getY();
 
-        while(!validShot)
+        while (!validShot)
         {
-            if(random.nextInt() % 2 == 0)
+            if (random.nextInt() % 2 == 0)
             {
-                if(random.nextInt() % 2 == 0)
+                if (random.nextInt() % 2 == 0)
                     nextX = origX - 1;
                 else
                     nextX = origX + 1;
 
                 nextY = origY;
-            }
-            else
+            } else
             {
                 nextX = origX;
 
-                if(random.nextInt() % 2 == 0)
+                if (random.nextInt() % 2 == 0)
                     nextY = origY - 1;
                 else
                     nextY = origY + 1;
@@ -106,10 +144,22 @@ public class ShipDestroyer {
 
             nextShot = new Point(nextX, nextY);
 
-            if(!board.isValidShot(nextShot) || alreadyTriedShot(nextShot))
+            if (!board.isValidShot(nextShot))
+            {
+                numPossibleShots--;
                 validShot = false;
-            else
+            } else if (alreadyTriedShot(nextShot))
+            {
+                validShot = false;
+            } else
+            {
                 validShot = true;
+            }
+
+            // We've tried as many shots as there are possibilities (4 in
+            // non-edge case), the ship has moved
+            if (numPossibleShots == missed.size())
+                throw new ShipMovedException();
         }
 
         return nextShot;
@@ -117,7 +167,7 @@ public class ShipDestroyer {
 
     private boolean isYIncreasing()
     {
-        if(lastHit.getY() > origHit.getY())
+        if (getLastHit().getY() > getFirstHit().getY())
             return true;
         else
             return false;
@@ -125,7 +175,7 @@ public class ShipDestroyer {
 
     private boolean isYDecreasing()
     {
-        if(lastHit.getY() < origHit.getY())
+        if (getLastHit().getY() < getFirstHit().getY())
             return true;
         else
             return false;
@@ -133,7 +183,7 @@ public class ShipDestroyer {
 
     private boolean isXIncreasing()
     {
-        if(lastHit.getX() > origHit.getX())
+        if (getLastHit().getX() > getFirstHit().getX())
             return true;
         else
             return false;
@@ -141,7 +191,7 @@ public class ShipDestroyer {
 
     private boolean isXDecreasing()
     {
-        if(lastHit.getX() < origHit.getX())
+        if (getLastHit().getX() < getFirstHit().getX())
             return true;
         else
             return false;
@@ -151,14 +201,14 @@ public class ShipDestroyer {
     {
         Point nextShot = null;
 
-        if(isXIncreasing())
-            nextShot = new Point(lastHit.getX()+1, lastHit.getY());
-        else if(isXDecreasing())
-            nextShot = new Point(lastHit.getX()-1, lastHit.getY());
-        else if(isYIncreasing())
-            nextShot = new Point(lastHit.getX(), lastHit.getY()+1);
-        else if(isYDecreasing())
-            nextShot = new Point(lastHit.getX(), lastHit.getY()-1);
+        if (isXIncreasing())
+            nextShot = new Point(getLastHit().getX() + 1, getLastHit().getY());
+        else if (isXDecreasing())
+            nextShot = new Point(getLastHit().getX() - 1, getLastHit().getY());
+        else if (isYIncreasing())
+            nextShot = new Point(getLastHit().getX(), getLastHit().getY() + 1);
+        else if (isYDecreasing())
+            nextShot = new Point(getLastHit().getX(), getLastHit().getY() - 1);
 
         return nextShot;
     }
@@ -167,32 +217,51 @@ public class ShipDestroyer {
     {
         Point nextShot = null;
 
-        if(isXIncreasing())
-            nextShot = new Point(origHit.getX()-1, origHit.getY());
-        else if(isXDecreasing())
-            nextShot = new Point(origHit.getX()+1, origHit.getY());
-        else if(isYIncreasing())
-            nextShot = new Point(origHit.getX(), origHit.getY()-1);
-        else if(isYDecreasing())
-            nextShot = new Point(origHit.getX(), origHit.getY()+1);
+        if (isXIncreasing())
+            nextShot = new Point(getFirstHit().getX() - 1, getFirstHit().getY());
+        else if (isXDecreasing())
+            nextShot = new Point(getFirstHit().getX() + 1, getFirstHit().getY());
+        else if (isYIncreasing())
+            nextShot = new Point(getFirstHit().getX(), getFirstHit().getY() - 1);
+        else if (isYDecreasing())
+            nextShot = new Point(getFirstHit().getX(), getFirstHit().getY() + 1);
 
         return nextShot;
     }
 
-    public Point getNextShot()
+    public Point getNextShot() throws ShipMovedException
     {
         Point nextShot = null;
-        if(lastHit == null)
-            nextShot = getRandomShot();
-        else
+        if (getLastHit().equals(getFirstHit()))
         {
-            if(lastShotWasAHit)
+            nextShot = getRandomShot();
+        } else
+        {
+            if (lastShotWasAHit)
+            {
                 nextShot = getShotInSequence();
-            else
+            } else
+            {
                 nextShot = getShotReverseSequence();
+            }
         }
 
         return nextShot;
     }
 
+    public List<Point> getAllHits()
+    {
+        return hits;
+    }
+
+    public boolean isTargeting(Point location)
+    {
+        for (Point p : getAllHits())
+        {
+            if (p.equals(location))
+                return true;
+        }
+
+        return false;
+    }
 }

@@ -9,6 +9,7 @@ import ships.*;
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
 import battleshipExceptions.*;
+import battleship.Shot;
 import java.util.*;
 
 public class BoardTests {
@@ -380,7 +381,7 @@ public class BoardTests {
         assertTrue(active.contains(pb));
         assertTrue(active.contains(s));
 
-        board.isHit(new Point(9,9), true);
+        board.isHit(new Shot(new Point(9,9), ShipType.CARRIER), true);
 
         active = board.getActiveShips();
         assertEquals(4, active.size());
@@ -391,8 +392,8 @@ public class BoardTests {
         assertTrue(active.contains(pb));
 
 
-        board.isHit(new Point(5,5), true);
-        board.isHit(new Point(5,4), true);
+        board.isHit(new Shot(new Point(5,5), ShipType.CARRIER), true);
+        board.isHit(new Shot(new Point(5,4), ShipType.CARRIER), true);
 
         active = board.getActiveShips();
         assertEquals(3, active.size());
@@ -414,8 +415,8 @@ public class BoardTests {
             fail("caught InvalidShipPositionException when I shouldn't have");
         }
 
-        assertTrue(board.isHit(new Point(0,0), true).isAHit());
-        assertFalse(board.isHit(new Point(8,8), true).isAHit());
+        assertTrue(board.isHit(new Shot(new Point(0,0), ShipType.CARRIER), true).isAHit());
+        assertFalse(board.isHit(new Shot(new Point(8,8), ShipType.CARRIER), true).isAHit());
     }
 
 
@@ -449,7 +450,7 @@ public class BoardTests {
             fail("caught InvalidShipPositionException when I shouldn't have");
         }
 
-        assertTrue(board.isHit(zeroPoint, true).isAHit());
+        assertTrue(board.isHit(new Shot(zeroPoint, ShipType.CARRIER), true).isAHit());
 
         assertTrue(c.isDamaged(zeroPoint));
         assertFalse(s.isDamaged(zeroPoint));
@@ -466,7 +467,7 @@ public class BoardTests {
             fail("caught InvalidShipPositionException when I shouldn't have");
         }
 
-        assertTrue(board.isHit(zeroPoint, true).isAHit());
+        assertTrue(board.isHit(new Shot(zeroPoint, ShipType.CARRIER), true).isAHit());
 
         assertTrue(c.isDamaged(zeroPoint));
 

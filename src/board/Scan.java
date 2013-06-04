@@ -3,7 +3,9 @@ package board;
 import java.util.*;
 
 import ships.*;
+import ships.Ship.ShipType;
 import battleship.BattleshipUtils;
+import battleship.Shot;
 
 public class Scan {
     private Point startPoint;
@@ -53,14 +55,13 @@ public class Scan {
         return pointsToScan;
     }
 
-
     public List<Point> findShips() {
         List<Point> foundShips = new ArrayList<Point>();
         List<Point> pointsToScan = getPointsToScan();
 
         for(Point scanPoint : pointsToScan)
         {
-            if(board.isHit(scanPoint, false).isAHit())
+            if(board.isHit(new Shot(scanPoint, ShipType.CARRIER), false).isAHit())
                 foundShips.add(scanPoint);
         }
 

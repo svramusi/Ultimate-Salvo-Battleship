@@ -7,6 +7,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import battleship.Shot;
+
 import ships.PatrolBoat;
 import ships.Point;
 import ships.Ship;
@@ -77,17 +79,17 @@ public class PatrolBoatTests {
     public void testTakesDamage() {
         pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(pb.isAHit(new Point(0,0), true));
-        assertTrue(pb.isAHit(new Point(1,0), true));
-        assertFalse(pb.isAHit(new Point(9,9), true));
+        assertTrue(pb.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(pb.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
+        assertFalse(pb.isAHit(new Shot(new Point(9,9), ShipType.CARRIER), true));
     }
     
     @Test
     public void testSunk() {
         pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(pb.isAHit(new Point(0,0), true));
-        assertTrue(pb.isAHit(new Point(1,0), true));
+        assertTrue(pb.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
+        assertTrue(pb.isAHit(new Shot(new Point(1,0), ShipType.CARRIER), true));
         
         assertTrue(pb.isSunk());
     }
@@ -96,11 +98,22 @@ public class PatrolBoatTests {
     public void testIsDamaged() {
         pb.setStartPoint(new Point(0,0), Direction.DOWN);
 
-        assertTrue(pb.isAHit(new Point(0,0), true));
+        assertTrue(pb.isAHit(new Shot(new Point(0,0), ShipType.CARRIER), true));
 
         assertTrue(pb.isDamaged(new Point(0,0)));
         assertFalse(pb.isDamaged(new Point(1,0)));
         assertFalse(pb.isDamaged(new Point(9,9)));
+    }
+    
+    @Test
+    public void testGetSunkBySubOnOneShot() {
+        pb.setStartPoint(new Point(0,0), Direction.DOWN);
+
+        assertTrue(pb.isAHit(new Shot(new Point(0,0), ShipType.SUBMARINE), true));
+
+        assertTrue(pb.isDamaged(new Point(0,0)));
+        assertTrue(pb.isDamaged(new Point(1,0)));
+        assertTrue(pb.isSunk());
     }
     
     @Test

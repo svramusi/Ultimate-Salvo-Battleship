@@ -1,4 +1,4 @@
-package improvedExpertAgentUtils;
+package expertAgentUtils;
 
 import display.Display;
 import ships.*;
@@ -6,7 +6,8 @@ import ships.Ship.ShipType;
 
 import java.util.*;
 
-public class EnemyShips {
+public class EnemyShips
+{
     private List<Ship> activeEnemyShips;
 
     private int carrierHits;
@@ -15,8 +16,7 @@ public class EnemyShips {
     private int pbHits;
     private int subHits;
 
-    public EnemyShips()
-    {
+    public EnemyShips() {
         activeEnemyShips = new ArrayList<Ship>();
 
         activeEnemyShips.add((new ShipFactory()).getShip(ShipType.CARRIER));
@@ -34,23 +34,20 @@ public class EnemyShips {
 
     public void registerHit(ShipType shipTypeAimedFor)
     {
-        if(shipTypeAimedFor.equals(ShipType.CARRIER))
+        if (shipTypeAimedFor.equals(ShipType.CARRIER))
         {
             carrierHits++;
-        }
-        else if(shipTypeAimedFor.equals(ShipType.BATTLESHIP))
+        } else if (shipTypeAimedFor.equals(ShipType.BATTLESHIP))
         {
             battleshipHits++;
-        }
-        else if(shipTypeAimedFor.equals(ShipType.DESTROYER))
+        } else if (shipTypeAimedFor.equals(ShipType.DESTROYER))
         {
             destroyerHits++;
-        }
-        else if(shipTypeAimedFor.equals(ShipType.PATROLBOAT))
+        } else if (shipTypeAimedFor.equals(ShipType.PATROLBOAT))
         {
             pbHits++;
-        }
-        else //if(shipType.equals(ShipType.SUBMARINE))
+        } else
+        // if(shipType.equals(ShipType.SUBMARINE))
         {
             subHits++;
         }
@@ -59,26 +56,31 @@ public class EnemyShips {
     public void sunkShip(ShipType shipType)
     {
         int shipIndex = 0;
-        for(Ship s : activeEnemyShips)
+        for (Ship s : activeEnemyShips)
         {
-            if(s.getShipType().equals(shipType))
+            if (s.getShipType().equals(shipType))
                 break;
 
             shipIndex++;
         }
 
-        if(shipIndex < activeEnemyShips.size())
+        if (shipIndex < activeEnemyShips.size())
             activeEnemyShips.remove(shipIndex);
     }
 
     public boolean isShipStillFloating(ShipType shipType)
     {
-        for(Ship s : activeEnemyShips)
+        for (Ship s : activeEnemyShips)
         {
-            if(s.getShipType().equals(shipType))
+            if (s.getShipType().equals(shipType))
                 return true;
         }
 
         return false;
+    }
+
+    public List<Ship> getFloatingShips()
+    {
+        return activeEnemyShips;
     }
 }

@@ -3,6 +3,7 @@ package board;
 import ships.*;
 import ships.Ship.ShipType;
 import battleshipExceptions.*;
+import battleship.Shot;
 
 import java.util.*;
 
@@ -187,6 +188,17 @@ public class Board {
         return activeShips;
     }
 
+    public List<ShipType> getActiveShipTypes()
+    {
+        List<ShipType> activeShips = new ArrayList<ShipType>();
+        for (Ship s : getAllShips())
+        {
+            if (!s.isSunk())
+                activeShips.add(s.getShipType());
+        }
+        return activeShips;
+    }
+
     public boolean isUnderAnotherShip(Ship s) {
         if(s.getShipType() != Ship.ShipType.SUBMARINE)
             return false;
@@ -197,7 +209,7 @@ public class Board {
             return false;
     }
 
-    public HitResponse isHit(Point shot, boolean takesDamage)
+    public HitResponse isHit(Shot shot, boolean takesDamage)
     {
         boolean isAHit = false;
         ShipType sunkShip = null;
@@ -218,7 +230,7 @@ public class Board {
             }
         }
 
-        return new HitResponse(shot, isAHit, sunkShip);
+        return new HitResponse(shot.getPoint(), isAHit, sunkShip);
     }
 
     public void nextTurn() {
