@@ -348,7 +348,7 @@ public class ExpertComputerPlayer extends Player  {
 		
 		for(Shot shot : shots)
 		{
-			hitResponses.add(isHit(shot.getPoint(), dealDamage));
+			hitResponses.add(isHit(shot, dealDamage));
 			predictor.addInfo(shot);
 		}
 

@@ -78,7 +78,7 @@ public class HumanPlayer extends Player {
 			if(shots.size() > 1)
 				dealDamage = false; //ITS A SCAN!
 			
-			HitResponse hitResponse = isHit(shot.getPoint(), dealDamage);
+			HitResponse hitResponse = isHit(shot, dealDamage);
 	
 			if(hitResponse.isAHit())
 			{
