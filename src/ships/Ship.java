@@ -2,6 +2,8 @@ package ships;
 
 import java.util.*;
 
+import battleship.Shot;
+
 public abstract class Ship {
 	public enum Direction {UP, DOWN, LEFT, RIGHT};
 	public enum ShipType {CARRIER, BATTLESHIP, DESTROYER, PATROLBOAT, SUBMARINE};
@@ -44,12 +46,18 @@ public abstract class Ship {
 		return -1;
 	}
 
-	public boolean isAHit(Point p, boolean takesDamage)
+	public boolean isAHit(Shot shot, boolean takesDamage)
 	{
-		int hitIndex = convertToDamageIndex(p);
+		int hitIndex = convertToDamageIndex(shot.getPoint());
 
 		if(hitIndex != -1)
 		{
+			if (shot.getShipType().equals(ShipType.SUBMARINE) && takesDamage) {
+				for (int i=0; i<getSize(); i++)
+					damage[i] = true;
+
+				return true;
+			}
 			if(takesDamage)
 				damage[hitIndex] = true;
 			

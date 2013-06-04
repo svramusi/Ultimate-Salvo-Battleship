@@ -233,7 +233,7 @@ public class RandomComputerPlayer extends Player {
 		
 		for(Shot shot : shots)
 		{
-			hitResponses.add(isHit(shot.getPoint(), dealDamage));
+			hitResponses.add(isHit(shot, dealDamage));
 		}
 
 		display.writeLine("board after:");
