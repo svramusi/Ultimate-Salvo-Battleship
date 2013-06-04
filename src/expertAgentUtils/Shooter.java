@@ -201,7 +201,19 @@ public class Shooter
 
     public List<Point> findPlacesToAttack(Board board)
     {
-        // List<Point> placesToAttack = findPlacesToAttack(board, false);
+        List<Point> placesToAttack;
+
+        // If the carrier has a best guess, don't do this code
+        // If this gets run, then the carrier won't scan
+        // This code is quickly becoming abysmal...
+        if (this.placesToAttack.size() > 0 && !getShipType().equals(ShipType.CARRIER))
+        {
+            placesToAttack = new ArrayList<Point>(this.placesToAttack);
+            this.placesToAttack.clear();
+        } else
+        {
+            placesToAttack = findPlacesToAttack(board, false);
+        }
 
         // Regardless if the carrier scanned, no more scans can be done
         // It doesn't even matter if you're not the carrier!
