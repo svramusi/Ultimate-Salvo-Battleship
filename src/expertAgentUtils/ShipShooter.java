@@ -29,7 +29,7 @@ public class ShipShooter
 
         for (Ship ship : ships)
         {
-            shooters.add(new Shooter(board, ship, display));
+            shooters.add(new Shooter(board, ship));
         }
 
         scanResult = new ScanResult();
@@ -68,9 +68,6 @@ public class ShipShooter
         // As such, give priority to scan results as they are known points of a
         // ship, yet not attacked yet. Target those first so they ships don't
         // get away.
-
-        display.writeLine(Integer.toString(scanResult.size()));
-
         if (scanResult.size() > 0)
         {
             allTargets.put(scanResult.getShipType(), new MetaData(scanResult.getAll(),
@@ -121,20 +118,6 @@ public class ShipShooter
         }
     }
 
-    // public Point getTarget(ShipType shipType, Board board)
-    // {
-    // for (Shooter shooter : shooters)
-    // {
-    // if (shooter.getShipType().equals(shipType))
-    // {
-    // return shooter.findNextTarget(board);
-    // }
-    // }
-    //
-    // // Need to return exception
-    // return null;
-    // }
-
     public List<Shot> getNextShot(Board board)
     {
         Shooter currentShooter = shooters.get(currentShooterIndex);
@@ -146,12 +129,9 @@ public class ShipShooter
         List<Shot> shots = new ArrayList<Shot>();
         Ship ship = currentShooter.getShip();
 
-        display.writeLine("shooting from: " + ship.getShipType());
-
         List<Point> placesToAttack = currentShooter.findPlacesToAttack(board);
         for (Point placeToAttack : placesToAttack)
         {
-            display.writeLine("Place to attack: " + placeToAttack);
             if (ship.isValidShot(placeToAttack))
             {
                 display.writeLine("attacking/scanning: " + placeToAttack);

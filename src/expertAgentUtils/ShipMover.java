@@ -1,13 +1,12 @@
 package expertAgentUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ships.Mover;
 import ships.Ship.ShipType;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-
 import battleshipExceptions.InvalidShipPositionException;
 import battleshipExceptions.ShipDamagedException;
 import board.Board;
@@ -24,18 +23,6 @@ public class ShipMover
     {
         movers.add(mover);
     }
-
-    // public void setTargetDestination(ShipType shipType, Point destination,
-    // Board board)
-    // {
-    // for (Mover mover : movers)
-    // {
-    // if (mover.getShipType().equals(shipType))
-    // {
-    // mover.calculateDesiredLocation(destination, board);
-    // }
-    // }
-    // }
 
     public void setAllTargets(Map<ShipType, MetaData> allTargets, Board board)
     {

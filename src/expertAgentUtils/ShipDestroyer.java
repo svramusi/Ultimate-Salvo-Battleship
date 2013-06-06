@@ -1,19 +1,18 @@
 package expertAgentUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import ships.Point;
 import ships.Ship.ShipType;
-import board.Board;
 import battleshipExceptions.ShipMovedException;
-
-import java.util.*;
+import board.Board;
 
 public class ShipDestroyer
 {
     private boolean foundShipButDidntSink;
     private boolean lastShotWasAHit;
-
-    // private Point origHit;
-    // private Point lastHit;
 
     private List<Point> hits;
     private List<Point> missed;
@@ -35,9 +34,6 @@ public class ShipDestroyer
 
     public void reset()
     {
-        // origHit = null;
-        // lastHit = null;
-
         hits.clear();
         missed.clear();
 
@@ -80,15 +76,6 @@ public class ShipDestroyer
 
         if (!hits.contains(point))
             hits.add(point);
-
-        // if (origHit == null)
-        // {
-        // origHit = point;
-        // lastHit = point;
-        // } else
-        // {
-        // lastHit = point;
-        // }
     }
 
     public void miss(Point point)

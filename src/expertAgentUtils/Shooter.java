@@ -10,7 +10,6 @@ import battleship.Shot;
 import battleshipExceptions.ShipMovedException;
 import board.Board;
 import board.Scan;
-import display.Display;
 
 public class Shooter
 {
@@ -20,20 +19,18 @@ public class Shooter
     private ShipDestroyer shipDestroyer;
     private ShipPredictor predictor;
     private Ship ship;
-    private Display display;
 
     private boolean didAScan;
     private boolean lastAttackWasFromScan;
 
     private List<Point> placesToAttack;
 
-    public Shooter(Board board, Ship ship, Display display) {
+    public Shooter(Board board, Ship ship) {
         scanResult = new ScanResult();
         targetedShipType = null;
         shipDestroyer = new ShipDestroyer(board);
         predictor = new ShipPredictor(board);
         this.ship = ship;
-        this.display = display;
 
         didAScan = false;
         lastAttackWasFromScan = false;
@@ -78,7 +75,6 @@ public class Shooter
 
             for (Point previousHit : previousHits)
             {
-                display.writeLine("adding " + previousHit);
                 shipDestroyer.hit(previousHit, targetedShip);
             }
         } else if (targetedShipMetaData != null && targetedShipMetaData.isBestGuess())
@@ -157,16 +153,13 @@ public class Shooter
         if (scanResult.size() > 0
                 && scanResult.getShipType().equals(this.targetedShipType))
         {
-            display.writeLine("1");
             lastAttackWasFromScan = true;
             pointsToAttack.add(scanResult.getNextResult());
         } else
         {
-            display.writeLine("2");
             boolean shipHasMoved = true;
             if (shipDestroyer.hotOnTrail())
             {
-                display.writeLine("3");
                 try
                 {
                     pointsToAttack.add(shipDestroyer.getNextShot());
@@ -179,10 +172,8 @@ public class Shooter
 
             if (shipHasMoved)
             {
-                display.writeLine("4");
                 if (amIACarrier() && !didAScan)
                 {
-                    display.writeLine("5");
                     pointsToAttack.addAll(performCarrierScan(board));
 
                     // We're just calculating where to move next
@@ -190,7 +181,6 @@ public class Shooter
                         didAScan = false;
                 } else
                 {
-                    display.writeLine("6");
                     pointsToAttack.add(getOptimalShot());
                 }
             }
@@ -222,14 +212,6 @@ public class Shooter
         // Use the target that was found in findNextTarget()
         return placesToAttack;
     }
-
-    // public Point findNextTarget(Board board)
-    // {
-    // placesToAttack = findPlacesToAttack(board, true);
-    // display.writeLine("THE NEXT PLACE TO ATTACK IS: " +
-    // placesToAttack.get(0));
-    // return placesToAttack.get(0);
-    // }
 
     public void undoLastAttack(Point lastAttack)
     {

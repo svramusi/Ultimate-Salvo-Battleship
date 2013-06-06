@@ -2,19 +2,17 @@ package ships;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-
-import battleshipExceptions.InvalidShipPositionException;
-import battleshipExceptions.ShipDamagedException;
-import board.Board;
 
 import ships.Ship.Direction;
 import ships.Ship.ShipType;
-
-import expertAgentUtils.MetaData;
+import battleshipExceptions.InvalidShipPositionException;
+import battleshipExceptions.ShipDamagedException;
+import board.Board;
 import display.Display;
+import expertAgentUtils.MetaData;
 
 public class Mover
 {
@@ -128,8 +126,6 @@ public class Mover
             ShipType enemyShip = mapEntry.getKey();
             MetaData enemyShipMetaData = mapEntry.getValue();
 
-            display.writeLine(enemyShip + " ### " + enemyShipMetaData.toString());
-
             if (enemyShipMetaData.isAttacking())
             {
                 attackingLocations.put(enemyShip, enemyShipMetaData);
@@ -172,13 +168,6 @@ public class Mover
                 closestAttackingShipType = mapEntry.getKey();
                 closestAttackingLocation = lastPlaceAttacked;
                 closestAttackingMetaData = placeAttackedMetaData;
-
-                // display.writeLine("closest attacking distance: "
-                // + closestAttackingDistance);
-                // display.writeLine("closest attacking type: " +
-                // closestAttackingShipType);
-                // display.writeLine("closest attacking location: "
-                // + closestAttackingLocation);
             }
         }
 
@@ -213,25 +202,16 @@ public class Mover
                 closestGuessShipType = mapEntry.getKey();
                 closestGuessLocation = guessedLocation;
                 closestGuessMetaData = placeGuessedMetaData;
-
-                // display.writeLine("closest guess distance: " +
-                // closestGuessDistance);
-                // display.writeLine("closest guess type: " +
-                // closestGuessShipType);
-                // display.writeLine("closest guess location: " +
-                // closestGuessLocation);
             }
         }
 
         if (isWithinStrikingDistance(closestAttackingDistance))
         {
-            display.writeLine("i'm going after attacking");
             this.targetedShip = closestAttackingShipType;
             this.targetedShipMetaData = closestAttackingMetaData;
             calculateDesiredLocation(closestAttackingLocation, board);
         } else if (isWithinStrikingDistance(closestScanDistance))
         {
-            display.writeLine("i'm going after scan");
             this.targetedShip = closestScanShipType;
             this.targetedShipMetaData = closestScanMetaData;
             calculateDesiredLocation(closestScanLocation, board);
@@ -239,7 +219,6 @@ public class Mover
         {
             if (observerTargets.containsKey(ShipType.CARRIER))
             {
-                display.writeLine("i'm going after carrier current scan");
                 Map<ShipType, Point> carrierTarget = observerTargets
                         .get(ShipType.CARRIER);
 
@@ -258,11 +237,9 @@ public class Mover
                 // carrier to tell me where he's scanning
                 if (isThereStillACarrier())
                 {
-                    display.writeLine("i'm deferring");
                     deferMove = true;
                 } else
                 {
-                    display.writeLine("i'm taking a best guess");
                     this.targetedShip = closestGuessShipType;
                     this.targetedShipMetaData = closestGuessMetaData;
                     calculateDesiredLocation(closestGuessLocation, board);
@@ -272,12 +249,6 @@ public class Mover
 
         display.writeLine("I'm " + this.ship.getShipType() + " and i'm targeting "
                 + this.targetedShip);
-
-        // // Need to change this!
-        // this.targetedShip = findClosestShip(allTargets);
-        //
-        // calculateDesiredLocation(allTargets.get(targetedShip).getPoint(),
-        // board);
 
         for (Mover observer : observerCollection)
         {
@@ -312,28 +283,6 @@ public class Mover
 
         return minDistance;
     }
-
-    // private ShipType findClosestShip(Map<ShipType, MetaData> allTargets)
-    // {
-    // ShipType closestShip = null;
-    // double shortestDistance = Double.POSITIVE_INFINITY;
-    //
-    // List<Point> currentLocation = ship.getShipLocation();
-    //
-    // for (Map.Entry<ShipType, MetaData> mapEntry : allTargets.entrySet())
-    // {
-    // display.writeLine("finding distance to: " + mapEntry.getValue());
-    // double distance = getMinDistance(currentLocation, mapEntry.getValue()
-    // .getPoint());
-    // if (distance < shortestDistance)
-    // {
-    // shortestDistance = distance;
-    // closestShip = mapEntry.getKey();
-    // }
-    // }
-    //
-    // return closestShip;
-    // }
 
     public ShipType getTargetedShip()
     {
@@ -634,13 +583,9 @@ public class Mover
             {
                 ShipMover.moveShip(this.ship, this.recalculatedStart,
                         this.recalculatedDirection, board);
-                display.writeLine("I'm " + getShipType()
-                        + " and I've recalculated moved to " + this.recalculatedStart);
             } else
             {
                 ShipMover.moveShip(this.ship, this.destination, board);
-                display.writeLine("I'm " + getShipType() + " and I've moved to "
-                        + this.destination);
             }
 
             iveMoved = true;
